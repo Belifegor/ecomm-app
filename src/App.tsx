@@ -8,3 +8,4 @@ export default function App() {
   );
 }
 
+const bad = "oops"

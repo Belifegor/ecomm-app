@@ -48,18 +48,19 @@ git checkout -b develop origin/develop
 # 👨‍💻 Как работает каждый участник
 
 1. Клонируешь репозиторий и переключаешься на develop
-
+```
 git clone https://github.com/Belifegor/ecomm-app.git
 cd ecomm-app
 git checkout develop
 git pull origin develop
+```
 
 2. Создаёшь свою личную ветку от develop
 
 Каждый работает в отдельной ветке от develop, чтобы не мешать другим.
-
+```
 git checkout -b your-name/feature-name
-
+```
 Примеры:
 ```
 alex/product-card

@@ -1,49 +1,51 @@
-🛒 ECOMM-APP
+## 🛒 ECOMM-APP
+  ___ 
+Это SPA приложение, предоставляющее удобный и понятный интерфейс для покупок. Приложение разработано с использованием современного стека и работает на базе Сommercetools.
 
-Мультистраничное e-commerce приложение, реализованное на React + TypeScript с использованием Vite, TailwindCSS, ESLint, Prettier и Husky.
+🚀 Технологии:
 
-🚀 Технологии
+- React
 
-React
+- TypeScript
 
-TypeScript
+- Vite
 
-Vite
+- TailwindCSS
 
-TailwindCSS
+- ESLint
 
-ESLint
+- Prettier
 
-Prettier
+- Husky
 
-Husky
+- Zustand — для управления состоянием
 
-Zustand — для управления состоянием
+- Axios — для работы с API
 
-Axios — для работы с API
+# 📦 Установка и запуск
 
-📦 Установка и запуск
-
+```
 git clone https://github.com/Belifegor/ecomm-app.git
 cd ecomm-app
 npm install
 npm run dev
+```
 
 Проект запустится на http://localhost:5173/
 
-🧭 Работа с ветками (Git Flow)
+# 🧭 Работа с ветками (Git Flow)
 
 🔁 Переключись на develop
-
+```
 git checkout develop
 git pull origin develop
-
+```
 Если ветки нет:
-
+```
 git fetch origin develop
 git checkout -b develop origin/develop
-
-👨‍💻 Как работает каждый участник
+```
+# 👨‍💻 Как работает каждый участник
 
 1. Клонируешь репозиторий и переключаешься на develop
 
@@ -59,26 +61,26 @@ git pull origin develop
 git checkout -b your-name/feature-name
 
 Примеры:
-
+```
 alex/product-card
 
 kate/cart-page
 
 john/fix-header
-
+```
 3. Выполняешь свою задачу
 
 Работаешь в своей ветке.
 
 Периодически коммитишь:
-
+```
 git add .
 git commit -m "feat: add product card component"
-
+```
 Пушишь ветку:
-
+```
 git push origin your-name/feature-name
-
+```
 4. Создаёшь Pull Request → в develop
 
 На GitHub открываешь PR из своей ветки в develop
@@ -91,9 +93,10 @@ git push origin your-name/feature-name
 
 Ветка main защищена — туда коммиты напрямую запрещены.Все фичи и правки идут через develop, а потом один финальный PR в main.
 
-📂 Структура проекта
 
-src/
+# 📂 Структура проекта
+
+```src/
 ├── assets/        # Изображения и иконки
 ├── components/    # Переиспользуемые компоненты
 ├── hooks/         # Кастомные React-хуки
@@ -104,15 +107,16 @@ src/
 ├── utils/         # Вспомогательные функции
 ├── App.tsx
 └── main.tsx
+```
 
-🧪 Сценарии
-
+# 🧪 Сценарии
+```
 npm run dev               # Запуск проекта
 npm run build             # Сборка проекта
 npm run lint              # Проверка кода ESLint
 npx prettier --write .    # Форматирование кода вручную
-
-💡 Советы
+```
+# 💡 Советы
 
 Используйте ветки для каждой задачи
 

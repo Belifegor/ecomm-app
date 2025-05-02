@@ -34,7 +34,7 @@ module.exports = {
   rules: {
     'react/react-in-jsx-scope': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/no-explicit-any': 'warn',
+    '@typescript-eslint/no-explicit-any': 'error',
     'react/prop-types': 'off',
     'import/order': ['warn', { groups: ['builtin', 'external', 'internal'] }],
   },

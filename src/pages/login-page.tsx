@@ -6,8 +6,8 @@ function LoginPage() {
   //const res = scheme.safeParse({ ...fields });
   return (
     <div className="flex flex-col w-1/1 h-1/1 justify-center items-center">
-      <div className="w-1/2 h-1/2 border border-[#B5B5B5] rounded-[10px]">
-        <h2 className="font-bold">ACCOUNT LOGIN</h2>
+      <div className="w-1/2 border border-[#EBEBEB] rounded-[10px] py-14 px-16">
+        <h2 className="font-bold text-xl mb-10">ACCOUNT LOGIN</h2>
         <InputField
           label="Email"
           type="email"

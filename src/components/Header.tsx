@@ -10,6 +10,27 @@ export function Header() {
           cyber
         </Link>
 
+        <div className="relative w-full max-w-sm hidden md:block">
+          <input
+            type="text"
+            placeholder="Search..."
+            className="w-full pl-10 pr-4 py-2 border rounded-lg bg-gray-100 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <svg
+            className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1016.65 16.65z"
+            />
+          </svg>
+        </div>
+
         <nav className="hidden md:flex gap-6 text-gray-700 font-medium">
           <NavLink to="/" className="text-blue-600 font-semibold">
             Home

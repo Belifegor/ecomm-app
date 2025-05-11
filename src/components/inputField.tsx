@@ -1,12 +1,12 @@
 //import { getErrorMessage } from '../utils/validation.ts';
-import { /*ChangeEvent,*/ JSX } from 'react';
+import { ChangeEvent, JSX } from 'react';
 
 type InputFieldProps = {
   label: string;
   type?: string;
   name: string;
   placeholder?: string;
-  // onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
 function InputField(props: InputFieldProps): JSX.Element {
@@ -19,9 +19,10 @@ function InputField(props: InputFieldProps): JSX.Element {
         type={props.type}
         className="border border-[#9F9F9F] h-14 rounded-[7px] p-4 hover:cursor-pointer"
         name={props.name}
-        placeholder={props.placeholder} /*onChange={onChange}*/
+        placeholder={props.placeholder}
+        onChange={props.onChange}
       />
-      {<p className="h-8 text-red-500">{'error'}</p>}
+      {/*{<p className="h-8 text-red-500">{'error'}</p>}*/}
     </div>
   );
 }

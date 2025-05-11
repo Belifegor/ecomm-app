@@ -17,8 +17,6 @@ function LoginPage() {
     const newForm = { ...fields };
     newForm[name] = value;
     setValue(newForm);
-    console.log(value);
-    console.log(value.trim());
   };
   return (
     <div className="flex flex-col w-1/1 h-1/1 justify-center items-center">

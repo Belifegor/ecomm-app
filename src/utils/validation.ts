@@ -82,17 +82,19 @@ export const schemaForRegistration = schemaForLogin.extend({
   street: z.string().min(1),
   city: z
     .string()
-    .min(1)
+    .min(1, { message: 'Field must contain at least one letter' })
     .refine((val) => !/[^A-Za-z]/.test(val), {
       message: 'Field must not contain digits and special symbols',
     }),
   postalCode: z
     .string()
-    .min(1)
+    .min(1, { message: 'Field must contain at least one letter' })
     .refine((/*val*/) => {
       //соответствие формату кода ???
     }),
-  country: z.string().min(1),
+  country: z
+    .string()
+    .min(1, { message: 'Field must contain at least one letter' }),
   //переделать в выпадающий спиок, уточнить страны
 });
 

@@ -1,12 +1,12 @@
 import InputField from '../components/inputField.tsx';
 import Button from '../components/button.tsx';
-//import { schemaForLogin } from '../utils/validation.ts';
 import { schemaForLogin } from '../utils/validation.ts';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
-export type LoginData = z.infer<typeof schemaForLogin>;
+type LoginData = z.infer<typeof schemaForLogin>;
+
 function LoginPage() {
   const {
     register,

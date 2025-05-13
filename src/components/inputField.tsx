@@ -1,23 +1,22 @@
-//import { getErrorMessage } from '../utils/validation.ts';
 import { JSX } from 'react';
-import { UseFormRegister } from 'react-hook-form';
-import type { LoginData } from '../pages/LoginPage';
+import { Path, FieldValues, UseFormRegister } from 'react-hook-form';
 
-type InputFieldProps = {
+type InputFieldProps<T extends FieldValues> = {
   label: string;
   type: string;
-  name: keyof LoginData;
-  placeholder?: string;
-  register: UseFormRegister<LoginData>;
+  name: Path<T>;
+  placeholder: string;
+  register: UseFormRegister<T>;
 };
 
-function InputField({
+export function InputField<T extends FieldValues>({
   label,
-  name,
   type,
+  name,
   placeholder,
   register,
-}: InputFieldProps): JSX.Element {
+}: InputFieldProps<T>): JSX.Element {
+  console.log();
   return (
     <div className="flex flex-col mt-1.5">
       <label className="text-left text-sm leading-8 text-[#545454]">

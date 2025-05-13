@@ -1,4 +1,4 @@
-import { z, ZodError } from 'zod';
+import { z } from 'zod';
 
 export const schemaForLogin = z.object({
   email: z
@@ -77,9 +77,33 @@ export const schemaForRegistration = schemaForLogin.extend({
   dateOfBirth: z
     .string()
     .min(1, { message: 'Add your birth date' })
-    .refine((/*val*/) => {
-      //доделать проверку на возраст
-    }),
+    .refine(
+      (val) => {
+        const birthDate = new Date(val);
+        const now = new Date();
+        const age = now.getFullYear() - birthDate.getFullYear();
+        if (age < 13) {
+          return false;
+        } else if (
+          now.getMonth() < birthDate.getMonth() ||
+          (now.getMonth() === birthDate.getMonth() &&
+            now.getDate() < birthDate.getDate())
+        ) {
+          return false;
+        }
+        return true;
+      },
+      {
+        message: 'You must be over 13 years old',
+      }
+    ),
+  // .refine((val) => {
+  //   const birthDate = new Date(val);
+  //   const now = new Date();
+  //   return  birthDate <= now
+  // },{
+  //   message: 'Wrong date',
+  // }),
   street: z.string().min(1),
   city: z
     .string()
@@ -99,12 +123,12 @@ export const schemaForRegistration = schemaForLogin.extend({
   //переделать в выпадающий спиок, уточнить страны
 });
 
-export const getErrorMessage = (
-  error: ZodError | undefined,
-  field: string
-): string | null => {
-  if (!error) return null;
-  console.log(error.issues);
-  const issue = error.issues.find((issue) => issue.path[0] === field);
-  return issue?.message ?? null;
-};
+// export const getErrorMessage = (
+//   error: ZodError | undefined,
+//   field: string
+// ): string | null => {
+//   if (!error) return null;
+//   console.log(error.issues);
+//   const issue = error.issues.find((issue) => issue.path[0] === field);
+//   return issue?.message ?? null;
+// };

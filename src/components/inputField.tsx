@@ -1,28 +1,34 @@
 //import { getErrorMessage } from '../utils/validation.ts';
-import { ChangeEvent, JSX } from 'react';
+import { JSX } from 'react';
+import { UseFormRegister } from 'react-hook-form';
+import type { LoginData } from '../pages/LoginPage';
 
 type InputFieldProps = {
   label: string;
-  type?: string;
-  name: string;
+  type: string;
+  name: keyof LoginData;
   placeholder?: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  register: UseFormRegister<LoginData>;
 };
 
-function InputField(props: InputFieldProps): JSX.Element {
+function InputField({
+  label,
+  name,
+  type,
+  placeholder,
+  register,
+}: InputFieldProps): JSX.Element {
   return (
     <div className="flex flex-col mt-1.5">
       <label className="text-left text-sm leading-8 text-[#545454]">
-        {props.label}
+        {label}
       </label>
       <input
-        type={props.type}
+        type={type}
         className="border border-[#9F9F9F] h-14 rounded-[7px] p-4 hover:cursor-pointer"
-        name={props.name}
-        placeholder={props.placeholder}
-        onChange={props.onChange}
+        {...register(name)}
+        placeholder={placeholder}
       />
-      {/*{<p className="h-8 text-red-500">{'error'}</p>}*/}
     </div>
   );
 }

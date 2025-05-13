@@ -3,15 +3,16 @@ import { z, ZodError } from 'zod';
 export const schemaForLogin = z.object({
   email: z
     .string()
-    //.email({ message: 'Wrong email' })
-    //  .refine((val) => val === val.trim(), {
-    //   message: 'Email must not contain leading or trailing whitespace',
-    // }),
+    //.email({ message: 'Wrong email' }),
+    .refine((val) => val === val.trim(), {
+      message: 'Email must not contain leading or trailing whitespace',
+    })
     .superRefine((val, ctx) => {
       if (!val.includes('@')) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: 'Email must contain @ symbol',
+          path: [],
         });
       }
       const [str, domain] = val.split('@');

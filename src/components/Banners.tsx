@@ -3,7 +3,7 @@ import { BannerCard } from './BannerCard';
 export function Banners() {
   return (
     <section className="py-12 bg-white">
-      <div className="max-w-[1440px] mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="w-full mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <BannerCard
           image="./src/images/Popular_products.svg"
           title="Popular Products"

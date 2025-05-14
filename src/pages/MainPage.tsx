@@ -3,6 +3,8 @@ import { HeroSection } from '../components/HeroSection';
 import { CategorySlider } from '../components/CategorySlider';
 import { ProductTabs } from '../components/ProductTabs';
 import { Banners } from '../components/Banners';
+import { Discounts } from '../components/Discounts';
+import { BannerSale } from '../components/BannerSale';
 
 export function MainPage() {
   return (
@@ -12,6 +14,8 @@ export function MainPage() {
       <CategorySlider />
       <ProductTabs />
       <Banners />
+      <Discounts />
+      <BannerSale />
     </main>
   );
 }

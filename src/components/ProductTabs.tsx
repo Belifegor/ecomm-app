@@ -72,7 +72,7 @@ export function ProductTabs() {
     <section className="py-12 bg-white">
       <div className="max-w-[1440px] mx-auto px-4">
         {/* Вкладки */}
-        <div className="flex gap-6 mb-6 text-sm font-medium border-b">
+        <div className="flex gap-6 mb-6 text-sm font-medium">
           {Object.keys(products).map((tab) => (
             <button
               key={tab}

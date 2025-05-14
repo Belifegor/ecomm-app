@@ -5,6 +5,7 @@ import { ProductTabs } from '../components/ProductTabs';
 import { Banners } from '../components/Banners';
 import { Discounts } from '../components/Discounts';
 import { BannerSale } from '../components/BannerSale';
+import { Footer } from '../components/Footer';
 
 export function MainPage() {
   return (
@@ -16,6 +17,7 @@ export function MainPage() {
       <Banners />
       <Discounts />
       <BannerSale />
+      <Footer />
     </main>
   );
 }

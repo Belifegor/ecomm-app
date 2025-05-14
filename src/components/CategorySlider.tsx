@@ -20,8 +20,8 @@ const categories = [
 export function CategorySlider() {
   return (
     <section className="py-8 bg-white">
-      <div className="max-w-[1440px] mx-auto px-4">
-        <div className="flex justify-between items-center mb-8">
+      <div className="max-w-[1440px] mx-40">
+        <div className="flex  items-center mb-8">
           <h2 className="text-xl font-semibold">Browse By Category</h2>
           <div className="flex gap-2">
             <button className="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center">

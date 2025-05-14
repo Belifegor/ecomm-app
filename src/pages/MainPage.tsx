@@ -1,6 +1,8 @@
 import { Header } from '../components/Header';
 import { HeroSection } from '../components/HeroSection';
 import { CategorySlider } from '../components/CategorySlider';
+import { ProductTabs } from '../components/ProductTabs';
+import { Banners } from '../components/Banners';
 
 export function MainPage() {
   return (
@@ -8,6 +10,8 @@ export function MainPage() {
       <Header />
       <HeroSection />
       <CategorySlider />
+      <ProductTabs />
+      <Banners />
     </main>
   );
 }

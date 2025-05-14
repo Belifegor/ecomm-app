@@ -117,9 +117,9 @@ export const schemaForRegistration = schemaForLogin.extend({
     .refine((/*val*/) => {
       //соответствие формату кода ???
     }),
-  country: z
-    .string()
-    .min(1, { message: 'Field must contain at least one letter' }),
+  // country: z
+  //   .string()
+  //   .min(1, { message: 'Field must contain at least one letter' }),
   //переделать в выпадающий спиок, уточнить страны
 });
 

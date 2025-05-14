@@ -20,7 +20,7 @@ export function InputField<T extends FieldValues>({
 }: InputFieldProps<T>): JSX.Element {
   const [isShownPassword, setShowPassword] = useState(false);
   const isPassword: boolean = type === 'password';
-  const inputType: string = isPassword && isShownPassword ? 'text' : 'password';
+  const inputType: string = isPassword && isShownPassword ? 'text' : type;
 
   return (
     <div className="flex flex-col mt-1.5">

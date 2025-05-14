@@ -6,7 +6,12 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 type RegistrationData = z.infer<typeof schemaForRegistration>;
-
+const countrys = [
+  'United States (US)',
+  'European (EU)',
+  'Belarus(BY)',
+  'Russia(RU)',
+];
 function RegistrationPage() {
   const {
     register,
@@ -23,7 +28,7 @@ function RegistrationPage() {
       street: '',
       city: '',
       postalCode: '',
-      country: '',
+      // country: '',
     },
   });
 
@@ -112,16 +117,32 @@ function RegistrationPage() {
         {errors.postalCode && (
           <p className="h-8 text-red-500">{errors.postalCode.message}</p>
         )}
-        <InputField
-          register={register}
-          label="Country"
-          type="text"
-          name="country"
-          placeholder="country"
-        />
-        {errors.country && (
-          <p className="h-8 text-red-500">{errors.country.message}</p>
-        )}
+        {/*<InputField*/}
+        {/*  register={register}*/}
+        {/*  label="Country"*/}
+        {/*  type="text"*/}
+        {/*  name="country"*/}
+        {/*  placeholder="country"*/}
+        {/*/>*/}
+        {/*{errors.country && (*/}
+        {/*  <p className="h-8 text-red-500">{errors.country.message}</p>*/}
+        {/*)}*/}
+        <label
+          htmlFor="fruit"
+          className="text-left text-sm leading-8 text-[#545454]"
+        >
+          Country
+        </label>
+        <select
+          id="fruit"
+          className="border border-[#9F9F9F] w-full h-14 rounded-[7px] p-4 hover:cursor-pointer"
+        >
+          {countrys.map((country) => (
+            <option key={country} value={country}>
+              {country}
+            </option>
+          ))}
+        </select>
         <Button text="Sing Up" />
       </div>
     </div>

@@ -29,7 +29,6 @@ function RegistrationPage() {
       street: '',
       city: '',
       postalCode: '',
-      country: '',
     },
   });
 
@@ -119,18 +118,6 @@ function RegistrationPage() {
         {errors.city && (
           <p className="h-5 text-red-500 text-[12px]">{errors.city.message}</p>
         )}
-        <InputField
-          register={register}
-          label="Postal code"
-          type="text"
-          name="postalCode"
-          placeholder="postal code"
-        />
-        {errors.postalCode && (
-          <p className="h-5 text-red-500 text-[12px]">
-            {errors.postalCode.message}
-          </p>
-        )}
         <label
           // htmlFor="country"
           className="text-left text-sm leading-8 text-[#545454]"
@@ -148,6 +135,18 @@ function RegistrationPage() {
             </option>
           ))}
         </select>
+        <InputField
+          register={register}
+          label="Postal code"
+          type="text"
+          name="postalCode"
+          placeholder="postal code"
+        />
+        {errors.postalCode && (
+          <p className="h-5 text-red-500 text-[12px]">
+            {errors.postalCode.message}
+          </p>
+        )}
         <Button text="Sing Up" />
       </div>
     </div>

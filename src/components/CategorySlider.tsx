@@ -20,7 +20,7 @@ const categories = [
 export function CategorySlider() {
   return (
     <section className="py-8 bg-white">
-      <div className="max-w-[1440px] mx-40">
+      <div className="max-w-[1440px] mx-auto lg:px-40">
         <div className="flex  items-center mb-8">
           <h2 className="text-xl font-semibold">Browse By Category</h2>
           <div className="flex gap-2">

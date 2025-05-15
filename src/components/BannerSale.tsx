@@ -11,7 +11,7 @@ export function BannerSale() {
         <p className="mt-4 text-sm md:text-base text-gray-300">
           Commodo fames vitae vitae leo mauris in. Eu consequat.
         </p>
-        <button className="mt-8 border border-white px-6 py-2 rounded hover:bg-white hover:text-gray-900 transition">
+        <button className="mt-8 border px-8 py-2 rounded font-medium hover:bg-[#9a2ee8] hover:text-black transition">
           Shop Now
         </button>
       </div>

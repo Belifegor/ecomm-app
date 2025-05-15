@@ -81,6 +81,16 @@ export const schemaForRegistration = schemaForLogin.extend({
       (val) => {
         const birthDate = new Date(val);
         const now = new Date();
+        return birthDate <= now;
+      },
+      {
+        message: 'Wrong date',
+      }
+    )
+    .refine(
+      (val) => {
+        const birthDate = new Date(val);
+        const now = new Date();
         const age = now.getFullYear() - birthDate.getFullYear();
         if (age < 13) {
           return false;
@@ -97,13 +107,6 @@ export const schemaForRegistration = schemaForLogin.extend({
         message: 'You must be over 13 years old',
       }
     ),
-  // .refine((val) => {
-  //   const birthDate = new Date(val);
-  //   const now = new Date();
-  //   return  birthDate <= now
-  // },{
-  //   message: 'Wrong date',
-  // }),
   street: z.string().min(1),
   city: z
     .string()
@@ -117,10 +120,9 @@ export const schemaForRegistration = schemaForLogin.extend({
     .refine((/*val*/) => {
       //соответствие формату кода ???
     }),
-  // country: z
-  //   .string()
-  //   .min(1, { message: 'Field must contain at least one letter' }),
-  //переделать в выпадающий спиок, уточнить страны
+  country: z
+    .string()
+    .min(1, { message: 'Field must contain at least one letter' }),
 });
 
 // export const getErrorMessage = (

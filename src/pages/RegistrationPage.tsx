@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 type RegistrationData = z.infer<typeof schemaForRegistration>;
-const countrys = [
+const countries = [
   'United States (US)',
   'European (EU)',
   'Belarus(BY)',
@@ -16,6 +16,7 @@ function RegistrationPage() {
   const {
     register,
     formState: { errors },
+    getValues,
   } = useForm<RegistrationData>({
     mode: 'onChange',
     resolver: zodResolver(schemaForRegistration),
@@ -28,10 +29,13 @@ function RegistrationPage() {
       street: '',
       city: '',
       postalCode: '',
-      // country: '',
+      country: '',
     },
   });
 
+  const allFieldNames = Object.values(getValues());
+
+  console.log(allFieldNames);
   return (
     <div className="flex flex-col w-1/1 h-1/1 justify-center items-center">
       <div className="min-w-[360px] w-1/3 border border-[#EBEBEB] rounded-[10px] py-14 px-16">
@@ -39,12 +43,12 @@ function RegistrationPage() {
         <InputField
           register={register}
           label="Email"
-          type="email"
+          type="text"
           name="email"
           placeholder="example@example.com"
         />
         {errors.email && (
-          <p className="h-8 text-red-500">{errors.email.message}</p>
+          <p className="h-5 text-red-500 text-[12px]">{errors.email.message}</p>
         )}
         <InputField
           register={register}
@@ -54,7 +58,9 @@ function RegistrationPage() {
           placeholder="password..."
         />
         {errors.password && (
-          <p className="h-8 text-red-500">{errors.password.message}</p>
+          <p className="h-5 text-red-500 text-[12px]">
+            {errors.password.message}
+          </p>
         )}
         <InputField
           register={register}
@@ -64,7 +70,7 @@ function RegistrationPage() {
           placeholder="first name"
         />
         {errors.name && (
-          <p className="h-8 text-red-500">{errors.name.message}</p>
+          <p className="h-5 text-red-500 text-[12px]">{errors.name.message}</p>
         )}
         <InputField
           register={register}
@@ -74,7 +80,9 @@ function RegistrationPage() {
           placeholder="last name"
         />
         {errors.lastName && (
-          <p className="h-8 text-red-500">{errors.lastName.message}</p>
+          <p className="h-5 text-red-500 text-[12px]">
+            {errors.lastName.message}
+          </p>
         )}
         <InputField
           register={register}
@@ -84,7 +92,9 @@ function RegistrationPage() {
           placeholder="MM/DD/YYYY"
         />
         {errors.dateOfBirth && (
-          <p className="h-8 text-red-500">{errors.dateOfBirth.message}</p>
+          <p className="h-5 text-red-500 text-[12px]">
+            {errors.dateOfBirth.message}
+          </p>
         )}
         <h2 className="font-bold text-xl mb-10 mt-10">ADDRESS</h2>
         <InputField
@@ -95,7 +105,9 @@ function RegistrationPage() {
           placeholder="street"
         />
         {errors.street && (
-          <p className="h-8 text-red-500">{errors.street.message}</p>
+          <p className="h-5 text-red-500 text-[12px]">
+            {errors.street.message}
+          </p>
         )}
         <InputField
           register={register}
@@ -105,7 +117,7 @@ function RegistrationPage() {
           placeholder="city"
         />
         {errors.city && (
-          <p className="h-8 text-red-500">{errors.city.message}</p>
+          <p className="h-5 text-red-500 text-[12px]">{errors.city.message}</p>
         )}
         <InputField
           register={register}
@@ -115,29 +127,22 @@ function RegistrationPage() {
           placeholder="postal code"
         />
         {errors.postalCode && (
-          <p className="h-8 text-red-500">{errors.postalCode.message}</p>
+          <p className="h-5 text-red-500 text-[12px]">
+            {errors.postalCode.message}
+          </p>
         )}
-        {/*<InputField*/}
-        {/*  register={register}*/}
-        {/*  label="Country"*/}
-        {/*  type="text"*/}
-        {/*  name="country"*/}
-        {/*  placeholder="country"*/}
-        {/*/>*/}
-        {/*{errors.country && (*/}
-        {/*  <p className="h-8 text-red-500">{errors.country.message}</p>*/}
-        {/*)}*/}
         <label
-          htmlFor="fruit"
+          // htmlFor="country"
           className="text-left text-sm leading-8 text-[#545454]"
         >
           Country
         </label>
         <select
-          id="fruit"
+          id="country"
           className="border border-[#9F9F9F] w-full h-14 rounded-[7px] p-4 hover:cursor-pointer"
+          {...register('country', { required: true })}
         >
-          {countrys.map((country) => (
+          {countries.map((country) => (
             <option key={country} value={country}>
               {country}
             </option>

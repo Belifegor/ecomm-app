@@ -32,7 +32,7 @@ function LoginPage() {
           placeholder="example@example.com"
         />
         {errors.email && (
-          <p className="h-8 text-red-500">{errors.email.message}</p>
+          <p className="h-5 text-red-500 text-[12px]">{errors.email.message}</p>
         )}
         <InputField
           register={register}
@@ -42,7 +42,9 @@ function LoginPage() {
           placeholder="password..."
         />
         {errors.password && (
-          <p className="h-8 text-red-500">{errors.password.message}</p>
+          <p className="h-5 text-red-500 text-[12px]">
+            {errors.password.message}
+          </p>
         )}
         <Button text="Login" />
       </div>

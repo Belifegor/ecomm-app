@@ -22,7 +22,7 @@ export function Header() {
 
   return (
     <header className="bg-white shadow sticky top-0 z-10">
-      <div className="max-w-[1440px] mx-auto px-4 py-4 flex justify-between items-center xl:px-40">
+      <div className="max-w-[1440px] mx-auto px-8 py-4 flex justify-between items-center xl:px-40">
         <Link to="/" className="text-2xl font-bold text-gray-800">
           <Logo />
         </Link>
@@ -80,7 +80,7 @@ export function Header() {
 
       {/* Мобильный слайдер меню */}
       <div
-        className={`fixed top-0 right-0 h-full w-full bg-white shadow-lg overflow-hidden transform transition-transform duration-300 ease-in-out z-30 md:hidden ${
+        className={`fixed top-0 right-0 h-full w-full bg-white shadow-lg overflow-hidden transform transition-transform duration-500 ease-in-out z-30 md:hidden ${
           isMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >

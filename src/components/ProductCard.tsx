@@ -35,7 +35,7 @@ export function ProductCard({ name, price, image, liked }: Product) {
         <p className="text-lg font-bold mb-3">${price.toFixed(2)}</p>
       </div>
       {/* кнопка */}
-      <button className="mt-auto bg-black  text-white w-full max-w-[200px] mb-6 px-16 py-3 rounded-lg hover:bg-[#9a2ee8] hover:text-white transition">
+      <button className="mt-auto bg-black  text-white w-full max-w-[200px] min-w-[100px] mb-6 px-8 py-3 rounded-lg hover:bg-[#9a2ee8] hover:text-white transition">
         <span className="whitespace-nowrap">Buy now</span>
       </button>
     </div>

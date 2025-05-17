@@ -6,6 +6,7 @@ import { Banners } from '../components/Banners';
 import { Discounts } from '../components/Discounts';
 import { BannerSale } from '../components/BannerSale';
 import { Footer } from '../components/Footer';
+import '../styles/index.css';
 
 export function MainPage() {
   return (

@@ -1,13 +1,13 @@
 export function Footer() {
   return (
-    <footer className="bg-black text-white py-12 px-4">
-      <div className="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
+    <footer className="bg-black text-white py-12 px-40">
+      <div className="md:flex md:justify-between gap-8 max-w-[1120px] mx-auto">
         {/* Левая колонка */}
         <div>
           <h2 className="text-xl font-bold mb-4">cyber</h2>
           <p className="text-sm text-gray-400 leading-relaxed">
-            We are a residential interior design firm located in Portland. Our
-            boutique-studio offers more than
+            We are a residential interior design firm located
+            <br /> in Portland. Our boutique-studio offers more than
           </p>
         </div>
 

@@ -69,7 +69,7 @@ export function ProductTabs() {
   const [activeTab, setActiveTab] = useState<Tab>('New Arrival');
 
   return (
-    <section className="py-12 bg-white">
+    <section id="products" className="py-12 bg-white">
       <div className="max-w-[1440px] mx-auto px-4 lg:px-40">
         {/* Вкладки */}
         <div className="flex gap-6 mb-6 text-sm font-medium">

@@ -37,12 +37,18 @@ export function Header() {
         </div>
 
         <nav className="hidden md:flex gap-6 text-gray-700 font-medium">
-          <NavLink to="/" className="text-blue-600 font-semibold">
+          <a href="#home" className="hover:text-[#9a2ee8]">
             Home
-          </NavLink>
-          <NavLink to="/about">About</NavLink>
-          <NavLink to="/contact">Contact</NavLink>
-          <NavLink to="/blog">Blog</NavLink>
+          </a>
+          <a href="#products" className="hover:text-[#9a2ee8]">
+            Products
+          </a>
+          <a href="#contact" className="hover:text-[#9a2ee8]">
+            Contact
+          </a>
+          <a href="#blog" className="hover:text-[#9a2ee8]">
+            Blog
+          </a>
         </nav>
 
         <div className="hidden md:flex gap-2 items-center">

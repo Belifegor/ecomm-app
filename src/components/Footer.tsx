@@ -28,7 +28,10 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className="bg-black text-white py-12 sm:px-4 md:px-8 xl:px-40">
+    <footer
+      id="contact"
+      className="bg-black text-white py-12 sm:px-4 md:px-8 xl:px-40"
+    >
       <div className="md:flex md:justify-between gap-8 max-w-[1120px] mx-auto px-4 space-y-8 md:space-y-0">
         {/* Левая колонка */}
         <div>
@@ -99,7 +102,7 @@ export function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={link.name}
-            className="p-2 rounded-full hover:bg-[#9a2ee8] active:bg-gray-700 transition-colors duration-200"
+            className="p-2 rounded-full hover:bg-[#9a2ee8] active:bg-[#54306d] transition-colors duration-200"
           >
             {link.icon}
           </a>

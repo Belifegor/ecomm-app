@@ -4,13 +4,15 @@ import { schemaForLogin } from '../utils/validation.ts';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { getCustomerToken } from '../services/CommerceTools/BuildClient.ts';
 
-type LoginData = z.infer<typeof schemaForLogin>;
+export type LoginData = z.infer<typeof schemaForLogin>;
 
 function LoginPage() {
   const {
     register,
-    formState: { errors },
+    handleSubmit,
+    formState: { errors, isValid },
   } = useForm<LoginData>({
     mode: 'onChange',
     resolver: zodResolver(schemaForLogin),
@@ -19,34 +21,44 @@ function LoginPage() {
       password: '',
     },
   });
-  // const res = schemaForLogin.safeParse({ register });
+  const submitHandler = (formData: LoginData) => {
+    getCustomerToken(formData)
+      .get()
+      .execute()
+      .then((res) => console.log(res));
+  };
+  console.log(isValid);
   return (
     <div className="flex flex-col w-1/1 h-1/1 justify-center items-center">
       <div className="min-w-[360px] w-1/3 border border-[#EBEBEB] rounded-[10px] py-14 px-16">
         <h2 className="font-bold text-xl mb-10">ACCOUNT LOGIN</h2>
-        <InputField
-          register={register}
-          label="Email"
-          type="text"
-          name="email"
-          placeholder="example@example.com"
-        />
-        {errors.email && (
-          <p className="h-5 text-red-500 text-[12px]">{errors.email.message}</p>
-        )}
-        <InputField
-          register={register}
-          label="Password"
-          type="password"
-          name="password"
-          placeholder="password..."
-        />
-        {errors.password && (
-          <p className="h-5 text-red-500 text-[12px]">
-            {errors.password.message}
-          </p>
-        )}
-        <Button text="Login" />
+        <form onSubmit={handleSubmit(submitHandler)}>
+          <InputField
+            register={register}
+            label="Email"
+            type="text"
+            name="email"
+            placeholder="example@example.com"
+          />
+          {errors.email && (
+            <p className="h-5 text-red-500 text-[12px]">
+              {errors.email.message}
+            </p>
+          )}
+          <InputField
+            register={register}
+            label="Password"
+            type="password"
+            name="password"
+            placeholder="password..."
+          />
+          {errors.password && (
+            <p className="h-5 text-red-500 text-[12px]">
+              {errors.password.message}
+            </p>
+          )}
+          <Button type="submit" text="Login" disabled={!isValid} />
+        </form>
       </div>
     </div>
   );

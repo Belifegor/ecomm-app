@@ -3,19 +3,19 @@
 
 import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
 import { LoginData } from '../../pages/LoginPage.tsx';
+import {
+  type AuthMiddlewareOptions,
+  ClientBuilder,
+  type HttpMiddlewareOptions,
+  type PasswordAuthMiddlewareOptions,
+} from '@commercetools/ts-client';
+
 const PROJECT_KEY = import.meta.env.VITE_CT_PROJECT_KEY;
 const CLIENT_ID = import.meta.env.VITE_CT_CLIENT_ID;
 const CLIENT_SECRET = import.meta.env.VITE_CT_CLIENT_SECRET;
 const AUTH_HOST = import.meta.env.VITE_CT_AUTH_HOST;
 const API_HOST = import.meta.env.VITE_CT_API_HOST;
 const API_SCOPES = import.meta.env.VITE_API_SCOPES;
-
-import {
-  ClientBuilder,
-  type AuthMiddlewareOptions, // Required for auth
-  type HttpMiddlewareOptions, // Required for sending HTTP requests
-  type PasswordAuthMiddlewareOptions, //
-} from '@commercetools/ts-client';
 
 const projectKey = PROJECT_KEY;
 const scopes = API_SCOPES;

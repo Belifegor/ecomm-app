@@ -1,4 +1,4 @@
-//import LoginPage from './pages/LoginPage.tsx';
+import LoginPage from './pages/LoginPage.tsx';
 import RegistrationPage from './pages/RegistrationPage.tsx';
 
 export default function App() {
@@ -7,7 +7,7 @@ export default function App() {
       {/*<h1 className="text-4xl font-bold text-blue-600">*/}
       {/*  TailwindCSS v4 работает!*/}
       {/*</h1>*/}
-      {/*<LoginPage />*/}
+      <LoginPage />
       <RegistrationPage />
     </div>
   );

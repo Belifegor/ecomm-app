@@ -15,7 +15,7 @@ const countries = [
 function RegistrationPage() {
   const {
     register,
-    formState: { errors },
+    formState: { errors, isValid },
     getValues,
   } = useForm<RegistrationData>({
     mode: 'onChange',
@@ -39,115 +39,123 @@ function RegistrationPage() {
     <div className="flex flex-col w-1/1 h-1/1 justify-center items-center">
       <div className="min-w-[360px] w-1/3 border border-[#EBEBEB] rounded-[10px] py-14 px-16">
         <h2 className="font-bold text-xl mb-10">ACCOUNT REGISTRATION</h2>
-        <InputField
-          register={register}
-          label="Email"
-          type="text"
-          name="email"
-          placeholder="example@example.com"
-        />
-        {errors.email && (
-          <p className="h-5 text-red-500 text-[12px]">{errors.email.message}</p>
-        )}
-        <InputField
-          register={register}
-          label="Password"
-          type="password"
-          name="password"
-          placeholder="password..."
-        />
-        {errors.password && (
-          <p className="h-5 text-red-500 text-[12px]">
-            {errors.password.message}
-          </p>
-        )}
-        <InputField
-          register={register}
-          label="First name"
-          type="text"
-          name="name"
-          placeholder="first name"
-        />
-        {errors.name && (
-          <p className="h-5 text-red-500 text-[12px]">{errors.name.message}</p>
-        )}
-        <InputField
-          register={register}
-          label="Last name"
-          type="text"
-          name="lastName"
-          placeholder="last name"
-        />
-        {errors.lastName && (
-          <p className="h-5 text-red-500 text-[12px]">
-            {errors.lastName.message}
-          </p>
-        )}
-        <InputField
-          register={register}
-          label="Date of birth"
-          type="date"
-          name="dateOfBirth"
-          placeholder="MM/DD/YYYY"
-        />
-        {errors.dateOfBirth && (
-          <p className="h-5 text-red-500 text-[12px]">
-            {errors.dateOfBirth.message}
-          </p>
-        )}
-        <h2 className="font-bold text-xl mb-10 mt-10">ADDRESS</h2>
-        <InputField
-          register={register}
-          label="Street"
-          type="text"
-          name="street"
-          placeholder="street"
-        />
-        {errors.street && (
-          <p className="h-5 text-red-500 text-[12px]">
-            {errors.street.message}
-          </p>
-        )}
-        <InputField
-          register={register}
-          label="City"
-          type="text"
-          name="city"
-          placeholder="city"
-        />
-        {errors.city && (
-          <p className="h-5 text-red-500 text-[12px]">{errors.city.message}</p>
-        )}
-        <label
-          // htmlFor="country"
-          className="text-left text-sm leading-8 text-[#545454]"
-        >
-          Country
-        </label>
-        <select
-          id="country"
-          className="border border-[#9F9F9F] w-full h-14 rounded-[7px] p-4 hover:cursor-pointer"
-          {...register('country', { required: true })}
-        >
-          {countries.map((country) => (
-            <option key={country} value={country}>
-              {country}
-            </option>
-          ))}
-        </select>
-        <InputField
-          register={register}
-          label="Postal code"
-          type="text"
-          name="postalCode"
-          placeholder="postal code"
-        />
-        {errors.postalCode && (
-          <p className="h-5 text-red-500 text-[12px]">
-            {errors.postalCode.message}
-          </p>
-        )}
-        <Button text="Sing Up" />
+        <form>
+          <InputField
+            register={register}
+            label="Email"
+            type="text"
+            name="email"
+            placeholder="example@example.com"
+          />
+          {errors.email && (
+            <p className="h-5 text-red-500 text-[12px]">
+              {errors.email.message}
+            </p>
+          )}
+          <InputField
+            register={register}
+            label="Password"
+            type="password"
+            name="password"
+            placeholder="password..."
+          />
+          {errors.password && (
+            <p className="h-5 text-red-500 text-[12px]">
+              {errors.password.message}
+            </p>
+          )}
+          <InputField
+            register={register}
+            label="First name"
+            type="text"
+            name="name"
+            placeholder="first name"
+          />
+          {errors.name && (
+            <p className="h-5 text-red-500 text-[12px]">
+              {errors.name.message}
+            </p>
+          )}
+          <InputField
+            register={register}
+            label="Last name"
+            type="text"
+            name="lastName"
+            placeholder="last name"
+          />
+          {errors.lastName && (
+            <p className="h-5 text-red-500 text-[12px]">
+              {errors.lastName.message}
+            </p>
+          )}
+          <InputField
+            register={register}
+            label="Date of birth"
+            type="date"
+            name="dateOfBirth"
+            placeholder="MM/DD/YYYY"
+          />
+          {errors.dateOfBirth && (
+            <p className="h-5 text-red-500 text-[12px]">
+              {errors.dateOfBirth.message}
+            </p>
+          )}
+          <h2 className="font-bold text-xl mb-10 mt-10">ADDRESS</h2>
+          <InputField
+            register={register}
+            label="Street"
+            type="text"
+            name="street"
+            placeholder="street"
+          />
+          {errors.street && (
+            <p className="h-5 text-red-500 text-[12px]">
+              {errors.street.message}
+            </p>
+          )}
+          <InputField
+            register={register}
+            label="City"
+            type="text"
+            name="city"
+            placeholder="city"
+          />
+          {errors.city && (
+            <p className="h-5 text-red-500 text-[12px]">
+              {errors.city.message}
+            </p>
+          )}
+          <label
+            // htmlFor="country"
+            className="text-left text-sm leading-8 text-[#545454]"
+          >
+            Country
+          </label>
+          <select
+            id="country"
+            className="border border-[#9F9F9F] w-full h-14 rounded-[7px] p-4 hover:cursor-pointer"
+            {...register('country', { required: true })}
+          >
+            {countries.map((country) => (
+              <option key={country} value={country}>
+                {country}
+              </option>
+            ))}
+          </select>
+          <InputField
+            register={register}
+            label="Postal code"
+            type="text"
+            name="postalCode"
+            placeholder="postal code"
+          />
+          {errors.postalCode && (
+            <p className="h-5 text-red-500 text-[12px]">
+              {errors.postalCode.message}
+            </p>
+          )}
+          <Button text="Sing Up" type="submit" disabled={!isValid} />
+        </form>
       </div>
     </div>
   );

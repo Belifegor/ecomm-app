@@ -23,9 +23,15 @@ function LoginPage() {
   });
   const submitHandler = (formData: LoginData) => {
     getCustomerToken(formData)
+      .me()
       .get()
       .execute()
-      .then((res) => console.log(res));
+      .then((res) => {
+        console.log('Customer info:', res.body);
+      })
+      .catch((err) => {
+        console.error('Login failed:', err.message);
+      });
   };
   console.log(isValid);
   return (

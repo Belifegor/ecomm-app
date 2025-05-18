@@ -1,7 +1,7 @@
 import { apiRoot } from './apiRoot';
 
-export function getProducts() {
-  const response = apiRoot.productProjections().get().execute();
+export async function getProducts() {
+  const response = await apiRoot.productProjections().get().execute();
 
-  return response;
+  return response.body.results;
 }

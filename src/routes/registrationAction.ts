@@ -44,7 +44,7 @@ export async function registerAction({ request }: ActionFunctionArgs) {
       });
 
       const result = await loginCustomer({ email, password });
-      authStore().login(result.customer);
+      authStore.getState().login(result.customer);
 
       return redirect('/main');
     }

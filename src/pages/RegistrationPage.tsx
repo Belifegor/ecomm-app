@@ -4,42 +4,64 @@ import { schemaForRegistration } from '../utils/validation.ts';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Link /*useNavigate*/ } from 'react-router-dom';
+import { registerAction } from '../routes/registrationAction.ts';
+import { useState } from 'react';
 
-type RegistrationData = z.infer<typeof schemaForRegistration>;
+export type RegistrationData = z.infer<typeof schemaForRegistration>;
 const countries = [
   'United States (US)',
   'European (EU)',
   'Belarus(BY)',
   'Russia(RU)',
 ];
-function RegistrationPage() {
+function Registration() {
+  // const navigate = useNavigate();
+  const [regError, setRegError] = useState<string | null>(null);
   const {
     register,
+    handleSubmit,
     formState: { errors, isValid },
-    getValues,
+    // getValues,
   } = useForm<RegistrationData>({
     mode: 'onChange',
     resolver: zodResolver(schemaForRegistration),
     defaultValues: {
       email: '',
       password: '',
-      name: '',
+      firstName: '',
       lastName: '',
       dateOfBirth: '',
-      street: '',
+      streetName: '',
       city: '',
       postalCode: '',
+      defaultBillingAddress: false,
     },
   });
 
-  const allFieldNames = Object.values(getValues());
+  // const allFieldNames = Object.values(getValues());
+  const registrationCustomer = (formData: RegistrationData) => {
+    registerAction(formData)
+      .then((res) => {
+        console.log(res);
+        setRegError(null);
+        // navigate('/main');
+      })
+      .catch((error: unknown) => {
+        if (error instanceof Error) {
+          setRegError(error.message);
+        } else {
+          setRegError('An unknown error occurred');
+        }
+      });
+  };
 
-  console.log(allFieldNames);
+  // console.log(allFieldNames);
   return (
     <div className="flex flex-col w-1/1 h-1/1 justify-center items-center">
       <div className="min-w-[360px] w-1/3 border border-[#EBEBEB] rounded-[10px] py-14 px-16">
         <h2 className="font-bold text-xl mb-10">ACCOUNT REGISTRATION</h2>
-        <form>
+        <form onSubmit={handleSubmit(registrationCustomer)}>
           <InputField
             register={register}
             label="Email"
@@ -68,12 +90,12 @@ function RegistrationPage() {
             register={register}
             label="First name"
             type="text"
-            name="name"
+            name="firstName"
             placeholder="first name"
           />
-          {errors.name && (
+          {errors.firstName && (
             <p className="h-5 text-red-500 text-[12px]">
-              {errors.name.message}
+              {errors.firstName.message}
             </p>
           )}
           <InputField
@@ -105,12 +127,12 @@ function RegistrationPage() {
             register={register}
             label="Street"
             type="text"
-            name="street"
+            name="streetName"
             placeholder="street"
           />
-          {errors.street && (
+          {errors.streetName && (
             <p className="h-5 text-red-500 text-[12px]">
-              {errors.street.message}
+              {errors.streetName.message}
             </p>
           )}
           <InputField
@@ -154,11 +176,32 @@ function RegistrationPage() {
               {errors.postalCode.message}
             </p>
           )}
+          <input
+            type="checkbox"
+            id="defaultBillingAddress"
+            {...register('defaultBillingAddress')}
+            className="w-4 h-4 mt-2 mr-2"
+          />
+          <label className="text-left text-sm leading-8 text-[#545454]">
+            Make as default billing address
+          </label>
+
           <Button text="Sing Up" type="submit" disabled={!isValid} />
+          <p className="text-left text-sm leading-8 text-[#545454]">
+            If you have an account yet
+            <Link
+              to="/register"
+              className="text-sm hover:underline text-[#545454] "
+            >
+              {' '}
+              Login
+            </Link>
+          </p>
         </form>
+        {regError && <p className="h-5 text-red-500 text-[16px]">{regError}</p>}
       </div>
     </div>
   );
 }
 
-export default RegistrationPage;
+export default Registration;

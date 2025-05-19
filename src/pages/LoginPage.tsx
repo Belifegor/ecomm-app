@@ -4,12 +4,15 @@ import { schemaForLogin } from '../utils/validation.ts';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { getCustomerToken } from '../services/CommerceTools/BuildClient.ts';
+import { getCustomerToken } from '../services/sdk/loginCustomer.ts';
+import { Link /*Outlet, useNavigate*/ } from 'react-router-dom';
+import { authStore } from '../store/store.ts';
+import { useState } from 'react';
 //import { useNavigate } from 'react-router-dom'
 export type LoginData = z.infer<typeof schemaForLogin>;
 
-function LoginPage() {
-  // const navigate = useNavigate();
+function Login() {
+  //const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -22,18 +25,37 @@ function LoginPage() {
       password: '',
     },
   });
-  const submitHandler = (formData: LoginData) => {
-    getCustomerToken(formData)
-      .me()
-      .get()
-      .execute()
-      .then((res) => {
-        // navigate('/main');
-        console.log('Customer info:', res.body);
-      })
-      .catch((err) => {
-        console.error('Login failed:', err.message);
-      });
+  const [loginError, setLoginError] = useState<string | null>(null);
+  const submitHandler = async (formData: LoginData) => {
+    // getCustomerToken(formData)
+    //   .me()
+    //   .get()
+    //   .execute()
+    //   .then((res) => {
+    //     console.log('Customer info:', res.body);
+    //     navigate('/profile');
+    //   })
+    //   .catch((err) => {
+    //     console.error('Login failed:', err.message);
+    //   });
+
+    try {
+      const result = await getCustomerToken(formData)
+        .me()
+        .login()
+        .post({ body: formData })
+        .execute();
+      // await loginCustomer({ email, password });
+      authStore.getState().login(result.body.customer);
+      console.log(result);
+      setLoginError(null);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setLoginError(error.message);
+      } else {
+        setLoginError('An unknown error occurred');
+      }
+    }
   };
   console.log(isValid);
   return (
@@ -66,9 +88,22 @@ function LoginPage() {
             </p>
           )}
           <Button type="submit" text="Login" disabled={!isValid} />
+          <p className="text-left text-sm leading-8 text-[#545454]">
+            Don't have an account yet?
+            <Link
+              to="/register"
+              className="text-sm hover:underline text-[#545454] "
+            >
+              {' '}
+              Register
+            </Link>
+          </p>
         </form>
+        {loginError && (
+          <p className="h-5 text-red-500 text-[16px]">{loginError}</p>
+        )}
       </div>
     </div>
   );
 }
-export default LoginPage;
+export default Login;

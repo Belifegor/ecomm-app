@@ -63,7 +63,7 @@ export const schemaForLogin = z.object({
 
 export const schemaForRegistration = schemaForLogin
   .extend({
-    name: z
+    firstName: z
       .string()
       .min(1, { message: 'Field must contain at least one letter' })
       .refine((val) => !/[^A-Za-z]/.test(val), {
@@ -92,23 +92,20 @@ export const schemaForRegistration = schemaForLogin
         (val) => {
           const birthDate = new Date(val);
           const now = new Date();
-          const age = now.getFullYear() - birthDate.getFullYear();
-          if (age < 13) {
-            return false;
-          } else if (
-            now.getMonth() < birthDate.getMonth() ||
-            (now.getMonth() === birthDate.getMonth() &&
-              now.getDate() < birthDate.getDate())
-          ) {
-            return false;
-          }
-          return true;
+
+          const thirteenYearsAgo = new Date(
+            now.getFullYear() - 13,
+            now.getMonth(),
+            now.getDate()
+          );
+
+          return birthDate <= thirteenYearsAgo;
         },
         {
           message: 'You must be over 13 years old',
         }
       ),
-    street: z.string().min(1),
+    streetName: z.string().min(1),
     city: z
       .string()
       .min(1, { message: 'Field must contain at least one letter' })
@@ -125,6 +122,7 @@ export const schemaForRegistration = schemaForLogin
     postalCode: z
       .string()
       .min(1, { message: 'Field must contain at least one letter' }),
+    defaultBillingAddress: z.boolean(),
   })
   .superRefine((data, ctx) => {
     const { country, postalCode } = data;
@@ -138,6 +136,22 @@ export const schemaForRegistration = schemaForLogin
     }
     console.log(postalCodePatterns[country].test(postalCode));
   });
+// export const schemaForRegistrationFormatted = schemaForRegistration
+//   .transform((data) => ({
+//     email: data.email,
+//     password: data.password,
+//     firstName: data.firstName,
+//     lastName: data.lastName,
+//     dateOfBirth: data.dateOfBirth,
+//     addresses: [
+//       {
+//         streetName: data.streetName,
+//         city: data.city,
+//         postalCode: data.postalCode,
+//         country: data.country,
+//       }
+//     ],
+//   }))
 
 const postalCodePatterns: Record<string, RegExp> = {
   'United States (US)': /^\d{5}$/,

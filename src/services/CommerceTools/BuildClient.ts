@@ -2,25 +2,23 @@
 // import { createAuthForAnonymousSessionFlow, TokenStore  } from '@commercetools/sdk-client-v2'
 
 import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
-import { LoginData } from '../../pages/LoginPage.tsx';
 import {
   type AuthMiddlewareOptions,
   ClientBuilder,
   type HttpMiddlewareOptions,
-  type PasswordAuthMiddlewareOptions,
 } from '@commercetools/ts-client';
 
-const PROJECT_KEY = import.meta.env.VITE_CT_PROJECT_KEY;
-const CLIENT_ID = import.meta.env.VITE_CT_CLIENT_ID;
-const CLIENT_SECRET = import.meta.env.VITE_CT_CLIENT_SECRET;
-const AUTH_HOST = import.meta.env.VITE_CT_AUTH_HOST;
-const API_HOST = import.meta.env.VITE_CT_API_HOST;
-const API_SCOPES = import.meta.env.VITE_API_SCOPES;
+export const PROJECT_KEY = import.meta.env.VITE_CT_PROJECT_KEY;
+export const CLIENT_ID = import.meta.env.VITE_CT_CLIENT_ID;
+export const CLIENT_SECRET = import.meta.env.VITE_CT_CLIENT_SECRET;
+export const AUTH_HOST = import.meta.env.VITE_CT_AUTH_HOST;
+export const API_HOST = import.meta.env.VITE_CT_API_HOST;
+export const API_SCOPES = import.meta.env.VITE_API_SCOPES;
 
 const projectKey = PROJECT_KEY;
 const scopes = API_SCOPES;
 
-const authMiddlewareOptions: AuthMiddlewareOptions = {
+export const authMiddlewareOptions: AuthMiddlewareOptions = {
   host: AUTH_HOST,
   projectKey: projectKey,
   credentials: {
@@ -31,7 +29,7 @@ const authMiddlewareOptions: AuthMiddlewareOptions = {
   httpClient: fetch,
 };
 
-const httpMiddlewareOptions: HttpMiddlewareOptions = {
+export const httpMiddlewareOptions: HttpMiddlewareOptions = {
   host: API_HOST,
   httpClient: fetch,
   enableRetry: true,
@@ -52,29 +50,3 @@ export const anonymousClient = new ClientBuilder()
 export const apiRoot = createApiBuilderFromCtpClient(
   anonymousClient
 ).withProjectKey({ projectKey: PROJECT_KEY });
-
-export function getCustomerToken(formData: LoginData) {
-  const passwordMiddlewareOptions: PasswordAuthMiddlewareOptions = {
-    host: AUTH_HOST,
-    projectKey: PROJECT_KEY,
-    credentials: {
-      clientId: CLIENT_ID,
-      clientSecret: CLIENT_SECRET,
-      user: {
-        username: formData.email,
-        password: formData.password,
-      },
-    },
-    scopes,
-    httpClient: fetch,
-  };
-  console.log('xxxxx');
-  const passwordFlowClient = new ClientBuilder()
-    .withProjectKey(projectKey)
-    .withPasswordFlow(passwordMiddlewareOptions)
-    .withHttpMiddleware(httpMiddlewareOptions)
-    .build();
-  return createApiBuilderFromCtpClient(passwordFlowClient).withProjectKey({
-    projectKey: PROJECT_KEY,
-  });
-}

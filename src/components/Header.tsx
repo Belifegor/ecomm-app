@@ -1,5 +1,6 @@
 import { Link, NavLink } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { authStore } from '../store/store';
 import HeartIcon from '../assets/icons/Heart.svg?react';
 import CartIcon from '../assets/icons/Cart.svg?react';
 import SearchIcon from '../assets/icons/Search_icon.svg?react';
@@ -7,6 +8,8 @@ import Logo from '../assets/icons/Logo.svg?react';
 import BurgerIcon from '../assets/icons/Burger.svg?react';
 
 export function Header() {
+  const customer = authStore((state) => state.customer);
+  const logout = authStore((state) => state.logout);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -61,18 +64,39 @@ export function Header() {
           </button>
         </div>
         <div className="hidden md:flex gap-4">
-          <Link
-            to="/login"
-            className="text-md text-gray-700 font-medium hover:underline"
-          >
-            Login
-          </Link>
-          <Link
-            to="/register"
-            className="text-md text-gray-700 font-medium hover:underline"
-          >
-            Register
-          </Link>
+          {customer ? (
+            <>
+              <Link
+                to="/profile"
+                className="text-md text-gray-700 font-medium hover:underline"
+              >
+                👤 {customer.firstName || 'Profile'}
+              </Link>
+              <button
+                onClick={() => {
+                  logout();
+                }}
+                className="text-md text-gray-700 font-medium hover:underline"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/login"
+                className="text-md text-gray-700 font-medium hover:underline"
+              >
+                Login
+              </Link>
+              <Link
+                to="/register"
+                className="text-md text-gray-700 font-medium hover:underline"
+              >
+                Register
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Бургер кнопка */}

@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { NotFound } from '../pages/NotFound';
+import ProfilePage from '../pages/ProfilePage.tsx';
 //import { registerAction } from './registrationAction';
 // import { getProducts } from '../services/sdk/getProducts';
 import { protectedLoader } from './protectedLoader';
@@ -25,7 +26,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/profile',
-    element: <h1>Hi</h1>,
+    element: <ProfilePage />,
     loader: protectedLoader,
   },
   {

@@ -48,7 +48,7 @@ function Login() {
       // await loginCustomer({ email, password });
       authStore.getState().login(result.body.customer);
       console.log(result);
-      navigate('/');
+      navigate('/', { replace: true });
       setLoginError(null);
     } catch (error: unknown) {
       if (error instanceof Error) {

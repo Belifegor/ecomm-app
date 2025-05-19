@@ -1,7 +1,7 @@
 import { Link, NavLink } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import HeartIcon from '../assets/icons/heart.svg?react';
-import CartIcon from '../assets/icons/cart.svg?react';
+import HeartIcon from '../assets/icons/Heart.svg?react';
+import CartIcon from '../assets/icons/Cart.svg?react';
 import SearchIcon from '../assets/icons/Search_icon.svg?react';
 import Logo from '../assets/icons/Logo.svg?react';
 import BurgerIcon from '../assets/icons/Burger.svg?react';

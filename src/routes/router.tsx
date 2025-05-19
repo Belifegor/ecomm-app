@@ -6,34 +6,27 @@ import { protectedLoader } from './protectedLoader';
 // import { loginAction } from './loginAction';
 import Login from '../pages/LoginPage.tsx';
 import Registration from '../pages/RegistrationPage.tsx';
+import { MainPage } from '../pages/MainPage.tsx';
 
 const router = createBrowserRouter([
   {
     path: '/',
+    element: <MainPage />,
+  },
+  {
+    path: '/login',
     element: <Login />,
-    // loader: getProducts,
-    children: [
-      // {
-      //   index: true,
-      //   path: '/main',
-      //   element: <Main />,
-      // },
-      {
-        path: '/login',
-        element: <Login />,
-        // action: loginAction,
-      },
-      {
-        path: '/register',
-        element: <Registration />,
-        // action: registerAction,
-      },
-      {
-        path: '/profile',
-        element: <h1>Hi</h1>,
-        loader: protectedLoader,
-      },
-    ],
+    // action: loginAction,
+  },
+  {
+    path: '/register',
+    element: <Registration />,
+    // action: registerAction,
+  },
+  {
+    path: '/profile',
+    element: <h1>Hi</h1>,
+    loader: protectedLoader,
   },
   {
     path: '*',

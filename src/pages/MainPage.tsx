@@ -7,6 +7,7 @@ import { Discounts } from '../components/Discounts';
 import { BannerSale } from '../components/BannerSale';
 import { Footer } from '../components/Footer';
 import '../styles/index.css';
+// import { Outlet } from 'react-router-dom';
 
 export function MainPage() {
   return (

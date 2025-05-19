@@ -190,7 +190,7 @@ function Registration() {
           <p className="text-left text-sm leading-8 text-[#545454]">
             If you have an account yet
             <Link
-              to="/register"
+              to="/login"
               className="text-sm hover:underline text-[#545454] "
             >
               {' '}

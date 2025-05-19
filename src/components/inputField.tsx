@@ -1,7 +1,7 @@
 import { JSX, useState } from 'react';
 import { Path, FieldValues, UseFormRegister } from 'react-hook-form';
-// import ShownIcon from '../assets/icons/eye-on.svg?react';
-// import NotShownIcon from '../assets/icons/eye-off.svg?react';
+import ShownIcon from '../assets/icons/eye-on.svg?react';
+import NotShownIcon from '../assets/icons/eye-off.svg?react';
 
 type InputFieldProps<T extends FieldValues> = {
   label: string;
@@ -40,19 +40,19 @@ export function InputField<T extends FieldValues>({
             onClick={() => setShowPassword((val) => !val)}
             className="absolute top-1/2 right-2.5 transform -translate-y-1/2 focus:outline-none "
           >
-            {/*{isShownPassword ? (*/}
-            {/*  <NotShownIcon*/}
-            {/*    className="h-5 w-5 focus:outline-none"*/}
-            {/*    focusable="false"*/}
-            {/*    tabIndex={-1}*/}
-            {/*  />*/}
-            {/*) : (*/}
-            {/*  <ShownIcon*/}
-            {/*    className="h-5 w-5 focus:outline-none"*/}
-            {/*    focusable="false"*/}
-            {/*    tabIndex={-1}*/}
-            {/*  />*/}
-            {/*)}*/}
+            {isShownPassword ? (
+              <NotShownIcon
+                className="h-5 w-5 focus:outline-none"
+                focusable="false"
+                tabIndex={-1}
+              />
+            ) : (
+              <ShownIcon
+                className="h-5 w-5 focus:outline-none"
+                focusable="false"
+                tabIndex={-1}
+              />
+            )}
           </button>
         )}
       </div>

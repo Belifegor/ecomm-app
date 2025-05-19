@@ -8,11 +8,11 @@ import { getCustomerToken } from '../services/sdk/loginCustomer.ts';
 import { Link /*Outlet, useNavigate*/ } from 'react-router-dom';
 import { authStore } from '../store/store.ts';
 import { useState } from 'react';
-//import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 export type LoginData = z.infer<typeof schemaForLogin>;
 
 function Login() {
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -48,6 +48,7 @@ function Login() {
       // await loginCustomer({ email, password });
       authStore.getState().login(result.body.customer);
       console.log(result);
+      navigate('/');
       setLoginError(null);
     } catch (error: unknown) {
       if (error instanceof Error) {

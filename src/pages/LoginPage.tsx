@@ -5,10 +5,11 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { getCustomerToken } from '../services/CommerceTools/BuildClient.ts';
-
+//import { useNavigate } from 'react-router-dom'
 export type LoginData = z.infer<typeof schemaForLogin>;
 
 function LoginPage() {
+  // const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -27,6 +28,7 @@ function LoginPage() {
       .get()
       .execute()
       .then((res) => {
+        // navigate('/main');
         console.log('Customer info:', res.body);
       })
       .catch((err) => {

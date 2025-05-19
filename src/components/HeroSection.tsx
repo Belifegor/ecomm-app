@@ -19,7 +19,7 @@ export function HeroSection() {
 
         <div className="flex-1">
           <img
-            src="./src/images/Iphone_Image.svg"
+            src="/images/Iphone_Image.svg"
             alt="iPhone 14 Pro"
             className="w-full max-w-md mx-auto"
           />

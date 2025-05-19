@@ -6,26 +6,26 @@ const discountedProducts = [
     name: 'iPhone 14 Pro 512GB Gold',
     price: 1437,
     originalPrice: 1799,
-    image: './src/images/Iphone_14_pro_gold.svg',
+    image: '/images/Iphone_14_pro_gold.svg',
   },
   {
     id: 102,
     name: 'AirPods Max Silver',
     price: 549,
-    image: './src/images/AirPods_max.svg',
+    image: '/images/AirPods_max.svg',
   },
   {
     id: 103,
     name: 'Apple Watch Series 9',
     price: 399,
-    image: './src/images/Apple_watch.svg',
+    image: '/images/Apple_watch.svg',
   },
   {
     id: 104,
     name: 'iPhone 14 Pro 1TB',
     price: 1499,
     originalPrice: 1899,
-    image: './src/images/Iphone_14_pro_white.svg',
+    image: '/images/Iphone_14_pro_white.svg',
   },
 ];
 

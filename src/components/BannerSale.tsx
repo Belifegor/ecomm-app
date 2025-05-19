@@ -2,7 +2,7 @@ export function BannerSale() {
   return (
     <section
       className="w-full mx-auto bg-cover bg-center py-34 px-4"
-      style={{ backgroundImage: "url('./src/images/Banner_2_background.png')" }}
+      style={{ backgroundImage: "url('/images/Banner_2_background.png')" }}
     >
       <div className="max-w-[1440px] mx-auto text-center text-white">
         <h1 className="text-4xl md:text-6xl font-light">

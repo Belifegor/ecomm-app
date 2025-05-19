@@ -8,9 +8,19 @@ type AuthStore = {
   isAuthenticated: () => boolean;
 };
 
+const storedCustomer = localStorage.getItem('customer');
+const initialCustomer = storedCustomer ? JSON.parse(storedCustomer) : null;
+
 export const authStore = create<AuthStore>((set, get) => ({
-  customer: null,
-  login: (customer) => set({ customer }),
-  logout: () => set({ customer: null }),
+  customer: initialCustomer,
+
+  login: (customer) => {
+    localStorage.setItem('customer', JSON.stringify(customer)); // сохраняю в хранилище
+    set({ customer });
+  },
+  logout: () => {
+    localStorage.removeItem('customer'); //очищаю
+    set({ customer: null });
+  },
   isAuthenticated: () => get().customer !== null,
 }));

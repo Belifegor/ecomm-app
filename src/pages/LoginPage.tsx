@@ -4,15 +4,27 @@ import { schemaForLogin } from '../utils/validation.ts';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+
 import { getCustomerToken } from '../services/sdk/loginCustomer.ts';
-import { Link /*Outlet, useNavigate*/ } from 'react-router-dom';
+import { Link /*Outlet*/ } from 'react-router-dom';
 import { authStore } from '../store/store.ts';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+
 export type LoginData = z.infer<typeof schemaForLogin>;
 
 function Login() {
   const navigate = useNavigate();
+  //добавил сохранения состояния по пункту  RSS-ECOMM-2_06
+  const isAuthenticated = authStore((state) => state.isAuthenticated());
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
+
   const {
     register,
     handleSubmit,
@@ -25,7 +37,9 @@ function Login() {
       password: '',
     },
   });
+
   const [loginError, setLoginError] = useState<string | null>(null);
+
   const submitHandler = async (formData: LoginData) => {
     // getCustomerToken(formData)
     //   .me()

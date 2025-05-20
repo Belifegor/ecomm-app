@@ -4,7 +4,7 @@ import { schemaForRegistration } from '../utils/validation.ts';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link /*useNavigate*/ } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { registerAction } from '../routes/registrationAction.ts';
 import { useState } from 'react';
 
@@ -40,8 +40,9 @@ function Registration() {
   });
 
   // const allFieldNames = Object.values(getValues());
+  const navigate = useNavigate();
   const registrationCustomer = (formData: RegistrationData) => {
-    registerAction(formData)
+    registerAction(formData, navigate)
       .then((res) => {
         console.log(res);
         setRegError(null);

@@ -9,10 +9,14 @@ type AuthStore = {
 };
 
 const storedCustomer = localStorage.getItem('customer');
+const storedToken = localStorage.getItem('token');
+
 const initialCustomer = storedCustomer ? JSON.parse(storedCustomer) : null;
+const initialToken = storedToken || null;
 
 export const authStore = create<AuthStore>((set, get) => ({
   customer: initialCustomer,
+  token: initialToken,
 
   login: (customer) => {
     localStorage.setItem('customer', JSON.stringify(customer)); // сохраняю в хранилище

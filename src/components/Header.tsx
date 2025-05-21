@@ -24,7 +24,7 @@ export function Header() {
   }, [isMenuOpen]);
 
   return (
-    <header className="bg-white shadow sticky top-0 z-10">
+    <header className="bg-white shadow fixed top-0 left-0 w-full z-10">
       <div className="max-w-[1440px] mx-auto px-8 py-4 flex justify-between items-center xl:px-40">
         <Link to="/" className="text-2xl font-bold text-gray-800">
           <Logo />

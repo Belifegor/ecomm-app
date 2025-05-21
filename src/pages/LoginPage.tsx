@@ -41,6 +41,11 @@ function Login() {
   const [loginError, setLoginError] = useState<string | null>(null);
 
   const submitHandler = async (formData: LoginData) => {
+    if (authStore.getState().isAuthenticated()) {
+      navigate('/', { replace: true });
+      return;
+    }
+
     // getCustomerToken(formData)
     //   .me()
     //   .get()

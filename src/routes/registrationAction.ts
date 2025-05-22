@@ -11,6 +11,8 @@ export async function registerAction(
   navigate: NavigateFunction
 ) {
   const mappedData = mapRegistrationData(formData);
+  await registerCutomer(mappedData);
+
 
   await registerCutomer(mappedData);
 

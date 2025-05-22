@@ -11,22 +11,16 @@ export async function registerAction(
   navigate: NavigateFunction
 ) {
   const mappedData = mapRegistrationData(formData);
+  await registerCutomer(mappedData);
 
-  try {
-    await registerCutomer(mappedData);
-
-    const { email, password } = formData;
-    const result = await getCustomerToken({ email, password })
-      .me()
-      .login()
-      .post({ body: { email, password } })
-      .execute();
-    // await loginCustomer({ email, password });
-    authStore.getState().login(result.body.customer);
-    navigate('/', { replace: true }); // убрал main в navigate
-    console.log(result);
-  } catch (error) {
-    console.error('Registration failed', error);
-    return error;
-  }
+  const { email, password } = formData;
+  const result = await getCustomerToken({ email, password })
+    .me()
+    .login()
+    .post({ body: { email, password } })
+    .execute();
+  // await loginCustomer({ email, password });
+  authStore.getState().login(result.body.customer);
+  navigate('/', { replace: true }); // убрал main в navigate
+  console.log(result);
 }

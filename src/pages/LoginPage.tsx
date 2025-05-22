@@ -41,32 +41,14 @@ function Login() {
   const [loginError, setLoginError] = useState<string | null>(null);
 
   const submitHandler = async (formData: LoginData) => {
-    if (authStore.getState().isAuthenticated()) {
-      navigate('/', { replace: true });
-      return;
-    }
-
-    // getCustomerToken(formData)
-    //   .me()
-    //   .get()
-    //   .execute()
-    //   .then((res) => {
-    //     console.log('Customer info:', res.body);
-    //     navigate('/profile');
-    //   })
-    //   .catch((err) => {
-    //     console.error('Login failed:', err.message);
-    //   });
-
+    // if (authStore.getState().isAuthenticated()) {
+    //   navigate('/', { replace: true });
+    //   return;
+    // }
     try {
-      const result = await getCustomerToken(formData)
-        .me()
-        .login()
-        .post({ body: formData })
-        .execute();
-      // await loginCustomer({ email, password });
-      authStore.getState().login(result.body.customer);
-      console.log(result);
+      const customer = await getCustomerToken(formData);
+      console.log(customer);
+      authStore.getState().login(customer);
       navigate('/', { replace: true });
       setLoginError(null);
     } catch (error: unknown) {
@@ -76,7 +58,23 @@ function Login() {
         setLoginError('An unknown error occurred');
       }
     }
+    console.log(authStore.getState().isAuthenticated());
   };
+
+  //   try {
+  //
+  //     authStore.getState().login(result.body.customer);
+  //     console.log(result);
+  //     navigate('/', { replace: true });
+  //     setLoginError(null);
+  //   } catch (error: unknown) {
+  //     if (error instanceof Error) {
+  //       setLoginError(error.message);
+  //     } else {
+  //       setLoginError('An unknown error occurred');
+  //     }
+  //   }
+  // };
   console.log(isValid);
   return (
     <div className="flex flex-col w-1/1 h-1/1 justify-center items-center">

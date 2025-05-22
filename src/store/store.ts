@@ -1,5 +1,6 @@
 import { Customer } from '@commercetools/platform-sdk';
 import { create } from 'zustand';
+import { getAnToken } from '../services/CommerceTools/getAnonymousToken.ts';
 
 type AuthStore = {
   customer: Customer | null;
@@ -25,6 +26,7 @@ export const authStore = create<AuthStore>((set, get) => ({
   logout: () => {
     localStorage.removeItem('customer'); //очищаю
     set({ customer: null });
+    getAnToken();
   },
   isAuthenticated: () => get().customer !== null,
 }));

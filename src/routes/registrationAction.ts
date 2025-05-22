@@ -13,14 +13,13 @@ export async function registerAction(
   const mappedData = mapRegistrationData(formData);
   await registerCutomer(mappedData);
 
+
+  await registerCutomer(mappedData);
+
   const { email, password } = formData;
-  const result = await getCustomerToken({ email, password })
-    .me()
-    .login()
-    .post({ body: { email, password } })
-    .execute();
-  // await loginCustomer({ email, password });
-  authStore.getState().login(result.body.customer);
-  navigate('/', { replace: true }); // убрал main в navigate
+  const result = await getCustomerToken({ email, password });
   console.log(result);
+  // await loginCustomer({ email, password });
+  authStore.getState().login(result);
+  navigate('/', { replace: true }); // убрал main в navigate
 }

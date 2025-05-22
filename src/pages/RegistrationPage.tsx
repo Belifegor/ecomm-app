@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerAction } from '../routes/registrationAction.ts';
 import { useState } from 'react';
+import { Address } from '../components/Address.tsx';
 
 export type RegistrationData = z.infer<typeof schemaForRegistration>;
 const countries = [
@@ -16,8 +17,8 @@ const countries = [
   'Russia(RU)',
 ];
 function Registration() {
-  // const navigate = useNavigate();
   const [regError, setRegError] = useState<string | null>(null);
+  const [hideBilling, setHideBilling] = useState(false);
   const {
     register,
     handleSubmit,
@@ -32,14 +33,18 @@ function Registration() {
       firstName: '',
       lastName: '',
       dateOfBirth: '',
-      streetName: '',
-      city: '',
-      postalCode: '',
-      defaultBillingAddress: false,
+      shippingAddress: {
+        streetName: '',
+        city: '',
+        country: 'United States (US)',
+        postalCode: '',
+      },
+      saveAsBilling: false,
     },
   });
-
+  console.log(isValid);
   // const allFieldNames = Object.values(getValues());
+
   const navigate = useNavigate();
   const registrationCustomer = (formData: RegistrationData) => {
     registerAction(formData, navigate)
@@ -123,78 +128,41 @@ function Registration() {
               {errors.dateOfBirth.message}
             </p>
           )}
-          <h2 className="font-bold text-xl mb-10 mt-10">ADDRESS</h2>
-          <InputField
+          <h2 className="font-bold text-xl mb-10 mt-10">SHIPPING ADDRESS</h2>
+          <Address
             register={register}
-            label="Street"
-            type="text"
-            name="streetName"
-            placeholder="street"
+            errors={errors}
+            countries={countries}
+            typeAddress="shippingAddress"
           />
-          {errors.streetName && (
-            <p className="h-5 text-red-500 text-[12px]">
-              {errors.streetName.message}
-            </p>
-          )}
-          <InputField
-            register={register}
-            label="City"
-            type="text"
-            name="city"
-            placeholder="city"
-          />
-          {errors.city && (
-            <p className="h-5 text-red-500 text-[12px]">
-              {errors.city.message}
-            </p>
-          )}
-          <label
-            // htmlFor="country"
-            className="text-left text-sm leading-8 text-[#545454]"
-          >
-            Country
-          </label>
-          <select
-            id="country"
-            className="border border-[#9F9F9F] w-full h-14 rounded-[7px] p-4 hover:cursor-pointer"
-            {...register('country', { required: true })}
-          >
-            {countries.map((country) => (
-              <option key={country} value={country}>
-                {country}
-              </option>
-            ))}
-          </select>
-          <InputField
-            register={register}
-            label="Postal code"
-            type="text"
-            name="postalCode"
-            placeholder="postal code"
-          />
-          {errors.postalCode && (
-            <p className="h-5 text-red-500 text-[12px]">
-              {errors.postalCode.message}
-            </p>
-          )}
           <input
             type="checkbox"
-            id="defaultBillingAddress"
-            {...register('defaultBillingAddress')}
-            className="w-4 h-4 mt-2 mr-2"
+            id="saveAsBilling"
+            {...register('saveAsBilling')}
+            className="w-4 h-4 mt-6 mr-2"
+            onChange={() => setHideBilling(!hideBilling)}
           />
           <label className="text-left text-sm leading-8 text-[#545454]">
             Make as default billing address
           </label>
-
+          {
+            <div>
+              <h2 className="font-bold text-xl mb-10 mt-10">BILLING ADDRESS</h2>
+              <Address
+                register={register}
+                errors={errors}
+                countries={countries}
+                typeAddress="billingAddress"
+              />
+            </div>
+          }
           <Button text="Sing Up" type="submit" disabled={!isValid} />
           <p className="text-left text-sm leading-8 text-[#545454]">
-            If you have an account yet
+            If you have an account yet{' '}
             <Link
               to="/login"
               className="text-sm hover:underline text-[#545454] "
             >
-              {' '}
               Login
             </Link>
           </p>

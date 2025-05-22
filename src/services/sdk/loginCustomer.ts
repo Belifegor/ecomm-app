@@ -31,7 +31,7 @@ import {
 } from '../CommerceTools/BuildClient.ts';
 import { httpMiddlewareOptions } from '../CommerceTools/BuildClient.ts';
 
-export function getCustomerToken(formData: LoginData) {
+export async function getCustomerToken(formData: LoginData) {
   const passwordMiddlewareOptions: PasswordAuthMiddlewareOptions = {
     host: AUTH_HOST,
     projectKey: PROJECT_KEY,
@@ -52,7 +52,26 @@ export function getCustomerToken(formData: LoginData) {
     .withPasswordFlow(passwordMiddlewareOptions)
     .withHttpMiddleware(httpMiddlewareOptions)
     .build();
-  return createApiBuilderFromCtpClient(passwordFlowClient).withProjectKey({
+
+  const apiRoot = createApiBuilderFromCtpClient(
+    passwordFlowClient
+  ).withProjectKey({
     projectKey: PROJECT_KEY,
   });
+
+  const result = await apiRoot.me().login().post({ body: formData }).execute();
+  console.log(result);
+  return result.body.customer;
 }
+
+//
+// const { email, password } = formData;
+// const result = await getCustomerToken({ email, password })
+//   .me()
+//   .login()
+//   .post({ body: { email, password } })
+//   .execute();
+// // await loginCustomer({ email, password });
+// authStore.getState().login(result.body.customer);
+// navigate('/', { replace: true }); // убрал main в navigate
+// console.log(result);

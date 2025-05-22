@@ -1,5 +1,16 @@
 import { z } from 'zod';
-
+const CountryEnum = z.enum([
+  'United States (US)',
+  'European (EU)',
+  'Belarus(BY)',
+  'Russia(RU)',
+]);
+const postalCodePatterns: Record<string, RegExp> = {
+  'United States (US)': /^\d{5}$/,
+  'European (EU)': /^[A-Z0-9\s-]{3,10}$/i,
+  'Belarus(BY)': /^\d{6}$/,
+  'Russia(RU)': /^\d{6}$/,
+};
 export const schemaForLogin = z.object({
   email: z
     .string()
@@ -60,7 +71,21 @@ export const schemaForLogin = z.object({
       message: 'Password must contain at least one special symbol',
     }),
 });
-
+export const schemaForAddress = z.object({
+  streetName: z
+    .string()
+    .min(1, { message: 'Field must contain at least one letter' }),
+  city: z
+    .string()
+    .min(1, { message: 'Field must contain at least one letter' })
+    .refine((val) => !/[^A-Za-z]/.test(val), {
+      message: 'Field must not contain digits and special symbols',
+    }),
+  country: CountryEnum,
+  postalCode: z
+    .string()
+    .min(1, { message: 'Field must contain at least one letter' }),
+});
 export const schemaForRegistration = schemaForLogin
   .extend({
     firstName: z
@@ -105,66 +130,45 @@ export const schemaForRegistration = schemaForLogin
           message: 'You must be over 13 years old',
         }
       ),
-    streetName: z.string().min(1),
-    city: z
-      .string()
-      .min(1, { message: 'Field must contain at least one letter' })
-      .refine((val) => !/[^A-Za-z]/.test(val), {
-        message: 'Field must not contain digits and special symbols',
-      }),
-    country: z.enum([
-      'United States (US)',
-      'European (EU)',
-      'Belarus(BY)',
-      'Russia(RU)',
-    ]),
-    // .min(1, { message: 'Field must contain at least one letter' }),
-    postalCode: z
-      .string()
-      .min(1, { message: 'Field must contain at least one letter' }),
-    defaultBillingAddress: z.boolean(),
+    shippingAddress: schemaForAddress,
+    saveAsBilling: z.boolean(),
+    billingAddress: schemaForAddress,
   })
+
   .superRefine((data, ctx) => {
-    const { country, postalCode } = data;
-    // console.log(data.country)
-    if (!postalCodePatterns[country].test(postalCode)) {
+    console.log(data.saveAsBilling);
+    if (
+      !validatePC(data.shippingAddress.country, data.shippingAddress.postalCode)
+    ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: 'Wrong postal code format',
-        path: ['postalCode'],
+        message: 'Wrong postal code format for shipping address',
+        path: ['shippingAddress', 'postalCode'],
       });
     }
-    console.log(postalCodePatterns[country].test(postalCode));
-  });
-// export const schemaForRegistrationFormatted = schemaForRegistration
-//   .transform((data) => ({
-//     email: data.email,
-//     password: data.password,
-//     firstName: data.firstName,
-//     lastName: data.lastName,
-//     dateOfBirth: data.dateOfBirth,
-//     addresses: [
-//       {
-//         streetName: data.streetName,
-//         city: data.city,
-//         postalCode: data.postalCode,
-//         country: data.country,
-//       }
-//     ],
-//   }))
 
-const postalCodePatterns: Record<string, RegExp> = {
-  'United States (US)': /^\d{5}$/,
-  'European (EU)': /^[A-Z0-9\s-]{3,10}$/i,
-  'Belarus(BY)': /^\d{6}$/,
-  'Russia(RU)': /^\d{6}$/,
-};
-// export const getErrorMessage = (
-//   error: ZodError | undefined,
-//   field: string
-// ): string | null => {
-//   if (!error) return null;
-//   console.log(error.issues);
-//   const issue = error.issues.find((issue) => issue.path[0] === field);
-//   return issue?.message ?? null;
-// };
+    if (!data.saveAsBilling && data.billingAddress) {
+      if (
+        !validatePC(data.billingAddress.country, data.billingAddress.postalCode)
+      ) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Wrong postal code format for billing address',
+          path: ['billingAddress', 'postalCode'],
+        });
+      }
+    }
+
+    // if (!postalCodePatterns[shippingData.country].test(shippingData.postalCode)) {
+    //   ctx.addIssue({
+    //     code: z.ZodIssueCode.custom,
+    //     message: 'Wrong postal code format',
+    //     path: ['postalCode'],
+    //   });
+    // }
+  });
+
+function validatePC(country: string, postalCode: string): boolean {
+  const pattern = postalCodePatterns[country];
+  return pattern.test(postalCode);
+}

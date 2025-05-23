@@ -1,9 +1,15 @@
+import { useEffect } from 'react';
+import { getAnToken } from './services/CommerceTools/getAnonymousToken.ts';
+
+import { RouterProvider } from 'react-router-dom';
+import router from './routes/router';
+import { authStore } from './store/store.ts';
+
 export default function App() {
-  return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <h1 className="text-4xl font-bold text-blue-600">
-        TailwindCSS v4 работает!
-      </h1>
-    </div>
-  );
+  useEffect(() => {
+    if (!authStore.getState().customer) {
+      getAnToken();
+    }
+  }, []);
+  return <RouterProvider router={router} />;
 }

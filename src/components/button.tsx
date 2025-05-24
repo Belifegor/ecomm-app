@@ -1,19 +1,21 @@
-import { JSX } from 'react';
-
 type ButtonProps = {
   type: 'submit' | 'reset' | 'button';
   text: string;
   disabled: boolean;
 };
 
-function Button(props: ButtonProps): JSX.Element {
+function Button({ type, text, disabled }: ButtonProps) {
   return (
     <button
-      type={props.type}
-      disabled={props.disabled}
-      className={`h-14 w-1/1 rounded-[7px] hover:cursor-pointer ${props.disabled ? 'bg-gray-400 cursor-not-allowed' : 'bg-black hover:bg-gray-800, '} text-white mt-6`}
+      type={type}
+      disabled={disabled}
+      className={`h-14 w-1/1 rounded-[7px] hover:cursor-pointer ${
+        disabled
+          ? 'bg-gray-400 cursor-not-allowed'
+          : 'bg-black hover:bg-gray-800, '
+      } text-white mt-6`}
     >
-      {props.text}
+      {text}
     </button>
   );
 }

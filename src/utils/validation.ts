@@ -132,11 +132,10 @@ export const schemaForRegistration = schemaForLogin
       ),
     shippingAddress: schemaForAddress,
     saveAsBilling: z.boolean(),
-    billingAddress: schemaForAddress,
+    billingAddress: z.union([schemaForAddress, z.undefined()]).optional(),
   })
 
   .superRefine((data, ctx) => {
-    console.log(data.saveAsBilling);
     if (
       !validatePC(data.shippingAddress.country, data.shippingAddress.postalCode)
     ) {
@@ -146,26 +145,28 @@ export const schemaForRegistration = schemaForLogin
         path: ['shippingAddress', 'postalCode'],
       });
     }
-
-    if (!data.saveAsBilling && data.billingAddress) {
-      if (
-        !validatePC(data.billingAddress.country, data.billingAddress.postalCode)
-      ) {
+    if (!data.saveAsBilling) {
+      if (!data.billingAddress) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: 'Wrong postal code format for billing address',
-          path: ['billingAddress', 'postalCode'],
+          message: 'Billing address is required if not saved as shipping',
+          path: ['billingAddress'],
         });
+      } else {
+        if (
+          !validatePC(
+            data.billingAddress.country,
+            data.billingAddress.postalCode
+          )
+        ) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'Wrong postal code format for billing address',
+            path: ['billingAddress', 'postalCode'],
+          });
+        }
       }
     }
-
-    // if (!postalCodePatterns[shippingData.country].test(shippingData.postalCode)) {
-    //   ctx.addIssue({
-    //     code: z.ZodIssueCode.custom,
-    //     message: 'Wrong postal code format',
-    //     path: ['postalCode'],
-    //   });
-    // }
   });
 
 function validatePC(country: string, postalCode: string): boolean {

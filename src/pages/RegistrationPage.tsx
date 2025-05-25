@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerAction } from '../routes/registrationAction.ts';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Address } from '../components/Address.tsx';
 
 export type RegistrationData = z.infer<typeof schemaForRegistration>;
@@ -16,16 +16,19 @@ const countries = [
   'Belarus(BY)',
   'Russia(RU)',
 ];
+
 function Registration() {
   const [regError, setRegError] = useState<string | null>(null);
-  const [hideBilling, setHideBilling] = useState(false);
+  const [hideBilling, setHideBilling] = useState(true);
   const {
     register,
+    unregister,
     handleSubmit,
+    setValue,
     formState: { errors, isValid },
-    // getValues,
   } = useForm<RegistrationData>({
     mode: 'onChange',
+    shouldUnregister: true,
     resolver: zodResolver(schemaForRegistration),
     defaultValues: {
       email: '',
@@ -39,12 +42,9 @@ function Registration() {
         country: 'United States (US)',
         postalCode: '',
       },
-      saveAsBilling: false,
+      saveAsBilling: true,
     },
   });
-  console.log(isValid);
-  // const allFieldNames = Object.values(getValues());
-
   const navigate = useNavigate();
   const registrationCustomer = (formData: RegistrationData) => {
     registerAction(formData, navigate)
@@ -61,8 +61,24 @@ function Registration() {
         }
       });
   };
+  useEffect(() => {
+    if (hideBilling) {
+      setValue('billingAddress', undefined, { shouldValidate: true });
+      unregister('billingAddress');
+    } else {
+      setValue(
+        'billingAddress',
+        {
+          streetName: '',
+          city: '',
+          country: 'United States (US)',
+          postalCode: '',
+        },
+        { shouldValidate: true }
+      );
+    }
+  }, [hideBilling, unregister, setValue]);
 
-  // console.log(allFieldNames);
   return (
     <div className="flex flex-col w-1/1 h-1/1 justify-center items-center">
       <div className="min-w-[360px] w-1/3 border border-[#EBEBEB] rounded-[10px] py-14 px-16">
@@ -140,12 +156,17 @@ function Registration() {
             id="saveAsBilling"
             {...register('saveAsBilling')}
             className="w-4 h-4 mt-6 mr-2"
-            onChange={() => setHideBilling(!hideBilling)}
+            onChange={(e) => {
+              setHideBilling(!hideBilling);
+              setValue('saveAsBilling', e.target.checked, {
+                shouldValidate: true,
+              });
+            }}
           />
           <label className="text-left text-sm leading-8 text-[#545454]">
             Make as default billing address
           </label>
-          {
+          {!hideBilling && (
             <div>
               <h2 className="font-bold text-xl mb-10 mt-10">BILLING ADDRESS</h2>
               <Address
@@ -155,7 +176,7 @@ function Registration() {
                 typeAddress="billingAddress"
               />
             </div>
-          }
+          )}
           <Button text="Sing Up" type="submit" disabled={!isValid} />
           <p className="text-left text-sm leading-8 text-[#545454]">
             If you have an account yet{' '}

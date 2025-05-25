@@ -34,6 +34,6 @@ export function mapRegistrationData(formData: RegistrationData) {
     dateOfBirth: formData.dateOfBirth,
     addresses,
     defaultShippingAddress: 0,
-    defaultBillingAddress: formData.saveAsBilling ? 1 : 0,
+    defaultBillingAddress: formData.saveAsBilling ? 0 : 1,
   };
 }

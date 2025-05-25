@@ -1,6 +1,6 @@
 import { Customer } from '@commercetools/platform-sdk';
 import { create } from 'zustand';
-import { getAnToken } from '../services/CommerceTools/getAnonymousToken.ts';
+import { getAnToken } from '../services/sdk/getAnonymousToken.ts';
 
 type AuthStore = {
   customer: Customer | null;

@@ -1,21 +1,3 @@
-// import { apiRoot } from './apiRoot';
-// import type {
-//   CustomerSignInResult,
-//   CustomerSignin,
-// } from '@commercetools/platform-sdk';
-//
-// export async function loginCustomer(
-//   credentinals: CustomerSignin
-// ): Promise<CustomerSignInResult> {
-//
-//   const response = await apiRoot
-//     .me()
-//     .login()
-//     .post({ body: credentinals })
-//     .execute();
-//
-//   return response.body;
-// }
 import { LoginData } from '../../pages/LoginPage.tsx';
 import {
   ClientBuilder,
@@ -23,13 +5,13 @@ import {
 } from '@commercetools/ts-client';
 import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
 import {
-  PROJECT_KEY,
+  API_SCOPES,
   AUTH_HOST,
   CLIENT_ID,
   CLIENT_SECRET,
-  API_SCOPES,
-} from '../CommerceTools/BuildClient.ts';
-import { httpMiddlewareOptions } from '../CommerceTools/BuildClient.ts';
+  httpMiddlewareOptions,
+  PROJECT_KEY,
+} from './BuildClient.ts';
 
 export async function getCustomerToken(formData: LoginData) {
   const passwordMiddlewareOptions: PasswordAuthMiddlewareOptions = {
@@ -63,15 +45,3 @@ export async function getCustomerToken(formData: LoginData) {
   console.log(result);
   return result.body.customer;
 }
-
-//
-// const { email, password } = formData;
-// const result = await getCustomerToken({ email, password })
-//   .me()
-//   .login()
-//   .post({ body: { email, password } })
-//   .execute();
-// // await loginCustomer({ email, password });
-// authStore.getState().login(result.body.customer);
-// navigate('/', { replace: true }); // убрал main в navigate
-// console.log(result);

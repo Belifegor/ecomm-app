@@ -6,7 +6,7 @@ import CartIcon from '../assets/icons/Cart.svg?react';
 import SearchIcon from '../assets/icons/Search_icon.svg?react';
 import Logo from '../assets/icons/Logo.svg?react';
 import BurgerIcon from '../assets/icons/Burger.svg?react';
-
+import ProfileIcon from '../assets/icons/profile.svg?react';
 export function Header() {
   const customer = authStore((state) => state.customer);
   const logout = authStore((state) => state.logout);
@@ -68,9 +68,10 @@ export function Header() {
             <>
               <Link
                 to="/profile"
-                className="text-md text-gray-700 font-medium hover:underline"
+                className="flex items-center text-md text-gray-700 font-medium hover:underline"
               >
-                👤 {customer.firstName || 'Profile'}
+                <ProfileIcon className="inline w-8 h-7.5" />
+                {customer.firstName || 'Profile'}
               </Link>
               <button
                 onClick={() => {

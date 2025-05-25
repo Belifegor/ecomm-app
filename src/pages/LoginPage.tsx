@@ -16,7 +16,6 @@ export type LoginData = z.infer<typeof schemaForLogin>;
 
 function Login() {
   const navigate = useNavigate();
-  //добавил сохранения состояния по пункту  RSS-ECOMM-2_06
   const isAuthenticated = authStore((state) => state.isAuthenticated());
 
   useEffect(() => {
@@ -41,10 +40,6 @@ function Login() {
   const [loginError, setLoginError] = useState<string | null>(null);
 
   const submitHandler = async (formData: LoginData) => {
-    // if (authStore.getState().isAuthenticated()) {
-    //   navigate('/', { replace: true });
-    //   return;
-    // }
     try {
       const customer = await getCustomerToken(formData);
       console.log(customer);
@@ -60,21 +55,6 @@ function Login() {
     }
     console.log(authStore.getState().isAuthenticated());
   };
-
-  //   try {
-  //
-  //     authStore.getState().login(result.body.customer);
-  //     console.log(result);
-  //     navigate('/', { replace: true });
-  //     setLoginError(null);
-  //   } catch (error: unknown) {
-  //     if (error instanceof Error) {
-  //       setLoginError(error.message);
-  //     } else {
-  //       setLoginError('An unknown error occurred');
-  //     }
-  //   }
-  // };
   console.log(isValid);
   return (
     <div className="flex flex-col w-1/1 h-1/1 justify-center items-center">

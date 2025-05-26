@@ -177,7 +177,12 @@ function Registration() {
               />
             </div>
           )}
-          <Button text="Sing Up" type="submit" disabled={!isValid} />
+          <Button
+            text="Sing Up"
+            type="submit"
+            disabled={!isValid}
+            className=""
+          />
           <p className="text-left text-sm leading-8 text-[#545454]">
             If you have an account yet{' '}
             <Link

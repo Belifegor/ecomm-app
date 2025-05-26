@@ -74,6 +74,6 @@ function getAddressRole(address: Address, customer: Customer): string {
   } else if (isDefaultBilling) {
     return 'Default Billing Address';
   }
-  return 'Additional Address';
+  return '';
 }
 export default ProfilePage;

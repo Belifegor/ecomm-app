@@ -9,7 +9,7 @@ function SavedAddressBlock({
   address: Address;
 }) {
   return (
-    <div className="border border-[#EBEBEB] rounded-[10px] p-[10px] mb-10">
+    <div className="border border-[#EBEBEB] rounded-[10px] p-[10px] mb-12">
       {title && <h4 className="font-medium mb-2">{title}</h4>}
       <div className="flex flex-col gap-2">
         <ProfileValueItem label="Country" value={address.country} />

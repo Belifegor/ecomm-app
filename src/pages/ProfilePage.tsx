@@ -3,11 +3,10 @@ import Button from '../components/button.tsx';
 import ProfileValueItem from '../components/profileComponents/ProfileValueItem.tsx';
 import SavedAddressBlock from '../components/profileComponents/SavedAddressBlock.tsx';
 import { authStore } from '../store/store.ts';
-import { Customer } from '@commercetools/platform-sdk';
+import { Address, Customer } from '@commercetools/platform-sdk';
 
 function ProfilePage() {
   const currentCustomer: Customer | null = authStore.getState().customer;
-  const isSameResult = isSameAddress();
 
   return (
     <>
@@ -18,8 +17,11 @@ function ProfilePage() {
           <div className="w-1/1 md:w-1/2">
             <h3 className="text-xl font-semibold mb-4">User Information</h3>
             <div className="flex flex-col min-w-[300px] w-1/1 space-y-4 border border-[#EBEBEB] rounded-[10px] p-[10px]">
-              {/*<ProfileValueItem label="Email:" value={''} />*/}
-              {/*<ProfileValueItem label="Password:" value={''} />*/}
+              <ProfileValueItem label="Email:" value={currentCustomer?.email} />
+              <ProfileValueItem
+                label="Password:"
+                value={currentCustomer?.password}
+              />
               <ProfileValueItem
                 label="First Name:"
                 value={currentCustomer?.firstName}
@@ -33,51 +35,45 @@ function ProfilePage() {
                 value={currentCustomer?.dateOfBirth}
               />
             </div>
+            <Button
+              type="button"
+              text="Edit Profile"
+              className="max-w-[200px] min-w-[100px] md:ml-auto"
+            />
           </div>
           <div className="w-1/1 md:w-1/2">
             <h3 className="text-xl font-semibold mb-4">Addresses</h3>
             <div className="flex flex-col min-w-[300px] w-1/1">
-              {currentCustomer?.addresses[0] && (
+              {currentCustomer?.addresses.map((address) => (
                 <SavedAddressBlock
-                  title="Shipping Address"
-                  address={currentCustomer.addresses[0]}
+                  title={getAddressRole(address, currentCustomer)}
+                  address={address}
                 />
-              )}
-
-              {!isSameResult && currentCustomer?.addresses[1] && (
-                <SavedAddressBlock
-                  title="Billing Address"
-                  address={currentCustomer.addresses[1]}
-                />
-              )}
-              {/*{adderesses ? adderesses.map((address) => (*/}
-
-              {/*  <SavedAddressBlock title={} address={address} />*/}
-
-              {/*)) : false}*/}
+              ))}
             </div>
+            <Button
+              type="button"
+              text="Add address"
+              className="max-w-[200px] min-w-[100px] md:mr-auto"
+            />
           </div>
         </div>
-        <Button
-          type="button"
-          text="Edit Profile"
-          className="max-w-[200px] min-w-[100px] md:ml-auto"
-        />
       </div>
     </>
   );
 }
 
-function isSameAddress() {
-  const currentCustomer: Customer | null = authStore.getState().customer;
-  if (currentCustomer) {
-    const billingAddress = currentCustomer.addresses.find(
-      (item) => item.id === currentCustomer.defaultBillingAddressId
-    )!;
-    const shippingAddress = currentCustomer.addresses.find(
-      (item) => item.id === currentCustomer.defaultShippingAddressId
-    )!;
-    return billingAddress.id === shippingAddress.id;
+function getAddressRole(address: Address, customer: Customer): string {
+  const isDefaultShipping = customer.defaultShippingAddressId === address.id;
+  const isDefaultBilling = customer.defaultBillingAddressId === address.id;
+
+  if (isDefaultShipping && isDefaultBilling) {
+    return 'Default Shipping & Billing Address';
+  } else if (isDefaultShipping) {
+    return 'Default Shipping Address';
+  } else if (isDefaultBilling) {
+    return 'Default Billing Address';
   }
+  return 'Additional Address';
 }
 export default ProfilePage;

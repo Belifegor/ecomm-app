@@ -1,4 +1,10 @@
-function ProfileValueItem({ label, value }: { label: string; value: string }) {
+function ProfileValueItem({
+  label,
+  value,
+}: {
+  label: string;
+  value: string | undefined;
+}) {
   return (
     <div className="flex justify-between gap-2 items-center">
       <span className="text-left text-sm leading-8 text-[#545454]">

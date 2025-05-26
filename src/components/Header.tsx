@@ -1,4 +1,4 @@
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { authStore } from '../store/store';
 import HeartIcon from '../assets/icons/Heart.svg?react';
@@ -11,7 +11,7 @@ export function Header() {
   const customer = authStore((state) => state.customer);
   const logout = authStore((state) => state.logout);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const navigate = useNavigate();
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = 'hidden';
@@ -76,6 +76,7 @@ export function Header() {
               <button
                 onClick={() => {
                   logout();
+                  navigate('/', { replace: true });
                 }}
                 className="text-md text-gray-700 font-medium hover:underline"
               >

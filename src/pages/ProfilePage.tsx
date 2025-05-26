@@ -2,8 +2,13 @@ import { Header } from '../components/Header';
 import Button from '../components/button.tsx';
 import ProfileValueItem from '../components/profileComponents/ProfileValueItem.tsx';
 import SavedAddressBlock from '../components/profileComponents/SavedAddressBlock.tsx';
+import { authStore } from '../store/store.ts';
+import { Customer } from '@commercetools/platform-sdk';
 
-export default function ProfilePage() {
+function ProfilePage() {
+  const currentCustomer: Customer | null = authStore.getState().customer;
+  const isSameResult = isSameAddress();
+
   return (
     <>
       <Header />
@@ -15,20 +20,41 @@ export default function ProfilePage() {
             <div className="flex flex-col min-w-[300px] w-1/1 space-y-4 border border-[#EBEBEB] rounded-[10px] p-[10px]">
               {/*<ProfileValueItem label="Email:" value={''} />*/}
               {/*<ProfileValueItem label="Password:" value={''} />*/}
-              <ProfileValueItem label="First Name:" value={''} />
-              <ProfileValueItem label="Last Name:" value={''} />
-              <ProfileValueItem label="Date of birth:" value={''} />
+              <ProfileValueItem
+                label="First Name:"
+                value={currentCustomer?.firstName}
+              />
+              <ProfileValueItem
+                label="Last Name:"
+                value={currentCustomer?.lastName}
+              />
+              <ProfileValueItem
+                label="Date of birth:"
+                value={currentCustomer?.dateOfBirth}
+              />
             </div>
           </div>
           <div className="w-1/1 md:w-1/2">
             <h3 className="text-xl font-semibold mb-4">Addresses</h3>
             <div className="flex flex-col min-w-[300px] w-1/1">
-              <SavedAddressBlock
-                title="Shipping Address" /*address={'shipping}'*/
-              />
-              <SavedAddressBlock
-                title="Billing Address" /*address={'billing'}*/
-              />
+              {currentCustomer?.addresses[0] && (
+                <SavedAddressBlock
+                  title="Shipping Address"
+                  address={currentCustomer.addresses[0]}
+                />
+              )}
+
+              {!isSameResult && currentCustomer?.addresses[1] && (
+                <SavedAddressBlock
+                  title="Billing Address"
+                  address={currentCustomer.addresses[1]}
+                />
+              )}
+              {/*{adderesses ? adderesses.map((address) => (*/}
+
+              {/*  <SavedAddressBlock title={} address={address} />*/}
+
+              {/*)) : false}*/}
             </div>
           </div>
         </div>
@@ -41,3 +67,17 @@ export default function ProfilePage() {
     </>
   );
 }
+
+function isSameAddress() {
+  const currentCustomer: Customer | null = authStore.getState().customer;
+  if (currentCustomer) {
+    const billingAddress = currentCustomer.addresses.find(
+      (item) => item.id === currentCustomer.defaultBillingAddressId
+    )!;
+    const shippingAddress = currentCustomer.addresses.find(
+      (item) => item.id === currentCustomer.defaultShippingAddressId
+    )!;
+    return billingAddress.id === shippingAddress.id;
+  }
+}
+export default ProfilePage;

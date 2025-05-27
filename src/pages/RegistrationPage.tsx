@@ -181,7 +181,7 @@ function Registration() {
             text="Sing Up"
             type="submit"
             disabled={!isValid}
-            className=""
+            className="text-white"
           />
           <p className="text-left text-sm leading-8 text-[#545454]">
             If you have an account yet{' '}

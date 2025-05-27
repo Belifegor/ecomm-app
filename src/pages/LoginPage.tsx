@@ -85,7 +85,12 @@ function Login() {
               {errors.password.message}
             </p>
           )}
-          <Button type="submit" text="Login" disabled={!isValid} className="" />
+          <Button
+            type="submit"
+            text="Login"
+            disabled={!isValid}
+            className="text-white"
+          />
           <p className="text-left text-sm leading-8 text-[#545454]">
             Don't have an account yet?
             <Link

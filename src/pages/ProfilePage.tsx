@@ -4,13 +4,22 @@ import ProfileValueItem from '../components/profileComponents/ProfileValueItem.t
 import SavedAddressBlock from '../components/profileComponents/SavedAddressBlock.tsx';
 import { authStore } from '../store/store.ts';
 import { Address, Customer } from '@commercetools/platform-sdk';
+import { useState } from 'react';
+import EditProfilePopup from '../components/profileComponents/EditProfilePopup.tsx';
 
 function ProfilePage() {
   const currentCustomer: Customer | null = authStore.getState().customer;
-
+  const [isOpen, setStateOpen] = useState(false);
   return (
-    <>
+    <div className="w-full h-full">
       <Header />
+      {isOpen && (
+        <EditProfilePopup
+          handleEvent={() => {
+            setStateOpen(false);
+          }}
+        />
+      )}
       <div className="max-w-[1440px] mx-auto flex flex-col items-center px-8 xl:px-40 md:items-start">
         <h2 className="text-2xl font-bold mb-10 ">My Profile</h2>
         <div className="flex flex-col w-1/1 md:flex-row gap-5">
@@ -38,7 +47,8 @@ function ProfilePage() {
             <Button
               type="button"
               text="Edit Profile"
-              className="max-w-[200px] min-w-[100px] md:ml-auto"
+              className="max-w-[200px] min-w-[100px] text-white md:ml-auto"
+              onClick={() => setStateOpen(true)}
             />
           </div>
           <div className="w-1/1 md:w-1/2">
@@ -46,20 +56,22 @@ function ProfilePage() {
             <div className="flex flex-col min-w-[300px] w-1/1">
               {currentCustomer?.addresses.map((address) => (
                 <SavedAddressBlock
+                  key={address.id}
                   title={getAddressRole(address, currentCustomer)}
                   address={address}
+                  customer={currentCustomer}
                 />
               ))}
             </div>
             <Button
               type="button"
               text="Add address"
-              className="max-w-[200px] min-w-[100px] md:mr-auto"
+              className="max-w-[200px] min-w-[100px] text-white md:mr-auto ${disabled ? 'bg-gray-400 cursor-not-allowed' : 'bg-black hover:bg-gray-800, '}"
             />
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

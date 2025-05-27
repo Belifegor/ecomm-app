@@ -4,10 +4,11 @@ import InputField from '../inputField.tsx';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import Button from '../button.tsx';
+import { authStore } from '../../store/store.ts';
 
 function EditProfilePopup({ handleEvent }: { handleEvent: () => void }) {
   type EditValidation = z.infer<typeof schemaForRegistrationBase>;
-
+  const savedCustomer = authStore.getState().customer;
   const {
     register,
     handleSubmit,
@@ -23,6 +24,7 @@ function EditProfilePopup({ handleEvent }: { handleEvent: () => void }) {
     <div className=" w-1/3 min-w-[350px] h-7/10 fixed bg-white rounded-[10px] border border-[#EBEBEB] top-[60px], left-1/3 p-8">
       <form onSubmit={handleSubmit(onChange)} className="flex flex-col gap-4">
         <InputField
+          defaultValue={savedCustomer?.email}
           register={register}
           label="Email"
           name="email"
@@ -33,10 +35,11 @@ function EditProfilePopup({ handleEvent }: { handleEvent: () => void }) {
           <p className="h-5 text-red-500 text-[12px]">{errors.email.message}</p>
         )}
         <InputField
+          defaultValue={savedCustomer?.password}
           register={register}
           label="Password"
           name="password"
-          type="text"
+          type="password"
           placeholder=""
         />
         {errors.password && (
@@ -46,6 +49,7 @@ function EditProfilePopup({ handleEvent }: { handleEvent: () => void }) {
         )}
 
         <InputField
+          defaultValue={savedCustomer?.firstName}
           register={register}
           label="First Name"
           name="firstName"
@@ -58,6 +62,7 @@ function EditProfilePopup({ handleEvent }: { handleEvent: () => void }) {
           </p>
         )}
         <InputField
+          defaultValue={savedCustomer?.lastName}
           register={register}
           label="Last Name"
           name="lastName"
@@ -70,6 +75,7 @@ function EditProfilePopup({ handleEvent }: { handleEvent: () => void }) {
           </p>
         )}
         <InputField
+          defaultValue={savedCustomer?.dateOfBirth}
           register={register}
           label="Date of Birth"
           name="dateOfBirth"

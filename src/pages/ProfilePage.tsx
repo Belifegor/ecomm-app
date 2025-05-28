@@ -1,11 +1,11 @@
 import { Header } from '../components/Header';
 import Button from '../components/button.tsx';
-import ProfileValueItem from '../components/profileComponents/ProfileValueItem.tsx';
-import SavedAddressBlock from '../components/profileComponents/SavedAddressBlock.tsx';
+import ProfileValueItem from '../components/profile/ProfileValueItem.tsx';
+import SavedAddressBlock from '../components/profile/SavedAddressBlock.tsx';
 import { authStore } from '../store/store.ts';
 import { Address, Customer } from '@commercetools/platform-sdk';
 import { useState } from 'react';
-import EditProfilePopup from '../components/profileComponents/EditProfilePopup.tsx';
+import EditProfilePopup from '../components/profile/EditProfilePopup.tsx';
 
 function ProfilePage() {
   const currentCustomer: Customer | null = authStore.getState().customer;
@@ -47,7 +47,7 @@ function ProfilePage() {
             <Button
               type="button"
               text="Edit Profile"
-              className="max-w-[200px] min-w-[100px] text-white md:ml-auto"
+              className="mt-6 h-14 max-w-[200px] min-w-[100px] text-white md:ml-auto"
               onClick={() => setStateOpen(true)}
             />
           </div>
@@ -66,7 +66,7 @@ function ProfilePage() {
             <Button
               type="button"
               text="Add address"
-              className="max-w-[200px] min-w-[100px] text-white md:mr-auto ${disabled ? 'bg-gray-400 cursor-not-allowed' : 'bg-black hover:bg-gray-800, '}"
+              className="mt-6 h-14 max-w-[200px] min-w-[100px] text-white md:mr-auto"
             />
           </div>
         </div>

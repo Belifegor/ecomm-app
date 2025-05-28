@@ -1,6 +1,6 @@
 import ProfileValueItem from './ProfileValueItem.tsx';
 import { Address, Customer } from '@commercetools/platform-sdk';
-import ButtonForEditAddress from './ButtonForEditAddress.tsx';
+import Button from '../button.tsx';
 
 function SavedAddressBlock({
   title,
@@ -23,13 +23,37 @@ function SavedAddressBlock({
         <ProfileValueItem label="City:" value={address.city} />
         <ProfileValueItem label="Postal Code:" value={address.postalCode} />
       </div>
-      <ButtonForEditAddress text="Edit" />
-      <ButtonForEditAddress text="Delete" />
+      <Button
+        text="Edit"
+        type="button"
+        disabled={false}
+        className="w-15 bg-white border border-[#9F9F9F] p-1 rounded-[7px] mr-2 text-xs"
+        /*onClick={}*/
+      />
+      <Button
+        text="Delete"
+        type="button"
+        disabled={false}
+        className="w-15 bg-white border border-[#9F9F9F] p-1 rounded-[7px] mr-2 text-xs"
+        /*onClick={}*/
+      />
       {address.id !== customer.defaultShippingAddressId && (
-        <ButtonForEditAddress text="Make as default Shipping" />
+        <Button
+          text="Make as default Shipping"
+          type="button"
+          disabled={false}
+          className="w-40 bg-white border border-[#9F9F9F] p-1 rounded-[7px] mr-2 text-xs"
+          /*onClick={}*/
+        />
       )}
       {address.id !== customer.defaultBillingAddressId && (
-        <ButtonForEditAddress text="Make as default Billing" />
+        <Button
+          text="Make as default Billing"
+          type="button"
+          disabled={false}
+          className="w-40 bg-white border border-[#9F9F9F] p-1 rounded-[7px] mr-2 text-xs"
+          /*onClick={}*/
+        />
       )}
     </div>
   );

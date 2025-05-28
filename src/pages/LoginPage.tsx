@@ -89,7 +89,7 @@ function Login() {
             type="submit"
             text="Login"
             disabled={!isValid}
-            className="text-white"
+            className="h-14 text-white mt-6"
           />
           <p className="text-left text-sm leading-8 text-[#545454]">
             Don't have an account yet?

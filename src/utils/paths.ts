@@ -1,8 +1,8 @@
 export const ROUTES = {
   HOME: '/',
-  LOGIN: '/login',
-  REGISTER: '/register',
-  PROFILE: '/profile',
-  CATALOG: '/catalog',
-  NOTFOUND: '*',
+  LOGIN: 'login',
+  REGISTER: 'register',
+  PROFILE: 'profile',
+  CATALOG: 'catalog',
+  NOT_FOUND: '*',
 };

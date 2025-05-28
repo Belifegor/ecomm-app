@@ -1,44 +1,50 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { NotFound } from '../pages/NotFound';
 import ProfilePage from '../pages/ProfilePage.tsx';
-//import { registerAction } from './registrationAction';
-// import { getProducts } from '../services/sdk/getProducts';
 import { protectedLoader } from './protectedLoader';
 import { RequireNoAuth } from './RequireNoAuth.tsx';
-// import { loginAction } from './loginAction';
 import Login from '../pages/LoginPage.tsx';
 import Registration from '../pages/RegistrationPage.tsx';
+import App from '../App.tsx';
 import { MainPage } from '../pages/MainPage.tsx';
+import { ROUTES } from '../utils/paths.ts';
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <MainPage />,
-  },
-  {
-    path: '/login',
-    element: (
-      <RequireNoAuth>
-        <Login />
-      </RequireNoAuth>
-    ),
-  },
-  {
-    path: '/register',
-    element: (
-      <RequireNoAuth>
-        <Registration />
-      </RequireNoAuth>
-    ),
-  },
-  {
-    path: '/profile',
-    element: <ProfilePage />,
-    loader: protectedLoader,
-  },
-  {
-    path: '*',
-    element: <NotFound />,
+    path: ROUTES.HOME,
+    element: <App />,
+    children: [
+      {
+        // path: 'main',
+        index: true,
+        element: <MainPage />,
+      },
+      {
+        path: ROUTES.LOGIN,
+        element: (
+          <RequireNoAuth>
+            <Login />
+          </RequireNoAuth>
+        ),
+      },
+      {
+        path: ROUTES.REGISTER,
+        element: (
+          <RequireNoAuth>
+            <Registration />
+          </RequireNoAuth>
+        ),
+      },
+      {
+        path: ROUTES.PROFILE,
+        element: <ProfilePage />,
+        loader: protectedLoader,
+      },
+      {
+        path: ROUTES.NOT_FOUND,
+        element: <NotFound />,
+      },
+    ],
   },
 ]);
 

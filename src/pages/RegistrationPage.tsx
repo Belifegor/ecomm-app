@@ -8,6 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { registerAction } from '../routes/registrationAction.ts';
 import { useEffect, useState } from 'react';
 import { Address } from '../components/Address.tsx';
+import { ROUTES } from '../utils/paths.ts';
 
 export type RegistrationData = z.infer<typeof schemaForRegistration>;
 const countries = [
@@ -51,7 +52,6 @@ function Registration() {
       .then((res) => {
         console.log(res);
         setRegError(null);
-        // navigate('/main');
       })
       .catch((error: unknown) => {
         if (error instanceof Error) {
@@ -186,7 +186,7 @@ function Registration() {
           <p className="text-left text-sm leading-8 text-[#545454]">
             If you have an account yet{' '}
             <Link
-              to="/login"
+              to={ROUTES.LOGIN}
               className="text-sm hover:underline text-[#545454] "
             >
               Login

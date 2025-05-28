@@ -1,4 +1,3 @@
-import { Header } from '../components/Header';
 import Button from '../components/button.tsx';
 import ProfileValueItem from '../components/profile/ProfileValueItem.tsx';
 import SavedAddressBlock from '../components/profile/SavedAddressBlock.tsx';
@@ -12,7 +11,7 @@ function ProfilePage() {
   const [isOpen, setStateOpen] = useState(false);
   return (
     <div className="w-full h-full">
-      <Header />
+      {/*<Header />*/}
       {isOpen && (
         <EditProfilePopup
           handleEvent={() => {

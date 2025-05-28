@@ -11,6 +11,7 @@ import { authStore } from '../store/store.ts';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { ROUTES } from '../utils/paths.ts';
 
 export type LoginData = z.infer<typeof schemaForLogin>;
 
@@ -20,7 +21,7 @@ function Login() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/', { replace: true });
+      navigate(ROUTES.HOME, { replace: true });
     }
   }, [isAuthenticated, navigate]);
 
@@ -44,7 +45,7 @@ function Login() {
       const customer = await getCustomerToken(formData);
       console.log(customer);
       authStore.getState().login(customer);
-      navigate('/', { replace: true });
+      navigate(ROUTES.HOME, { replace: true });
       setLoginError(null);
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -94,7 +95,7 @@ function Login() {
           <p className="text-left text-sm leading-8 text-[#545454]">
             Don't have an account yet?
             <Link
-              to="/register"
+              to={ROUTES.REGISTER}
               className="text-sm hover:underline text-[#545454] "
             >
               {' '}

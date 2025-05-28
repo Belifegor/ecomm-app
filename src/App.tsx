@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { getAnToken } from './services/CommerceTools/getAnonymousToken.ts';
-
-import { RouterProvider } from 'react-router-dom';
-import router from './routes/router';
+import { getAnToken } from './services/sdk/getAnonymousToken.ts';
+import { /*RouterProvider*/ Outlet } from 'react-router-dom';
 import { authStore } from './store/store.ts';
+import { Header } from './components/Header.tsx';
+import { Footer } from './components/Footer.tsx';
 
 export default function App() {
   useEffect(() => {
@@ -11,5 +11,13 @@ export default function App() {
       getAnToken();
     }
   }, []);
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <Header />
+      <div className="mt-[61px] flex-1">
+        <Outlet />
+      </div>
+      <Footer />
+    </>
+  );
 }

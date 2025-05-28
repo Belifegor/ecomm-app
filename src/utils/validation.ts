@@ -86,57 +86,101 @@ export const schemaForAddress = z.object({
     .string()
     .min(1, { message: 'Field must contain at least one letter' }),
 });
-export const schemaForRegistration = schemaForLogin
+export const schemaForRegistrationBase = schemaForLogin.extend({
+  firstName: z
+    .string()
+    .min(1, { message: 'Field must contain at least one letter' })
+    .refine((val) => !/[^A-Za-z]/.test(val), {
+      message: 'Field must not contain digits and special symbols',
+    }),
+  lastName: z
+    .string()
+    .min(1, { message: 'Field must contain at least one letter' })
+    .refine((val) => !/[^A-Za-z]/.test(val), {
+      message: 'Field must not contain digits and special symbols',
+    }),
+  dateOfBirth: z
+    .string()
+    .min(1, { message: 'Add your birth date' })
+    .refine(
+      (val) => {
+        const birthDate = new Date(val);
+        const now = new Date();
+        return birthDate <= now;
+      },
+      {
+        message: 'Wrong date',
+      }
+    )
+    .refine(
+      (val) => {
+        const birthDate = new Date(val);
+        const now = new Date();
+
+        const thirteenYearsAgo = new Date(
+          now.getFullYear() - 13,
+          now.getMonth(),
+          now.getDate()
+        );
+
+        return birthDate <= thirteenYearsAgo;
+      },
+      {
+        message: 'You must be over 13 years old',
+      }
+    ),
+});
+
+export const schemaForRegistration = schemaForRegistrationBase
   .extend({
-    firstName: z
-      .string()
-      .min(1, { message: 'Field must contain at least one letter' })
-      .refine((val) => !/[^A-Za-z]/.test(val), {
-        message: 'Field must not contain digits and special symbols',
-      }),
-    lastName: z
-      .string()
-      .min(1, { message: 'Field must contain at least one letter' })
-      .refine((val) => !/[^A-Za-z]/.test(val), {
-        message: 'Field must not contain digits and special symbols',
-      }),
-    dateOfBirth: z
-      .string()
-      .min(1, { message: 'Add your birth date' })
-      .refine(
-        (val) => {
-          const birthDate = new Date(val);
-          const now = new Date();
-          return birthDate <= now;
-        },
-        {
-          message: 'Wrong date',
-        }
-      )
-      .refine(
-        (val) => {
-          const birthDate = new Date(val);
-          const now = new Date();
-
-          const thirteenYearsAgo = new Date(
-            now.getFullYear() - 13,
-            now.getMonth(),
-            now.getDate()
-          );
-
-          return birthDate <= thirteenYearsAgo;
-        },
-        {
-          message: 'You must be over 13 years old',
-        }
-      ),
+    // firstName: z
+    //   .string()
+    //   .min(1, { message: 'Field must contain at least one letter' })
+    //   .refine((val) => !/[^A-Za-z]/.test(val), {
+    //     message: 'Field must not contain digits and special symbols',
+    //   }),
+    // lastName: z
+    //   .string()
+    //   .min(1, { message: 'Field must contain at least one letter' })
+    //   .refine((val) => !/[^A-Za-z]/.test(val), {
+    //     message: 'Field must not contain digits and special symbols',
+    //   }),
+    // dateOfBirth: z
+    //   .string()
+    //   .min(1, { message: 'Add your birth date' })
+    //   .refine(
+    //     (val) => {
+    //       const birthDate = new Date(val);
+    //       const now = new Date();
+    //       return birthDate <= now;
+    //     },
+    //     {
+    //       message: 'Wrong date',
+    //     }
+    //   )
+    //   .refine(
+    //     (val) => {
+    //       const birthDate = new Date(val);
+    //       const now = new Date();
+    //
+    //       const thirteenYearsAgo = new Date(
+    //         now.getFullYear() - 13,
+    //         now.getMonth(),
+    //         now.getDate()
+    //       );
+    //
+    //       return birthDate <= thirteenYearsAgo;
+    //     },
+    //     {
+    //       message: 'You must be over 13 years old',
+    //     }
+    //   ),
     shippingAddress: schemaForAddress,
     saveAsBilling: z.boolean(),
-    billingAddress: schemaForAddress,
+    billingAddress: z.union([schemaForAddress, z.undefined()]).optional(),
   })
 
   .superRefine((data, ctx) => {
-    console.log(data.saveAsBilling);
     if (
       !validatePC(data.shippingAddress.country, data.shippingAddress.postalCode)
     ) {
@@ -146,26 +190,28 @@ export const schemaForRegistration = schemaForLogin
         path: ['shippingAddress', 'postalCode'],
       });
     }
-
-    if (!data.saveAsBilling && data.billingAddress) {
-      if (
-        !validatePC(data.billingAddress.country, data.billingAddress.postalCode)
-      ) {
+    if (!data.saveAsBilling) {
+      if (!data.billingAddress) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: 'Wrong postal code format for billing address',
-          path: ['billingAddress', 'postalCode'],
+          message: 'Billing address is required if not saved as shipping',
+          path: ['billingAddress'],
         });
+      } else {
+        if (
+          !validatePC(
+            data.billingAddress.country,
+            data.billingAddress.postalCode
+          )
+        ) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'Wrong postal code format for billing address',
+            path: ['billingAddress', 'postalCode'],
+          });
+        }
       }
     }
-
-    // if (!postalCodePatterns[shippingData.country].test(shippingData.postalCode)) {
-    //   ctx.addIssue({
-    //     code: z.ZodIssueCode.custom,
-    //     message: 'Wrong postal code format',
-    //     path: ['postalCode'],
-    //   });
-    // }
   });
 
 function validatePC(country: string, postalCode: string): boolean {

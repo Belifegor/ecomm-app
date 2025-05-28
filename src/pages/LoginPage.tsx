@@ -11,17 +11,17 @@ import { authStore } from '../store/store.ts';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { ROUTES } from '../utils/paths.ts';
 
 export type LoginData = z.infer<typeof schemaForLogin>;
 
 function Login() {
   const navigate = useNavigate();
-  //добавил сохранения состояния по пункту  RSS-ECOMM-2_06
   const isAuthenticated = authStore((state) => state.isAuthenticated());
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/', { replace: true });
+      navigate(ROUTES.HOME, { replace: true });
     }
   }, [isAuthenticated, navigate]);
 
@@ -41,15 +41,11 @@ function Login() {
   const [loginError, setLoginError] = useState<string | null>(null);
 
   const submitHandler = async (formData: LoginData) => {
-    // if (authStore.getState().isAuthenticated()) {
-    //   navigate('/', { replace: true });
-    //   return;
-    // }
     try {
       const customer = await getCustomerToken(formData);
       console.log(customer);
       authStore.getState().login(customer);
-      navigate('/', { replace: true });
+      navigate(ROUTES.HOME, { replace: true });
       setLoginError(null);
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -60,21 +56,6 @@ function Login() {
     }
     console.log(authStore.getState().isAuthenticated());
   };
-
-  //   try {
-  //
-  //     authStore.getState().login(result.body.customer);
-  //     console.log(result);
-  //     navigate('/', { replace: true });
-  //     setLoginError(null);
-  //   } catch (error: unknown) {
-  //     if (error instanceof Error) {
-  //       setLoginError(error.message);
-  //     } else {
-  //       setLoginError('An unknown error occurred');
-  //     }
-  //   }
-  // };
   console.log(isValid);
   return (
     <div className="flex flex-col w-1/1 h-1/1 justify-center items-center">
@@ -105,11 +86,16 @@ function Login() {
               {errors.password.message}
             </p>
           )}
-          <Button type="submit" text="Login" disabled={!isValid} />
+          <Button
+            type="submit"
+            text="Login"
+            disabled={!isValid}
+            className="h-14 text-white mt-6"
+          />
           <p className="text-left text-sm leading-8 text-[#545454]">
             Don't have an account yet?
             <Link
-              to="/register"
+              to={ROUTES.REGISTER}
               className="text-sm hover:underline text-[#545454] "
             >
               {' '}

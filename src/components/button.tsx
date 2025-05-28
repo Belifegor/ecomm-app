@@ -1,22 +1,21 @@
 type ButtonProps = {
   type: 'submit' | 'reset' | 'button';
+  disabled?: boolean;
   text: string;
-  disabled: boolean;
+  className?: string;
+  onClick?: () => void;
 };
-
-function Button({ type, text, disabled }: ButtonProps) {
+function Button({ type, disabled, text, className, onClick }: ButtonProps) {
   return (
     <button
       type={type}
       disabled={disabled}
-      className={`h-14 w-1/1 rounded-[7px] hover:cursor-pointer ${
-        disabled
-          ? 'bg-gray-400 cursor-not-allowed'
-          : 'bg-black hover:bg-gray-800, '
-      } text-white mt-6`}
+      onClick={onClick}
+      className={`w-1/1 rounded-[7px] hover:cursor-pointer disabled:cursor-not-allowed ${disabled ? 'bg-gray-400 cursor-not-allowed' : 'bg-black hover:bg-gray-800, '} ${className}`}
     >
       {text}
     </button>
   );
 }
+
 export default Button;

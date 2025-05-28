@@ -19,7 +19,7 @@ function ProfilePage() {
           }}
         />
       )}
-      <div className="max-w-[1440px] mx-auto flex flex-col items-center px-8 xl:px-40 md:items-start">
+      <div className="max-w-[1440px] mx-auto py-12 flex flex-col items-center px-8 xl:px-40 md:items-start">
         <h2 className="text-2xl font-bold mb-10 ">My Profile</h2>
         <div className="flex flex-col w-1/1 md:flex-row gap-5">
           <div className="w-1/1 md:w-1/2">

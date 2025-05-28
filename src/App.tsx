@@ -14,7 +14,9 @@ export default function App() {
   return (
     <>
       <Header />
-      <Outlet />
+      <div className="mt-[61px] flex-1">
+        <Outlet />
+      </div>
       <Footer />
     </>
   );

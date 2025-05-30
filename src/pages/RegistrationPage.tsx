@@ -9,15 +9,9 @@ import { registerAction } from '../routes/registrationAction.ts';
 import { useEffect, useState } from 'react';
 import { Address } from '../components/Address.tsx';
 import { ROUTES } from '../utils/paths.ts';
+import { countries } from '../utils/countryList.ts';
 
 export type RegistrationData = z.infer<typeof schemaForRegistration>;
-const countries = [
-  'United States (US)',
-  'European (EU)',
-  'Belarus(BY)',
-  'Russia(RU)',
-];
-
 function Registration() {
   const [regError, setRegError] = useState<string | null>(null);
   const [hideBilling, setHideBilling] = useState(true);

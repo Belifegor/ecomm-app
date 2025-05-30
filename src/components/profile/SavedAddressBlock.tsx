@@ -26,14 +26,12 @@ function SavedAddressBlock({
       <Button
         text="Edit"
         type="button"
-        disabled={false}
         className="w-15 bg-white border border-[#9F9F9F] p-1 rounded-[7px] mr-2 text-xs"
         /*onClick={}*/
       />
       <Button
         text="Delete"
         type="button"
-        disabled={false}
         className="w-15 bg-white border border-[#9F9F9F] p-1 rounded-[7px] mr-2 text-xs"
         /*onClick={}*/
       />
@@ -41,7 +39,6 @@ function SavedAddressBlock({
         <Button
           text="Make as default Shipping"
           type="button"
-          disabled={false}
           className="w-40 bg-white border border-[#9F9F9F] p-1 rounded-[7px] mr-2 text-xs"
           /*onClick={}*/
         />
@@ -50,7 +47,6 @@ function SavedAddressBlock({
         <Button
           text="Make as default Billing"
           type="button"
-          disabled={false}
           className="w-40 bg-white border border-[#9F9F9F] p-1 rounded-[7px] mr-2 text-xs"
           /*onClick={}*/
         />

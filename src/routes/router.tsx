@@ -8,6 +8,7 @@ import Registration from '../pages/RegistrationPage.tsx';
 import App from '../App.tsx';
 import { MainPage } from '../pages/MainPage.tsx';
 import { ROUTES } from '../utils/paths.ts';
+import { Catalog } from '../pages/CatalogPage.tsx';
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
         // path: 'main',
         index: true,
         element: <MainPage />,
+      },
+      {
+        path: ROUTES.CATALOG,
+        element: <Catalog />, //добавил Каталог
       },
       {
         path: ROUTES.LOGIN,

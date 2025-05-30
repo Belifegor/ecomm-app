@@ -8,6 +8,7 @@ import Logo from '../assets/icons/Logo.svg?react';
 import BurgerIcon from '../assets/icons/Burger.svg?react';
 import ProfileIcon from '../assets/icons/profile.svg?react';
 import { ROUTES } from '../utils/paths.ts';
+
 export function Header() {
   const customer = authStore((state) => state.customer);
   const logout = authStore((state) => state.logout);
@@ -41,18 +42,18 @@ export function Header() {
         </div>
 
         <nav className="hidden md:flex gap-6 text-gray-700 font-medium">
-          <a href={ROUTES.HOME} className="hover:text-[#9a2ee8]">
+          <NavLink to={ROUTES.HOME} className="hover:text-[#9a2ee8]">
             Home
-          </a>
-          <a href="#products" className="hover:text-[#9a2ee8]">
+          </NavLink>
+          <NavLink to={ROUTES.CATALOG} className="hover:text-[#9a2ee8]">
             Products
-          </a>
-          <a href="#contact" className="hover:text-[#9a2ee8]">
+          </NavLink>
+          <NavLink to="#contact" className="hover:text-[#9a2ee8]">
             Contact
-          </a>
-          <a href="#blog" className="hover:text-[#9a2ee8]">
+          </NavLink>
+          <NavLink to="#blog" className="hover:text-[#9a2ee8]">
             Blog
-          </a>
+          </NavLink>
         </nav>
 
         <div className="hidden md:flex gap-2 items-center">

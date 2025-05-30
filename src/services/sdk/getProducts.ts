@@ -1,9 +1,17 @@
-import { apiRoot } from '../CommerceTools/BuildClient';
+import { apiRoot } from '../sdk/BuildClient';
 
-export async function getProducts() {
+export async function getProducts(limit: number = 10) {
   const response = await apiRoot
     .productProjections()
-    .get({ queryArgs: { limit: 10 } })
+    .search()
+    .get({
+      queryArgs: {
+        limit,
+        localeProjection: 'en-US',
+        sort: 'name',
+      },
+    })
     .execute();
+
   return response.body.results;
 }

@@ -5,7 +5,5 @@ export async function getProducts() {
     .productProjections()
     .get({ queryArgs: { limit: 10 } })
     .execute();
-
-  console.log('Get product projections from GetProducts', response);
   return response.body.results;
 }

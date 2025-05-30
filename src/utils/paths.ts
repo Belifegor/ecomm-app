@@ -5,4 +5,5 @@ export const ROUTES = {
   PROFILE: 'profile',
   CATALOG: 'catalog',
   NOT_FOUND: '*',
+  CATALOG: '/catalog',
 };

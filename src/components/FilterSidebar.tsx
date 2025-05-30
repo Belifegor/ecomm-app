@@ -1,0 +1,27 @@
+import { Filter } from './Filter';
+
+export type FilterSidebarProps = {
+  filters: { [key: string]: string[] };
+  selectedFilters: { [key: string]: string[] };
+  onFilterChange: (title: string, option: string, isChecked: boolean) => void;
+};
+
+export function FilterSidebar({
+  filters,
+  selectedFilters,
+  onFilterChange,
+}: FilterSidebarProps) {
+  return (
+    <aside className="w-3xs flex flex-col">
+      {Object.entries(filters).map(([title, options]) => (
+        <Filter
+          key={title}
+          title={title}
+          options={options}
+          selected={selectedFilters[title] || []}
+          onChange={onFilterChange}
+        />
+      ))}
+    </aside>
+  );
+}

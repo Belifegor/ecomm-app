@@ -26,11 +26,12 @@ export function ProductCard({
   return (
     <div
       key={id}
-      className="relative bg-[#F6F6F6] rounded-xl px-4 flex flex-col items-center text-center shadow hover:shadow-lg transition h-full"
+      className="relative bg-[#F6F6F6] rounded-xl px-4 flex flex-col  
+      text-center shadow hover:shadow-lg transition h-full"
     >
       {/* Иконка лайка */}
-      <div className="w-full mb-4 mt-4 flex justify-end">
-        <button onClick={() => setIsLiked(!isLiked)}>
+      <div className="w-full pt-4 flex justify-end">
+        <button onClick={() => setIsLiked(!isLiked)} className="p-1 -mr-1">
           {isLiked ? (
             <HeartFilled className="w-6 h-6 text-red-500 transition" />
           ) : (
@@ -43,22 +44,22 @@ export function ProductCard({
       <img
         src={imageUrl}
         alt={name}
-        className="w-full h-40 object-contain mb-4"
+        className="w-full h-40 object-contain p-4"
       />
 
       {/* Название и описание */}
-      <div className="flex flex-col flex-grow justify-between">
-        <h3 className="text-lg font-medium text-gray-800 mb-2 leading-snug whitespace-pre-line">
+      <div className="flex flex-col  w-full flex-grow">
+        <h3 className="text-lg font-medium text-gray-800 mb-2 leading-snug line-clamp-2">
           {name}
         </h3>
         {description && (
-          <p className="text-sm text-gray-600 mb-2 whitespace-pre-line">
+          <p className="text-sm text-gray-600 mb-2 line-clamp-2">
             {description}
           </p>
         )}
 
         {/* Цена и старая цена */}
-        <div className="mb-3">
+        <div className="mt-auto">
           {originalPrice && originalPrice !== 'undefined' && (
             <span className="text-sm line-through text-gray-400 mr-2">
               ${originalPrice}
@@ -69,7 +70,10 @@ export function ProductCard({
       </div>
 
       {/* Кнопка покупки */}
-      <button className="mt-auto bg-black text-white w-full max-w-[200px] min-w-[100px] mb-6 px-8 py-3 rounded-lg hover:bg-[#9a2ee8] hover:text-white transition">
+      <button
+        className="mt-4 bg-black text-white w-full max-w-[200px] min-w-[100px]
+       mb-6 mx-auto px-8 py-3 rounded-lg hover:bg-[#9a2ee8] hover:text-white transition"
+      >
         <span className="whitespace-nowrap">Buy now</span>
       </button>
     </div>

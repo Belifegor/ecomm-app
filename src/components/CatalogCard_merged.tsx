@@ -41,14 +41,16 @@ export function ProductCard({
       </div>
 
       {/* Картинка */}
-      <img
-        src={imageUrl}
-        alt={name}
-        className="w-full h-40 object-contain p-4"
-      />
+      <div className="w-full h-40 mb-4 flex items-center justify-center">
+        <img
+          src={imageUrl}
+          alt={name}
+          className="w-full h-40 object-contain p-4"
+        />
+      </div>
 
       {/* Название и описание */}
-      <div className="flex flex-col  w-full flex-grow">
+      <div className="flex flex-col items-center w-full min-h-[120px]">
         <h3 className="text-lg font-medium text-gray-800 mb-2 leading-snug line-clamp-2">
           {name}
         </h3>

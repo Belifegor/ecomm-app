@@ -27,7 +27,7 @@ export function ProductCard({
     <div
       key={id}
       className="relative bg-[#F6F6F6] rounded-xl px-4 flex flex-col  
-      text-center shadow hover:shadow-lg transition h-full"
+      text-center shadow hover:shadow-lg transition"
     >
       {/* Иконка лайка */}
       <div className="w-full pt-4 flex justify-end">

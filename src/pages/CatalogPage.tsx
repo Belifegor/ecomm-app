@@ -20,19 +20,36 @@ export function CatalogPage() {
     [key: string]: string[];
   }>({});
   const [products, setProducts] = useState<Product[]>([]);
-  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    getAvailableFilters().then(setFilters).catch(console.error);
+    getAvailableFilters()
+      .then(setFilters)
+      .catch((e) => console.error('Ошибка загрузки доступных фильтров:', e));
   }, []);
 
   useEffect(() => {
     setLoading(true);
+    console.log('*** Перед фильтрацией, selectedFilters =', selectedFilters);
+
     getFilteredProducts(selectedFilters, 30)
       .then((data: ProductProjection[]) => {
-        const parsed = data.map(parseProduct);
-        setProducts(parsed);
+        console.log(
+          'Получено после фильтрации (data):',
+          data.map((p) => ({
+            id: p.id,
+            brand: p.masterVariant.attributes?.find((a) => a.name === 'brand')
+              ?.value,
+            color: p.masterVariant.attributes?.find((a) => a.name === 'color')
+              ?.value,
+            name: p.name['en-US'],
+          }))
+        );
+        const parsedProducts = data.map(parseProduct);
+        console.log('Parsed products for ProductCard:', parsedProducts);
+
+        setProducts(parsedProducts);
         setError(null);
       })
       .catch((err) => {
@@ -78,11 +95,13 @@ export function CatalogPage() {
           )}
           {products.map((p) => (
             <ProductCard
-              imageUrl={''}
               key={p.id}
-              {...p}
               id={p.id}
-              price={String(p.price)}
+              name={p.name}
+              description={p.description}
+              imageUrl={p.imageUrl}
+              price={p.price}
+              originalPrice={p.originalPrice}
             />
           ))}
         </div>

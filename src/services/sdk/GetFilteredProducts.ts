@@ -21,7 +21,7 @@ export async function getFilteredProducts(filters: Filters, limit = 10) {
   //цвет(color)
   if (filters.color?.length) {
     const list = filters.color.map((color) => `"${color}"`).join(',');
-    where.push(`variants.attributes.color.key in (${list})`);
+    where.push(`variants.attributes.color in (${list})`);
   }
 
   // Диапазон цены

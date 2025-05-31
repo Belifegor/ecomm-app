@@ -5,21 +5,27 @@ import { parseProduct } from '../utils/parseProduct';
 import { ProductCard } from '../components/CatalogCard_merged';
 import { FilterSidebar } from '../components/FilterSidebar';
 import { getFilteredProducts } from '../services/sdk/GetFilteredProducts';
+import { getAvailableFilters } from '../services/sdk/getAvailableFilters';
 import { Product } from '../components/CatalogCard_merged';
 
-const FILTERS = {
-  brand: ['Apple', 'Samsung', 'Sony', 'Google'], // можно подгружать с сервера
-  color: ['Black', 'White', 'Silver', 'Purple'],
-  model: ['iPhone 14 Pro', 'Galaxy S23', 'Pixel 7', 'iPhone 15 Pro Max'],
-};
+// const FILTERS = {
+//   brand: ['Apple', 'Samsung', 'Sony', 'Google'], // можно подгружать с сервера
+//   color: ['Black', 'White', 'Silver', 'Purple'],
+//   model: ['iPhone 14 Pro', 'Galaxy S23', 'Pixel 7', 'iPhone 15 Pro Max'],
+// };
 
 export function CatalogPage() {
+  const [filters, setFilters] = useState<{ [key: string]: string[] }>({});
   const [selectedFilters, setSelectedFilters] = useState<{
     [key: string]: string[];
   }>({});
   const [products, setProducts] = useState<Product[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    getAvailableFilters().then(setFilters).catch(console.error);
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -58,7 +64,7 @@ export function CatalogPage() {
       <div className="max-w-[1440px] mx-auto px-4 flex">
         {/* Боковая панель фильтров */}
         <FilterSidebar
-          filters={FILTERS}
+          filters={filters}
           selectedFilters={selectedFilters}
           onFilterChange={handleFilterChange}
         />

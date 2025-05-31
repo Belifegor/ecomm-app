@@ -10,6 +10,7 @@ import { Product } from '../components/CatalogCard_merged';
 const FILTERS = {
   brand: ['Apple', 'Samsung', 'Sony', 'Google'], // можно подгружать с сервера
   color: ['Black', 'White', 'Silver', 'Purple'],
+  model: ['iPhone 14 Pro', 'Galaxy S23', 'Pixel 7', 'iPhone 15 Pro Max'],
 };
 
 export function CatalogPage() {

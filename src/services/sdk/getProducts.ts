@@ -8,7 +8,7 @@ export async function getProducts(limit: number = 10) {
       queryArgs: {
         limit,
         localeProjection: 'en-US',
-        sort: 'name',
+        sort: 'name.en-US dsc',
       },
     })
     .execute();

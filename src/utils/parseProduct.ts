@@ -1,5 +1,5 @@
 import { ProductProjection } from '@commercetools/platform-sdk';
-import { Product } from '../components/CatalogCard';
+import { Product } from '../components/CatalogCard_merged';
 
 function formatPrice(centAmount?: number): string {
   if (centAmount) {

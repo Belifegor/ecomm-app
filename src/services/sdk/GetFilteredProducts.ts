@@ -3,6 +3,7 @@ import { apiRoot } from './BuildClient';
 export type Filters = {
   brand?: string[];
   color?: string[];
+  model?: string[];
   minPrice?: number;
   maxPrice?: number;
 };
@@ -18,10 +19,22 @@ export async function getFilteredProducts(filters: Filters, limit = 10) {
   }
 
   //цвет(color)
+  if (filters.color?.length) {
+    const list = filters.color.map((color) => `"${color}"`).join(',');
+    where.push(`variants.attributes.color.key in (${list})`);
+  }
+
+  // Диапазон цены
   if (filters.minPrice !== undefined || filters.maxPrice !== undefined) {
     const min = filters.minPrice ?? 0;
     const max = filters.maxPrice ?? 999_999;
     where.push(`variants.price.centAmount:range(${min * 100} to ${max * 100})`);
+  }
+
+  // Модель (model)
+  if (filters.model?.length) {
+    const list = filters.model.map((model) => `"${model}"`).join(',');
+    where.push(`variants.attributes.model in (${list})`);
   }
 
   const response = await apiRoot

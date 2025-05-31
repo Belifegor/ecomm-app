@@ -12,7 +12,7 @@ export function FilterSidebar({
   onFilterChange,
 }: FilterSidebarProps) {
   return (
-    <aside className="w-3xs flex flex-col">
+    <aside className="w-3xs flex flex-col mt-8 pr-4">
       {Object.entries(filters).map(([title, options]) => (
         <Filter
           key={title}

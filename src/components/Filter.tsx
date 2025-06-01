@@ -10,22 +10,30 @@ export type FilterProps = {
 export function Filter({ title, options, selected, onChange }: FilterProps) {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div>
-      <button onClick={() => setIsOpen((prev) => !prev)}>
+    <div className="mb-6 border-b border-gray-200 pb-4">
+      <button
+        onClick={() => setIsOpen((prev) => !prev)}
+        className="w-full flex justify-between items-center text-left font-medium text-black text-sm uppercase tracking-wide hover:text-[#9a2ee8] transition"
+      >
         {title}
-        <span>{isOpen ? '▲' : '▼'}</span>
+        <span className="text-gray-500">{isOpen ? '▲' : '▼'}</span>
       </button>
       {isOpen && (
-        <div>
+        <div className="mt-3 space-y-2">
           {options.map((option) => (
-            <div key={option}>
+            <label
+              key={option}
+              className="flex items-center gap-2 text-sm text-gray-700 hover:text-black cursor-pointer"
+            >
               <input
                 type="checkbox"
                 checked={selected.includes(option)}
                 onChange={(e) => onChange(title, option, e.target.checked)}
+                className="w-4 h-4 text-black accent-black"
               />
-              <label key={option}>{option}</label>
-            </div>
+              {option}
+              {/* <label key={option}>{option}</label> */}
+            </label>
           ))}
         </div>
       )}

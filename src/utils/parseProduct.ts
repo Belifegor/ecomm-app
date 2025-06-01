@@ -5,7 +5,7 @@ function formatPrice(centAmount?: number): string {
   if (centAmount) {
     return `${(centAmount / 100).toFixed(2)}`;
   } else {
-    return `0.00`;
+    return `undefined`;
   }
 }
 

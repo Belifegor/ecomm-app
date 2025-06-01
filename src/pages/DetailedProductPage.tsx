@@ -2,19 +2,21 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getProductById } from '../services/sdk/getProductById';
 import { ProductProjection } from '@commercetools/platform-sdk';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import { Navigation } from 'swiper/modules';
 
 export function DetailedProductPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState<ProductProjection | null>(null);
-  const [selectedImage, setSelectedImage] = useState<string>('');
 
   useEffect(() => {
     if (id) {
       getProductById(id)
         .then((data) => {
           setProduct(data);
-          setSelectedImage(data.masterVariant.images?.[0]?.url || '');
         })
         .catch(console.error);
     }
@@ -40,28 +42,22 @@ export function DetailedProductPage() {
       </button>
 
       <div className="flex flex-col lg:flex-row gap-10">
-        {/* Preview Thumbnails */}
-        <div className="flex lg:flex-col gap-2 order-2 lg:order-1">
-          {images.map((img, idx) => (
-            <img
-              key={idx}
-              src={img.url}
-              alt={`preview-${idx}`}
-              onClick={() => setSelectedImage(img.url)}
-              className={`w-16 h-16 object-contain border rounded cursor-pointer hover:ring-2 hover:ring-purple-400 transition ${
-                selectedImage === img.url ? 'ring-2 ring-purple-600' : ''
-              }`}
-            />
-          ))}
-        </div>
-
-        {/* Main Image */}
         <div className="flex-1 order-1 lg:order-2">
-          <img
-            src={selectedImage}
-            alt={name}
-            className="w-full max-w-md object-contain mx-auto"
-          />
+          <Swiper
+            navigation={images.length > 1}
+            modules={[Navigation]}
+            className="w-full max-w-md mx-auto"
+          >
+            {images.map((img, idx) => (
+              <SwiperSlide key={idx}>
+                <img
+                  src={img.url}
+                  alt={`image-${idx}`}
+                  className="w-full object-contain max-h-[400px] mx-auto"
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
 
         {/* Product Details */}

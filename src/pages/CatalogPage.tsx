@@ -7,6 +7,7 @@ import { FilterSidebar } from '../components/FilterSidebar';
 import { getFilteredProducts } from '../services/sdk/GetFilteredProducts';
 import { getAvailableFilters } from '../services/sdk/getAvailableFilters';
 import { Product } from '../components/CatalogCard_merged';
+import { Breadcrumbs } from '../components/BreadCrumbs';
 
 // const FILTERS = {
 //   brand: ['Apple', 'Samsung', 'Sony', 'Google'], // можно подгружать с сервера
@@ -78,6 +79,9 @@ export function CatalogPage() {
 
   return (
     <main className="bg-white min-h-screen w-full mt-2">
+      <div className="max-w-[1440px] mx-auto pl-6 pr-4">
+        <Breadcrumbs />
+      </div>
       <div className="max-w-[1440px] mx-auto px-4 flex">
         <aside className="w-1/4">
           {/* Боковая панель фильтров */}

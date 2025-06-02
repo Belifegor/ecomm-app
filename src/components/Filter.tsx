@@ -18,7 +18,10 @@ export function Filter({ title, options, selected, onChange }: FilterProps) {
         {title}
         <span className="text-gray-500">{isOpen ? '▲' : '▼'}</span>
       </button>
-      {isOpen && (
+      <div
+        className={`mt-3 space-y-2 overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
+      >
+        {/* {isOpen && ( */}
         <div className="mt-3 space-y-2">
           {options.map((option) => (
             <label
@@ -36,7 +39,8 @@ export function Filter({ title, options, selected, onChange }: FilterProps) {
             </label>
           ))}
         </div>
-      )}
+        {/* )} */}
+      </div>
     </div>
   );
 }

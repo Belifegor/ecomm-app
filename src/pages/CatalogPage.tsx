@@ -105,11 +105,11 @@ export function CatalogPage() {
       </div>
       <div className="max-w-[1440px] mx-auto px-4 flex">
         {/* Боковая панель фильтров */}
-        <FilterSidebar
+        {/* <FilterSidebar
           filters={filters}
           selectedFilters={selectedFilters}
           onFilterChange={handleFilterChange}
-        />
+        /> */}
 
         {/*Cортировка + список товаров */}
         <div className="flex-1 flex flex-col gap-4">
@@ -128,48 +128,23 @@ export function CatalogPage() {
               ))}
             </select>
           </div>
-          <aside className="w-1/4">
-            {/* Боковая панель фильтров */}
-            <FilterSidebar
-              filters={filters}
-              selectedFilters={selectedFilters}
-              onFilterChange={handleFilterChange}
-            />
-          </aside>
-
-          {/* Список продуктов */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6  items-start">
-            {loading && <p>Загрузка товаров...</p>}
-            {error && <p className="text-red-500">{error}</p>}
-            {!loading && !products.length && (
-              <p>Нет товаров по выбранным фильтрам.</p>
-            )}
-            {products.map((p) => (
-              <ProductCard
-                key={p.id}
-                id={p.id}
-                name={p.name}
-                description={p.description}
-                imageUrl={p.imageUrl}
-                price={p.price}
-                originalPrice={p.originalPrice}
+          <div className="flex">
+            <aside className="w-1/4">
+              {/* Боковая панель фильтров */}
+              <FilterSidebar
+                filters={filters}
+                selectedFilters={selectedFilters}
+                onFilterChange={handleFilterChange}
               />
-            ))}
-          </div>
-        </div>
-        <section className="w-3/4">
-          {/* Список продуктов */}
-          {loading && (
-            <div className="flex justify-center items-center min-h-[300px]">
-              <p className="text-gray-500 text-lg">Загрузка товаров...</p>
-            </div>
-          )}
-          {error && <p className="text-red-500">{error}</p>}
-          {!loading && !products.length && (
-            <p>Нет товаров по выбранным фильтрам.</p>
-          )}
-          {!loading && !error && products.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6  items-start mt-2">
+            </aside>
+
+            {/* Список продуктов */}
+            {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6  items-start">
+              {loading && <p>Загрузка товаров...</p>}
+              {error && <p className="text-red-500">{error}</p>}
+              {!loading && !products.length && (
+                <p>Нет товаров по выбранным фильтрам.</p>
+              )}
               {products.map((p) => (
                 <ProductCard
                   key={p.id}
@@ -181,9 +156,36 @@ export function CatalogPage() {
                   originalPrice={p.originalPrice}
                 />
               ))}
-            </div>
-          )}
-        </section>
+            </div> */}
+            {/* Список продуктов */}
+            <section className="w-3/4">
+              {loading && (
+                <div className="flex justify-center items-center min-h-[300px]">
+                  <p className="text-gray-500 text-lg">Загрузка товаров...</p>
+                </div>
+              )}
+              {error && <p className="text-red-500">{error}</p>}
+              {!loading && !products.length && (
+                <p>Нет товаров по выбранным фильтрам.</p>
+              )}
+              {!loading && !error && products.length > 0 && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6  items-start mt-2">
+                  {products.map((p) => (
+                    <ProductCard
+                      key={p.id}
+                      id={p.id}
+                      name={p.name}
+                      description={p.description}
+                      imageUrl={p.imageUrl}
+                      price={p.price}
+                      originalPrice={p.originalPrice}
+                    />
+                  ))}
+                </div>
+              )}
+            </section>
+          </div>
+        </div>
       </div>
     </main>
   );

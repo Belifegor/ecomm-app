@@ -12,7 +12,8 @@ export type Filters = {
 export async function getFilteredProducts(
   filters: Filters,
   limit = 10,
-  sort?: string
+  sort?: string,
+  searchQuery?: string
 ) {
   const filter: string[] = [];
 
@@ -57,6 +58,7 @@ export async function getFilteredProducts(
           limit,
           filter: filter.length > 0 ? filter : undefined,
           sort: sort ? [sort] : undefined,
+          [`text.en-US`]: searchQuery ? searchQuery : undefined,
           localeProjection: 'en-US',
         },
       })

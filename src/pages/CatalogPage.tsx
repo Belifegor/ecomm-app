@@ -7,12 +7,7 @@ import { FilterSidebar } from '../components/FilterSidebar';
 import { getFilteredProducts } from '../services/sdk/GetFilteredProducts';
 import { getAvailableFilters } from '../services/sdk/getAvailableFilters';
 import { Product } from '../components/CatalogCard_merged';
-
-// const FILTERS = {
-//   brand: ['Apple', 'Samsung', 'Sony', 'Google'], // можно подгружать с сервера
-//   color: ['Black', 'White', 'Silver', 'Purple'],
-//   model: ['iPhone 14 Pro', 'Galaxy S23', 'Pixel 7', 'iPhone 15 Pro Max'],
-// };
+import { useSearchStore } from '../store/searchStore';
 
 const SORT_OPTIONS = [
   { value: 'price asc', label: 'Price: Low to High' },
@@ -31,6 +26,8 @@ export function CatalogPage() {
   const [error, setError] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<string>('price asc');
 
+  const searchQuery = useSearchStore((state) => state.query);
+
   useEffect(() => {
     getAvailableFilters()
       .then(setFilters)
@@ -46,7 +43,7 @@ export function CatalogPage() {
       sortOrder
     );
 
-    getFilteredProducts(selectedFilters, 30, sortOrder)
+    getFilteredProducts(selectedFilters, 30, sortOrder, searchQuery)
       .then((data: ProductProjection[]) => {
         console.log(
           'Получено после фильтрации (data):',
@@ -70,7 +67,7 @@ export function CatalogPage() {
         setError('Не удалось загрузить товары. Попробуйте позже.');
       })
       .finally(() => setLoading(false));
-  }, [selectedFilters, sortOrder]);
+  }, [selectedFilters, sortOrder, searchQuery]);
 
   const handleFilterChange = (
     title: string,

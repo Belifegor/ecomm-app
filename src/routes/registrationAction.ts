@@ -18,6 +18,12 @@ export async function registerAction(
   const result = await getCustomerToken({ email, password });
   console.log(result);
   // await loginCustomer({ email, password });
-  authStore.getState().login(result, { userName: email, password: password });
+  authStore.getState().login(result);
+  authStore
+    .getState()
+    .updateUserOptions({ userName: email, password: password });
   navigate(ROUTES.HOME, { replace: true }); // убрал main в navigate
 }
+
+//Строка 21 authStore.getState().login(result, { userName: email, password: password })
+// заменил на работающий вариант

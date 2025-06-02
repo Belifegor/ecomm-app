@@ -44,7 +44,8 @@ function Login() {
     try {
       const customer = await getCustomerToken(formData);
       console.log(customer);
-      authStore.getState().login(customer, {
+      authStore.getState().login(customer);
+      authStore.getState().updateUserOptions({
         userName: formData.email,
         password: formData.password,
       });

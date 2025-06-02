@@ -6,8 +6,12 @@ import { useForm } from 'react-hook-form';
 import Button from '../button.tsx';
 import { authStore } from '../../store/store.ts';
 import { updateCustomer } from '../../services/sdk/updateCustomerInformation.ts';
+import { useState } from 'react';
+import PopupWrapper from './PopupWrapper.tsx';
+import UserVerificationPopup from './UserVerificationPopup.tsx';
 
 export type EditValidation = z.infer<typeof schemaForRegistrationBase>;
+
 function EditProfilePopup({ handleEvent }: { handleEvent: () => void }) {
   const savedCustomer = authStore.getState().customer;
   const {
@@ -19,17 +23,25 @@ function EditProfilePopup({ handleEvent }: { handleEvent: () => void }) {
     resolver: zodResolver(schemaForRegistrationBase),
     mode: 'onChange',
   });
-  const updateUserInformation = () => {
-    // console.log(getValues());
-    const data = getValues();
-    updateCustomer(data, handleEvent);
+  const [showVerification, setShowVerification] = useState(false);
+
+  const preSubmit = () => {
+    console.log(authStore.getState().userOptions);
+    if (authStore.getState().userOptions === null) {
+      setShowVerification(true); /// вызываем внутри  updateUserInformation() с тем что введет польз. но только после успешной верификации
+    } else {
+      updateUserInformation(); /// вызываем с тем что есть в сторе
+    }
   };
+
+  const updateUserInformation = () => {
+    const data = getValues();
+    updateCustomer(data, handleEvent).then((res) => console.log(res));
+  };
+
   return (
     <div>
-      <form
-        onSubmit={handleSubmit(updateUserInformation)}
-        className="flex flex-col gap-4"
-      >
+      <form onSubmit={handleSubmit(preSubmit)} className="flex flex-col gap-4">
         <InputField
           defaultValue={savedCustomer?.email}
           register={register}
@@ -109,6 +121,18 @@ function EditProfilePopup({ handleEvent }: { handleEvent: () => void }) {
           />
         </div>
       </form>
+      {showVerification && (
+        <PopupWrapper>
+          <UserVerificationPopup
+            onClose={() => {
+              setShowVerification(false);
+            }}
+            onUpdate={() => {
+              updateUserInformation();
+            }}
+          />
+        </PopupWrapper>
+      )}
     </div>
   );
 }

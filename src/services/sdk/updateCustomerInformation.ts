@@ -54,7 +54,6 @@ function updateSavedCustomer(data: EditValidation) {
     lastName: data.lastName,
     dateOfBirth: data.dateOfBirth,
   });
-  // authStore.getState().userOptions
 }
 
 function updatePassword() {

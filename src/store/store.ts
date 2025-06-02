@@ -5,38 +5,32 @@ import { getAnToken } from '../services/sdk/getAnonymousToken.ts';
 
 type AuthStore = {
   customer: Customer | null;
-  login: (
-    customer: Customer,
-    userOptions: { userName: string; password: string }
-  ) => void;
   logout: () => void;
-  isAuthenticated: () => boolean;
   userOptions: { userName: string; password: string } | null;
+  isAuthenticated: () => boolean;
+  login: (customer: Customer) => void;
   updateCustomer: (newCustomer: Partial<Customer>) => void;
+  updateUserOptions: (userOptions: {
+    userName: string;
+    password: string;
+  }) => void;
 };
 
 const storedCustomer = localStorage.getItem('customer');
 const storedToken = localStorage.getItem('token');
-const storedUserOptions = localStorage.getItem('userOptions');
 
 const initialCustomer = storedCustomer ? JSON.parse(storedCustomer) : null;
 const initialToken = storedToken || null;
-const initialUserOption = storedUserOptions
-  ? JSON.parse(storedUserOptions)
-  : null;
+const initialUserOption = null;
 
 export const authStore = create<AuthStore>((set, get) => ({
   customer: initialCustomer,
   token: initialToken,
   userOptions: initialUserOption,
 
-  login: (
-    customer: Customer,
-    userOptions: { userName: string; password: string }
-  ) => {
+  login: (customer: Customer) => {
     localStorage.setItem('customer', JSON.stringify(customer)); // сохраняю в хранилище
-    localStorage.setItem('userOptions', JSON.stringify(userOptions));
-    set({ customer, userOptions });
+    set({ customer });
   },
   logout: () => {
     localStorage.removeItem('customer'); //очищаю
@@ -55,13 +49,16 @@ export const authStore = create<AuthStore>((set, get) => ({
         version: currentCustomer.version + 1,
       };
       console.log(currentCustomer.version);
-      const newUserOptions = {
-        userName: newCustomer.email ?? currentUserOptions.userName,
-        password: currentUserOptions.password,
-      };
+      // const newUserOptions = {
+      //   userName: newCustomer.email ?? currentUserOptions.userName,
+      //   password: currentUserOptions.password,
+      // };
       localStorage.setItem('customer', JSON.stringify(updatedCustomer));
-      localStorage.setItem('userOptions', JSON.stringify(newUserOptions));
-      set({ customer: updatedCustomer, userOptions: newUserOptions });
+      set({ customer: updatedCustomer /*, userOptions: newUserOptions*/ });
     }
+    console.log(authStore.getState().userOptions);
+  },
+  updateUserOptions: (options: { userName: string; password: string }) => {
+    set({ userOptions: options });
   },
 }));

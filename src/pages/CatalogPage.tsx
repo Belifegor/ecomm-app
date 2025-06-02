@@ -77,7 +77,7 @@ export function CatalogPage() {
   };
 
   return (
-    <main className="bg-white min-h-screen w-full">
+    <main className="bg-white min-h-screen w-full mt-2">
       <div className="max-w-[1440px] mx-auto px-4 flex">
         <aside className="w-1/4">
           {/* Боковая панель фильтров */}
@@ -100,7 +100,7 @@ export function CatalogPage() {
             <p>Нет товаров по выбранным фильтрам.</p>
           )}
           {!loading && !error && products.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6  items-start">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6  items-start mt-2">
               {products.map((p) => (
                 <ProductCard
                   key={p.id}

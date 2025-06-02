@@ -9,6 +9,7 @@ import App from '../App.tsx';
 import { MainPage } from '../pages/MainPage.tsx';
 import { ROUTES } from '../utils/paths.ts';
 import { CatalogPage } from '../pages/CatalogPage.tsx';
+import { DetailedProductPage } from '../pages/DetailedProductPage.tsx';
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
             <Login />
           </RequireNoAuth>
         ),
+      },
+      {
+        path: 'products/:id',
+        element: <DetailedProductPage />,
       },
       {
         path: ROUTES.REGISTER,

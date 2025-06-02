@@ -4,5 +4,6 @@ export const ROUTES = {
   REGISTER: 'register',
   PROFILE: 'profile',
   CATALOG: 'catalog',
+  PRODUCT: 'products/:id',
   NOT_FOUND: '*',
 };

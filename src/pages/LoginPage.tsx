@@ -45,6 +45,10 @@ function Login() {
       const customer = await getCustomerToken(formData);
       console.log(customer);
       authStore.getState().login(customer);
+      authStore.getState().updateUserOptions({
+        userName: formData.email,
+        password: formData.password,
+      });
       navigate(ROUTES.HOME, { replace: true });
       setLoginError(null);
     } catch (error: unknown) {

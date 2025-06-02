@@ -7,7 +7,6 @@ export function getAnToken() {
     .execute()
     .then((response) => {
       console.log('Published product projections:', response.body.results);
-      console.log(response.headers);
     })
     .catch(console.error);
 }

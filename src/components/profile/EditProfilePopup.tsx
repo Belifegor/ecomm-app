@@ -5,24 +5,31 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import Button from '../button.tsx';
 import { authStore } from '../../store/store.ts';
+import { updateCustomer } from '../../services/sdk/updateCustomerInformation.ts';
 
+export type EditValidation = z.infer<typeof schemaForRegistrationBase>;
 function EditProfilePopup({ handleEvent }: { handleEvent: () => void }) {
-  type EditValidation = z.infer<typeof schemaForRegistrationBase>;
   const savedCustomer = authStore.getState().customer;
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors, isValid },
   } = useForm<EditValidation>({
     resolver: zodResolver(schemaForRegistrationBase),
     mode: 'onChange',
   });
-  const onChange = () => {
-    console.log(111);
+  const updateUserInformation = () => {
+    // console.log(getValues());
+    const data = getValues();
+    updateCustomer(data, handleEvent);
   };
   return (
     <div>
-      <form onSubmit={handleSubmit(onChange)} className="flex flex-col gap-4">
+      <form
+        onSubmit={handleSubmit(updateUserInformation)}
+        className="flex flex-col gap-4"
+      >
         <InputField
           defaultValue={savedCustomer?.email}
           register={register}

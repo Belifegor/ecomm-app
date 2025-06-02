@@ -12,7 +12,7 @@ export function FilterSidebar({
   onFilterChange,
 }: FilterSidebarProps) {
   return (
-    <aside className="w-3xs flex flex-col mt-8 pr-4">
+    <div className="max-w-3xs flex flex-col mt-8 pr-4 ">
       {Object.entries(filters).map(([title, options]) => (
         <Filter
           key={title}
@@ -22,6 +22,6 @@ export function FilterSidebar({
           onChange={onFilterChange}
         />
       ))}
-    </aside>
+    </div>
   );
 }

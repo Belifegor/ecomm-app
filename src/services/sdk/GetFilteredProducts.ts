@@ -9,7 +9,11 @@ export type Filters = {
 };
 
 //получение товаров по выбранным фильтрам
-export async function getFilteredProducts(filters: Filters, limit = 10) {
+export async function getFilteredProducts(
+  filters: Filters,
+  limit = 10,
+  sort?: string
+) {
   const filter: string[] = [];
 
   //бренд(brand)
@@ -52,6 +56,7 @@ export async function getFilteredProducts(filters: Filters, limit = 10) {
         queryArgs: {
           limit,
           filter: filter.length > 0 ? filter : undefined,
+          sort: sort ? [sort] : undefined,
           localeProjection: 'en-US',
         },
       })

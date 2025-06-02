@@ -14,6 +14,13 @@ import { Product } from '../components/CatalogCard_merged';
 //   model: ['iPhone 14 Pro', 'Galaxy S23', 'Pixel 7', 'iPhone 15 Pro Max'],
 // };
 
+const SORT_OPTIONS = [
+  { value: 'price asc', label: 'Price: Low to High' },
+  { value: 'price desc', label: 'Price: High to Low' },
+  { value: 'name.en-US asc', label: 'Name: A to Z' },
+  { value: 'name.en-US desc', label: 'Name: Z to A' },
+];
+
 export function CatalogPage() {
   const [filters, setFilters] = useState<{ [key: string]: string[] }>({});
   const [selectedFilters, setSelectedFilters] = useState<{
@@ -22,6 +29,7 @@ export function CatalogPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [sortOrder, setSortOrder] = useState<string>('price asc');
 
   useEffect(() => {
     getAvailableFilters()
@@ -31,9 +39,14 @@ export function CatalogPage() {
 
   useEffect(() => {
     setLoading(true);
-    console.log('*** Перед фильтрацией, selectedFilters =', selectedFilters);
+    console.log(
+      '*** Перед фильтрацией, selectedFilters =',
+      selectedFilters,
+      'sortOrder =',
+      sortOrder
+    );
 
-    getFilteredProducts(selectedFilters, 30)
+    getFilteredProducts(selectedFilters, 30, sortOrder)
       .then((data: ProductProjection[]) => {
         console.log(
           'Получено после фильтрации (data):',
@@ -57,7 +70,7 @@ export function CatalogPage() {
         setError('Не удалось загрузить товары. Попробуйте позже.');
       })
       .finally(() => setLoading(false));
-  }, [selectedFilters]);
+  }, [selectedFilters, sortOrder]);
 
   const handleFilterChange = (
     title: string,
@@ -76,6 +89,11 @@ export function CatalogPage() {
     });
   };
 
+  const handleSortChange = (value: string) => {
+    console.log('Выбранная сортировка:', value);
+    setSortOrder(value);
+  };
+
   return (
     <main className="bg-white min-h-screen w-full">
       <div className="max-w-[1440px] mx-auto px-4 flex">
@@ -86,24 +104,43 @@ export function CatalogPage() {
           onFilterChange={handleFilterChange}
         />
 
-        {/* Список продуктов */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6  items-start">
-          {loading && <p>Загрузка товаров...</p>}
-          {error && <p className="text-red-500">{error}</p>}
-          {!loading && !products.length && (
-            <p>Нет товаров по выбранным фильтрам.</p>
-          )}
-          {products.map((p) => (
-            <ProductCard
-              key={p.id}
-              id={p.id}
-              name={p.name}
-              description={p.description}
-              imageUrl={p.imageUrl}
-              price={p.price}
-              originalPrice={p.originalPrice}
-            />
-          ))}
+        {/*Cортировка + список товаров */}
+        <div className="flex-1 flex flex-col gap-4">
+          {/* Блок сортировки */}
+          <div className="flex justify-end">
+            <select
+              value={sortOrder}
+              onChange={(e) => handleSortChange(e.target.value)}
+              className="border border-gray-300 rounded-md px-3 py-2 text-sm"
+            >
+              <option value="">Sort by</option>
+              {SORT_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Список продуктов */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6  items-start">
+            {loading && <p>Загрузка товаров...</p>}
+            {error && <p className="text-red-500">{error}</p>}
+            {!loading && !products.length && (
+              <p>Нет товаров по выбранным фильтрам.</p>
+            )}
+            {products.map((p) => (
+              <ProductCard
+                key={p.id}
+                id={p.id}
+                name={p.name}
+                description={p.description}
+                imageUrl={p.imageUrl}
+                price={p.price}
+                originalPrice={p.originalPrice}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </main>

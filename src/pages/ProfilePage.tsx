@@ -13,9 +13,9 @@ function ProfilePage() {
   const [popup, setStateOpen] = useState<false | 'edit' | 'addAddress'>(false);
   useEffect(() => {
     if (popup) {
-      return document.body.classList.add('overflow-hidden');
+      document.body.classList.add('overflow-hidden');
     } else {
-      return document.body.classList.remove('overflow-hidden');
+      document.body.classList.remove('overflow-hidden');
     }
   }, [popup]);
 

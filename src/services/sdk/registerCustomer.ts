@@ -4,7 +4,7 @@ import type {
   MyCustomerDraft,
 } from '@commercetools/platform-sdk';
 
-export async function registerCutomer(
+export async function registerCustomer(
   customerData: MyCustomerDraft
 ): Promise<CustomerSignInResult> {
   const response = await apiRoot

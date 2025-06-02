@@ -13,7 +13,7 @@ import {
   PROJECT_KEY,
 } from './BuildClient.ts';
 
-export async function getCustomerToken(formData: LoginData) {
+export function createApiRoot(formData: LoginData) {
   const passwordMiddlewareOptions: PasswordAuthMiddlewareOptions = {
     host: AUTH_HOST,
     projectKey: PROJECT_KEY,
@@ -35,13 +35,16 @@ export async function getCustomerToken(formData: LoginData) {
     .withHttpMiddleware(httpMiddlewareOptions)
     .build();
 
-  const apiRoot = createApiBuilderFromCtpClient(
-    passwordFlowClient
-  ).withProjectKey({
+  return createApiBuilderFromCtpClient(passwordFlowClient).withProjectKey({
     projectKey: PROJECT_KEY,
   });
-
-  const result = await apiRoot.me().login().post({ body: formData }).execute();
+}
+export async function getCustomerToken(formData: LoginData) {
+  const result = await createApiRoot(formData)
+    .me()
+    .login()
+    .post({ body: formData })
+    .execute();
   console.log(result);
   return result.body.customer;
 }

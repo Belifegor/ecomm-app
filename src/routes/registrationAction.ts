@@ -1,4 +1,4 @@
-import { registerCutomer } from '../services/sdk/registerCustomer';
+import { registerCustomer } from '../services/sdk/registerCustomer';
 import { NavigateFunction } from 'react-router-dom'; // для навигации на main
 import { authStore } from '../store/store';
 import { RegistrationData } from '../pages/RegistrationPage.tsx';
@@ -12,12 +12,12 @@ export async function registerAction(
 ) {
   const mappedData = mapRegistrationData(formData);
 
-  await registerCutomer(mappedData);
+  await registerCustomer(mappedData);
 
   const { email, password } = formData;
   const result = await getCustomerToken({ email, password });
   console.log(result);
   // await loginCustomer({ email, password });
-  authStore.getState().login(result);
+  authStore.getState().login(result, { userName: email, password: password });
   navigate(ROUTES.HOME, { replace: true }); // убрал main в navigate
 }

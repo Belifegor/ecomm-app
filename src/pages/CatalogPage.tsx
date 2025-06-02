@@ -7,7 +7,7 @@ import { FilterSidebar } from '../components/FilterSidebar';
 import { getFilteredProducts } from '../services/sdk/GetFilteredProducts';
 import { getAvailableFilters } from '../services/sdk/getAvailableFilters';
 import { Product } from '../components/CatalogCard_merged';
-import { Breadcrumbs } from '../components/BreadCrumbs';
+import { Breadcrumbs } from '../components/Breadcrumbs';
 
 // const FILTERS = {
 //   brand: ['Apple', 'Samsung', 'Sony', 'Google'], // можно подгружать с сервера

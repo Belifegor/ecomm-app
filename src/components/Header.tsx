@@ -155,7 +155,26 @@ export function Header() {
           >
             Blog
           </NavLink>
-          {!customer ? (
+          {customer ? (
+            <>
+              <Link
+                to={ROUTES.PROFILE}
+                onClick={() => setIsMenuOpen(false)}
+                className="hover:underline mt-4"
+              >
+                Profile
+              </Link>
+              <button
+                onClick={() => {
+                  logout();
+                  navigate(ROUTES.HOME, { replace: true });
+                }}
+                className="hover:underline text-left"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
             <>
               <Link
                 to={ROUTES.LOGIN}
@@ -172,14 +191,6 @@ export function Header() {
                 Register
               </Link>
             </>
-          ) : (
-            <Link
-              to={ROUTES.PROFILE}
-              onClick={() => setIsMenuOpen(false)}
-              className="hover:underline mt-4"
-            >
-              Profile
-            </Link>
           )}
           <div className="flex gap-4 pt-4 border-t border-gray-200 mt-4">
             <button className="relative w-6 h-6">

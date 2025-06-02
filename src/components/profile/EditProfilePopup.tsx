@@ -21,7 +21,7 @@ function EditProfilePopup({ handleEvent }: { handleEvent: () => void }) {
     console.log(111);
   };
   return (
-    <div className=" w-1/3 min-w-[350px] h-7/10 fixed bg-white rounded-[10px] border border-[#EBEBEB] top-[60px], left-1/3 p-8">
+    <div>
       <form onSubmit={handleSubmit(onChange)} className="flex flex-col gap-4">
         <InputField
           defaultValue={savedCustomer?.email}
@@ -92,14 +92,13 @@ function EditProfilePopup({ handleEvent }: { handleEvent: () => void }) {
             type="submit"
             text="Save Changes"
             disabled={!isValid}
-            className="max-w-[150px] min-w-[80px] text-white"
+            className="max-w-[150px] min-w-[80px] h-14 text-white"
           />
           <Button
             type="button"
             text="Cancel Changes"
-            disabled={false}
             onClick={handleEvent}
-            className="max-w-[150px] min-w-[80px] bg-white text-[#9F9F9F]  border border-[#EBEBEB]"
+            className="max-w-[150px] min-w-[80px] h-14 bg-white text-[#9F9F9F]  border border-[#EBEBEB]"
           />
         </div>
       </form>

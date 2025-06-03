@@ -33,5 +33,6 @@ export async function updatePassword(
     onClosePopup();
   } catch (error) {
     console.error('Password update failed', error);
+    throw error;
   }
 }

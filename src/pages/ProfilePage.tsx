@@ -2,19 +2,20 @@ import Button from '../components/button.tsx';
 import ProfileValueItem from '../components/profile/ProfileValueItem.tsx';
 import SavedAddressBlock from '../components/profile/SavedAddressBlock.tsx';
 import { authStore } from '../store/store.ts';
-import { Customer } from '@commercetools/platform-sdk';
 import { useEffect, useState } from 'react';
 import EditProfilePopup from '../components/profile/EditProfilePopup.tsx';
 import PopupWrapper from '../components/profile/PopupWrapper.tsx';
 import AddAddressPopup from '../components/profile/AddAddressPopup.tsx';
 import { getAddressRole } from '../utils/getAdderessRoleFunc.ts';
 import ChangePasswordPopup from '../components/profile/changePasswordPopup.tsx';
+import { useStore } from 'zustand/react';
 
 function ProfilePage() {
-  const currentCustomer: Customer | null = authStore.getState().customer;
+  //const currentCustomer: Customer | null = authStore.getState().customer;
   const [popup, setStateOpen] = useState<
-    false | 'edit' | 'addAddress' | 'password'
+    false | 'edit' | 'addAddress' | 'password' | 'verification'
   >(false);
+  const currentCustomer = useStore(authStore, (state) => state.customer);
   useEffect(() => {
     if (popup) {
       document.body.classList.add('overflow-hidden');
@@ -65,10 +66,6 @@ function ProfilePage() {
             <h3 className="text-xl font-semibold mb-5">User Information</h3>
             <div className="flex flex-col min-w-[300px] w-1/1 space-y-4 border border-[#EBEBEB] rounded-[10px] p-[10px] mb-4">
               <ProfileValueItem label="Email:" value={currentCustomer?.email} />
-              {/*<ProfileValueItem*/}
-              {/*  label="Password:"*/}
-              {/*  value={currentCustomer?.password}*/}
-              {/*/>*/}
               <ProfileValueItem
                 label="First Name:"
                 value={currentCustomer?.firstName}
@@ -108,6 +105,7 @@ function ProfilePage() {
                   title={getAddressRole(address, currentCustomer)}
                   address={address}
                   customer={currentCustomer}
+                  // onChangeAddressRole={preChange}
                 />
               ))}
             </div>

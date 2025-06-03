@@ -1,19 +1,40 @@
 import ProfileValueItem from './ProfileValueItem.tsx';
 import { Address, Customer } from '@commercetools/platform-sdk';
 import Button from '../button.tsx';
+import {
+  AddressAction,
+  changeRoleAddress,
+} from '../../services/sdk/changeRoleAddress.ts';
+import { useState } from 'react';
+import { authStore } from '../../store/store.ts';
+// import { addNewAddress } from '../../services/sdk/addNewAddress.ts';
+import PopupWrapper from './PopupWrapper.tsx';
+import UserVerificationPopup from './UserVerificationPopup.tsx';
 
 function SavedAddressBlock({
   title,
   address,
   customer,
+  // onChangeAddressRole,
 }: {
   key?: string;
   title?: string;
   address: Address;
   customer: Customer;
+  // onChangeAddressRole: (address: Address, role: AddressAction) => void;
 }) {
   console.log(address.id);
   console.log(customer.defaultShippingAddressId);
+
+  const [showVerification, setShowVerification] = useState(false);
+  const [role, setRole] = useState<AddressAction>('setDefaultShippingAddress');
+  const preChange = (address: Address, role: AddressAction) => {
+    if (authStore.getState().userOptions === null) {
+      setShowVerification(true);
+    } else {
+      changeRoleAddress(address, role);
+    }
+  };
   return (
     <div className="border border-[#EBEBEB] rounded-[10px] p-[10px] mb-4">
       {title && <h4 className="font-medium mb-2">{title}</h4>}
@@ -40,7 +61,10 @@ function SavedAddressBlock({
           text="Make as default Shipping"
           type="button"
           className="w-40 bg-white border border-[#9F9F9F] p-1 rounded-[7px] mr-2 text-xs"
-          /*onClick={}*/
+          onClick={() => {
+            setRole('setDefaultShippingAddress');
+            preChange(address, role);
+          }}
         />
       )}
       {address.id !== customer.defaultBillingAddressId && (
@@ -48,7 +72,20 @@ function SavedAddressBlock({
           text="Make as default Billing"
           type="button"
           className="w-40 bg-white border border-[#9F9F9F] p-1 rounded-[7px] mr-2 text-xs"
-          /*onClick={}*/
+          onClick={() => {
+            setRole('setDefaultShippingAddress');
+            preChange(address, role);
+          }}
+        />
+      )}
+      {showVerification && (
+        <PopupWrapper
+          children={
+            <UserVerificationPopup
+              onClose={() => setShowVerification(false)}
+              onUpdate={() => changeRoleAddress(address, role)}
+            />
+          }
         />
       )}
     </div>

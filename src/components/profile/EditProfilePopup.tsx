@@ -23,15 +23,14 @@ function EditProfilePopup({ handleEvent }: { handleEvent: () => void }) {
     resolver: zodResolver(schemaForEditUserInfo),
     mode: 'onChange',
   });
-  console.log(isValid, getValues());
   const [showVerification, setShowVerification] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
   const preSubmit = () => {
     console.log(authStore.getState().userOptions);
     if (authStore.getState().userOptions === null) {
-      setShowVerification(true); /// вызываем внутри  updateUserInformation() с тем что введет польз. но только после успешной верификации
+      setShowVerification(true);
     } else {
-      updateUserInformation(); /// вызываем с тем что есть в сторе
+      updateUserInformation();
     }
   };
 

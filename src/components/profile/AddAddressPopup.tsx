@@ -5,24 +5,34 @@ import { schemaForAddress } from '../../utils/validation.ts';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '../button.tsx';
-
+import { useState } from 'react';
+import { authStore } from '../../store/store.ts';
+import PopupWrapper from './PopupWrapper.tsx';
+import UserVerificationPopup from './UserVerificationPopup.tsx';
+import { addNewAddress } from '../../services/sdk/addNewAddress.ts';
+export type AddressValidation = z.infer<typeof schemaForAddress>;
 function AddAddressPopup({ handleEvent }: { handleEvent: () => void }) {
-  type AddressValidation = z.infer<typeof schemaForAddress>;
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors, isValid },
   } = useForm<AddressValidation>({
     resolver: zodResolver(schemaForAddress),
     mode: 'onChange',
   });
-  console.log(errors);
-  const onChange = () => {
-    console.log(222);
+  const [showVerification, setShowVerification] = useState(false);
+
+  const preAdd = () => {
+    if (authStore.getState().userOptions === null) {
+      setShowVerification(true);
+    } else {
+      addNewAddress(getValues, handleEvent);
+    }
   };
   return (
     <div>
-      <form onSubmit={handleSubmit(onChange)} className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit(preAdd)} className="flex flex-col gap-4">
         <InputField
           register={register}
           label="Street"
@@ -86,6 +96,18 @@ function AddAddressPopup({ handleEvent }: { handleEvent: () => void }) {
           />
         </div>
       </form>
+      {showVerification && (
+        <PopupWrapper>
+          <UserVerificationPopup
+            onClose={() => {
+              setShowVerification(false);
+            }}
+            onUpdate={() => {
+              addNewAddress(getValues, handleEvent);
+            }}
+          />
+        </PopupWrapper>
+      )}
     </div>
   );
 }

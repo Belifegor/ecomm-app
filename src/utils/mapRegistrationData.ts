@@ -1,6 +1,6 @@
 import { RegistrationData } from '../pages/RegistrationPage.tsx';
 
-const countryMap = {
+export const countryMap = {
   'Russia(RU)': 'RU',
   'Belarus(BY)': 'BY',
   'United States (US)': 'US',

@@ -22,7 +22,7 @@ function ChangePasswordPopup({ handleEvent }: { handleEvent: () => void }) {
     mode: 'onChange',
   });
   const [showVerification, setShowVerification] = useState(false);
-
+  const [changePasswordError, setPasswordError] = useState<string | null>(null);
   const verification = () => {
     setShowVerification(true);
   };
@@ -30,6 +30,9 @@ function ChangePasswordPopup({ handleEvent }: { handleEvent: () => void }) {
   // const savedCustomer = authStore.getState().customer;
   return (
     <div>
+      <p className="text-xl font-semibold mb-5 text-center">
+        Enter new password
+      </p>
       <form onSubmit={handleSubmit(verification)}>
         <InputField
           // defaultValue={'********'}
@@ -59,6 +62,11 @@ function ChangePasswordPopup({ handleEvent }: { handleEvent: () => void }) {
           />
         </div>
       </form>
+      {changePasswordError && (
+        <p className="h-5 text-red-500 text-[16px] mt-4 text-center">
+          {changePasswordError}
+        </p>
+      )}
       {showVerification && (
         <PopupWrapper>
           <UserVerificationPopup
@@ -66,7 +74,9 @@ function ChangePasswordPopup({ handleEvent }: { handleEvent: () => void }) {
               setShowVerification(false);
             }}
             onUpdate={() => {
-              updatePassword(getValues, () => setShowVerification(false));
+              updatePassword(getValues, handleEvent).catch((err) =>
+                setPasswordError(err.message)
+              );
             }}
           />
         </PopupWrapper>

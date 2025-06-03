@@ -13,6 +13,7 @@ export function parseProduct(product: ProductProjection): Product {
   const master = product.masterVariant;
   const priceInfo = master?.prices?.[0];
   const imageUrl = master?.images?.[0]?.url;
+  const images = master?.images?.map((img) => img.url) || [];
   const currentPrice = priceInfo?.discounted?.value || priceInfo?.value;
   const originalPrice = priceInfo?.discounted ? priceInfo?.value : undefined;
   const name = product.name['en-US'] || 'No name';
@@ -25,6 +26,7 @@ export function parseProduct(product: ProductProjection): Product {
     name,
     description,
     imageUrl,
+    images,
     price: formatPrice(currentPrice?.centAmount),
     originalPrice: formatPrice(originalPrice?.centAmount),
   };

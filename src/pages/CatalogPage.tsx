@@ -133,6 +133,7 @@ export function CatalogPage() {
                 name={p.name}
                 description={p.description}
                 imageUrl={p.imageUrl}
+                images={p.images}
                 price={p.price}
                 originalPrice={p.originalPrice}
               />

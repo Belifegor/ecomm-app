@@ -1,7 +1,6 @@
 import { Customer } from '@commercetools/platform-sdk';
 import { create } from 'zustand';
 import { getAnToken } from '../services/sdk/getAnonymousToken.ts';
-// import { LoginData } from '../pages/LoginPage.tsx';
 
 type AuthStore = {
   customer: Customer | null;
@@ -49,10 +48,6 @@ export const authStore = create<AuthStore>((set, get) => ({
         version: currentCustomer.version + 1,
       };
       console.log(currentCustomer.version);
-      // const newUserOptions = {
-      //   userName: newCustomer.email ?? currentUserOptions.userName,
-      //   password: currentUserOptions.password,
-      // };
       localStorage.setItem('customer', JSON.stringify(updatedCustomer));
       set({ customer: updatedCustomer /*, userOptions: newUserOptions*/ });
     }

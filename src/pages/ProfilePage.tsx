@@ -2,15 +2,19 @@ import Button from '../components/button.tsx';
 import ProfileValueItem from '../components/profile/ProfileValueItem.tsx';
 import SavedAddressBlock from '../components/profile/SavedAddressBlock.tsx';
 import { authStore } from '../store/store.ts';
-import { Address, Customer } from '@commercetools/platform-sdk';
+import { Customer } from '@commercetools/platform-sdk';
 import { useEffect, useState } from 'react';
 import EditProfilePopup from '../components/profile/EditProfilePopup.tsx';
 import PopupWrapper from '../components/profile/PopupWrapper.tsx';
 import AddAddressPopup from '../components/profile/AddAddressPopup.tsx';
+import { getAddressRole } from '../utils/getAdderessRoleFunc.ts';
+import ChangePasswordPopup from '../components/profile/changePasswordPopup.tsx';
 
 function ProfilePage() {
   const currentCustomer: Customer | null = authStore.getState().customer;
-  const [popup, setStateOpen] = useState<false | 'edit' | 'addAddress'>(false);
+  const [popup, setStateOpen] = useState<
+    false | 'edit' | 'addAddress' | 'password'
+  >(false);
   useEffect(() => {
     if (popup) {
       document.body.classList.add('overflow-hidden');
@@ -43,6 +47,17 @@ function ProfilePage() {
           }
         />
       )}
+      {popup === 'password' && (
+        <PopupWrapper
+          children={
+            <ChangePasswordPopup
+              handleEvent={() => {
+                setStateOpen(false);
+              }}
+            />
+          }
+        />
+      )}
       <div className="max-w-[1440px] mx-auto py-12 flex flex-col items-center px-8 xl:px-40 md:items-start">
         <h2 className="text-2xl font-bold mb-10 ">My Profile</h2>
         <div className="flex flex-col w-1/1 md:flex-row gap-5">
@@ -50,10 +65,10 @@ function ProfilePage() {
             <h3 className="text-xl font-semibold mb-5">User Information</h3>
             <div className="flex flex-col min-w-[300px] w-1/1 space-y-4 border border-[#EBEBEB] rounded-[10px] p-[10px] mb-4">
               <ProfileValueItem label="Email:" value={currentCustomer?.email} />
-              <ProfileValueItem
-                label="Password:"
-                value={currentCustomer?.password}
-              />
+              {/*<ProfileValueItem*/}
+              {/*  label="Password:"*/}
+              {/*  value={currentCustomer?.password}*/}
+              {/*/>*/}
               <ProfileValueItem
                 label="First Name:"
                 value={currentCustomer?.firstName}
@@ -65,6 +80,16 @@ function ProfilePage() {
               <ProfileValueItem
                 label="Date of birth:"
                 value={currentCustomer?.dateOfBirth}
+              />
+            </div>
+
+            <div className="flex justify-between gap-1 px-2 items-center">
+              <ProfileValueItem label="Password:" value="********" />
+              <Button
+                text="Change"
+                type="button"
+                className="w-15 h-7 bg-white border border-[#9F9F9F] p-1 rounded-[7px] text-xs"
+                onClick={() => setStateOpen('password')}
               />
             </div>
             <Button
@@ -99,17 +124,4 @@ function ProfilePage() {
   );
 }
 
-function getAddressRole(address: Address, customer: Customer): string {
-  const isDefaultShipping = customer.defaultShippingAddressId === address.id;
-  const isDefaultBilling = customer.defaultBillingAddressId === address.id;
-
-  if (isDefaultShipping && isDefaultBilling) {
-    return 'Default Shipping & Billing Address';
-  } else if (isDefaultShipping) {
-    return 'Default Shipping Address';
-  } else if (isDefaultBilling) {
-    return 'Default Billing Address';
-  }
-  return '';
-}
 export default ProfilePage;

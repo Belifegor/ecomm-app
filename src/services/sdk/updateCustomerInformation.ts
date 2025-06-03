@@ -7,43 +7,36 @@ export async function updateCustomer(
   data: EditValidation,
   closePopup: () => void
 ) {
-  const currentCustomer = authStore.getState().customer;
-  const userOptions = authStore.getState().userOptions;
+  const { customer, userOptions } = authStore.getState();
+  if (!customer || !userOptions) return;
+  const { version } = customer;
 
-  if (currentCustomer && userOptions) {
-    const version = currentCustomer.version;
-    const actions: MyCustomerUpdateAction[] = [];
-    actions.push(
-      { action: 'changeEmail', email: data.email },
-      { action: 'setFirstName', firstName: data.firstName },
-      { action: 'setLastName', lastName: data.lastName },
-      { action: 'setDateOfBirth', dateOfBirth: data.dateOfBirth }
-    );
-    if (currentCustomer.password !== data.password) {
-      console.log(currentCustomer.password, data.password);
-      updatePassword();
-    }
-    const response = createApiRoot({
-      email: userOptions?.userName,
+  const actions: MyCustomerUpdateAction[] = [
+    { action: 'changeEmail', email: data.email },
+    { action: 'setFirstName', firstName: data.firstName },
+    { action: 'setLastName', lastName: data.lastName },
+    { action: 'setDateOfBirth', dateOfBirth: data.dateOfBirth },
+  ];
+
+  try {
+    const res = await createApiRoot({
+      email: userOptions.userName,
       password: userOptions.password,
     })
       .me()
-      .post({
-        body: {
-          version,
-          actions,
-        },
-      })
+      .post({ body: { version, actions } })
       .execute();
-    console.log(response);
-    console.log(version);
-    response.then((res) => {
-      console.log(res.statusCode);
-      if (res.statusCode === 200) {
-        updateSavedCustomer(data);
-        closePopup();
-      }
-    });
+
+    if (res.statusCode === 200) {
+      updateSavedCustomer(data);
+      closePopup();
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    } else {
+      console.error('Unknown error', error);
+    }
   }
 }
 
@@ -54,8 +47,4 @@ function updateSavedCustomer(data: EditValidation) {
     lastName: data.lastName,
     dateOfBirth: data.dateOfBirth,
   });
-}
-
-function updatePassword() {
-  console.log(1111);
 }

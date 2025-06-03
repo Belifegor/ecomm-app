@@ -30,21 +30,27 @@ function UserVerificationPopup({ onClose, onUpdate }: Props) {
     null
   );
 
-  const onSubmit = async (data: { email: string; password: string }) => {
-    const res = await verifyCredentials(data.email, data.password);
-    if (res) {
-      authStore
-        .getState()
-        .updateUserOptions({ userName: data.email, password: data.password });
-      onClose();
-      onUpdate();
+  const CheckData = async (data: { email: string; password: string }) => {
+    const store = authStore.getState();
+    if (data.email === store.customer?.email) {
+      const res = await verifyCredentials(data.email, data.password);
+      if (res) {
+        store.updateUserOptions({
+          userName: data.email,
+          password: data.password,
+        });
+        onClose();
+        onUpdate();
+      } else {
+        setVerificationError('Wrong password');
+      }
     } else {
-      setVerificationError('Wrong email or password');
+      setVerificationError('Wrong email');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(CheckData)}>
       <p className="text-xl font-semibold mb-5 text-center">
         Enter your current login and password
       </p>

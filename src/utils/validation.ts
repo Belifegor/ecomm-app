@@ -187,3 +187,7 @@ function validatePC(country: string, postalCode: string): boolean {
   const pattern = postalCodePatterns[country];
   return pattern.test(postalCode);
 }
+export const schemaForEditUserInfo = schemaForRegistrationBase.omit({
+  password: true,
+});
+export const schemaForPasswordOnly = schemaForLogin.omit({ email: true });

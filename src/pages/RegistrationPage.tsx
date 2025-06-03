@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { Address } from '../components/Address.tsx';
 import { ROUTES } from '../utils/paths.ts';
 import { countries } from '../utils/countryList.ts';
+import { authStore } from '../store/store.ts';
 
 export type RegistrationData = z.infer<typeof schemaForRegistration>;
 function Registration() {
@@ -41,19 +42,18 @@ function Registration() {
     },
   });
   const navigate = useNavigate();
-  const registrationCustomer = (formData: RegistrationData) => {
-    registerAction(formData, navigate)
-      .then((res) => {
-        console.log(res);
-        setRegError(null);
-      })
-      .catch((error: unknown) => {
-        if (error instanceof Error) {
-          setRegError(error.message);
-        } else {
-          setRegError('An unknown error occurred');
-        }
-      });
+  const registrationCustomer = async (formData: RegistrationData) => {
+    try {
+      await registerAction(formData, navigate);
+      console.log(authStore.getState().userOptions);
+      setRegError(null);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setRegError(error.message);
+      } else {
+        setRegError('An unknown error occurred');
+      }
+    }
   };
   useEffect(() => {
     if (hideBilling) {

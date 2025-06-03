@@ -17,7 +17,10 @@ export async function registerAction(
   const { email, password } = formData;
   const result = await getCustomerToken({ email, password });
   console.log(result);
-  // await loginCustomer({ email, password });
-  authStore.getState().login(result, { userName: email, password: password });
+  authStore.getState().login(result);
+  authStore.getState().updateUserOptions({
+    userName: formData.email,
+    password: formData.password,
+  });
   navigate(ROUTES.HOME, { replace: true }); // убрал main в navigate
 }

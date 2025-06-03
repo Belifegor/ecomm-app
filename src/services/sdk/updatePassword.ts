@@ -11,7 +11,7 @@ export async function updatePassword(
   if (!userOptions || !customer) return;
   console.log(newPassword);
   try {
-    await createApiRoot({
+    const res = await createApiRoot({
       email: userOptions.userName,
       password: userOptions.password,
     })
@@ -25,12 +25,15 @@ export async function updatePassword(
         },
       })
       .execute();
-    authStore.getState().updateUserOptions({
-      userName: customer.email,
-      password: newPassword,
-    });
-    authStore.getState().updateCustomer({ version: customer.version + 1 });
-    onClosePopup();
+    if (res.statusCode === 200) {
+      const updatedCustomer = res.body;
+      authStore.getState().updateCustomer(updatedCustomer);
+      authStore.getState().updateUserOptions({
+        userName: customer.email,
+        password: newPassword,
+      });
+      onClosePopup();
+    }
   } catch (error) {
     console.error('Password update failed', error);
     throw error;

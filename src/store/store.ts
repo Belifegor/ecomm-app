@@ -40,14 +40,14 @@ export const authStore = create<AuthStore>((set, get) => ({
   isAuthenticated: () => get().customer !== null,
   updateCustomer: (newCustomer: Partial<Customer>) => {
     const currentCustomer = get().customer;
-    const currentUserOptions = get().userOptions;
-    if (currentCustomer && currentUserOptions) {
+    // const currentUserOptions = get().userOptions;
+    if (currentCustomer /* && currentUserOptions*/) {
       const updatedCustomer: Customer = {
         ...currentCustomer,
         ...newCustomer,
-        version: currentCustomer.version + 1,
+        // version: currentCustomer.version + 1,
       };
-      console.log(currentCustomer.version);
+      console.log(updatedCustomer);
       localStorage.setItem('customer', JSON.stringify(updatedCustomer));
       set({ customer: updatedCustomer /*, userOptions: newUserOptions*/ });
     }

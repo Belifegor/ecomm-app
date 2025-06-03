@@ -1,11 +1,9 @@
 import ProfileValueItem from './ProfileValueItem.tsx';
 import { Address, Customer } from '@commercetools/platform-sdk';
 import Button from '../button.tsx';
-import {
-  AddressAction,
-  changeRoleAddress,
-} from '../../services/sdk/changeRoleAddress.ts';
-import { useState } from 'react';
+import { updateCustomerAddress } from '../../services/sdk/changeRoleAddress.ts';
+import type { AddressAction } from '../../services/sdk/changeRoleAddress.ts';
+import { useRef, useState } from 'react';
 import { authStore } from '../../store/store.ts';
 // import { addNewAddress } from '../../services/sdk/addNewAddress.ts';
 import PopupWrapper from './PopupWrapper.tsx';
@@ -23,16 +21,16 @@ function SavedAddressBlock({
   customer: Customer;
   // onChangeAddressRole: (address: Address, role: AddressAction) => void;
 }) {
-  console.log(address.id);
-  console.log(customer.defaultShippingAddressId);
-
+  // console.log(address.id);
+  // console.log(customer.defaultShippingAddressId);
   const [showVerification, setShowVerification] = useState(false);
-  const [role, setRole] = useState<AddressAction>('setDefaultShippingAddress');
-  const preChange = (address: Address, role: AddressAction) => {
+  // const [action, setRole] = useState<AddressAction>('setDefaultShippingAddress');
+  const pendingAction = useRef<AddressAction>('setDefaultShippingAddress');
+  const preChange = (address: Address, action: AddressAction) => {
     if (authStore.getState().userOptions === null) {
       setShowVerification(true);
     } else {
-      changeRoleAddress(address, role);
+      updateCustomerAddress({ address, action });
     }
   };
   return (
@@ -54,7 +52,10 @@ function SavedAddressBlock({
         text="Delete"
         type="button"
         className="w-15 bg-white border border-[#9F9F9F] p-1 rounded-[7px] mr-2 text-xs"
-        /*onClick={}*/
+        onClick={() => {
+          pendingAction.current = 'removeAddress';
+          preChange(address, pendingAction.current);
+        }}
       />
       {address.id !== customer.defaultShippingAddressId && (
         <Button
@@ -62,8 +63,8 @@ function SavedAddressBlock({
           type="button"
           className="w-40 bg-white border border-[#9F9F9F] p-1 rounded-[7px] mr-2 text-xs"
           onClick={() => {
-            setRole('setDefaultShippingAddress');
-            preChange(address, role);
+            pendingAction.current = 'setDefaultShippingAddress';
+            preChange(address, pendingAction.current);
           }}
         />
       )}
@@ -73,8 +74,8 @@ function SavedAddressBlock({
           type="button"
           className="w-40 bg-white border border-[#9F9F9F] p-1 rounded-[7px] mr-2 text-xs"
           onClick={() => {
-            setRole('setDefaultShippingAddress');
-            preChange(address, role);
+            pendingAction.current = 'setDefaultBillingAddress';
+            preChange(address, pendingAction.current);
           }}
         />
       )}
@@ -83,7 +84,12 @@ function SavedAddressBlock({
           children={
             <UserVerificationPopup
               onClose={() => setShowVerification(false)}
-              onUpdate={() => changeRoleAddress(address, role)}
+              onUpdate={() =>
+                updateCustomerAddress({
+                  address,
+                  action: pendingAction.current,
+                })
+              }
             />
           }
         />

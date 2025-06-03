@@ -28,7 +28,7 @@ export async function updateCustomer(
       .execute();
 
     if (res.statusCode === 200) {
-      updateSavedCustomer(data);
+      authStore.getState().updateCustomer(res.body);
       closePopup();
     }
   } catch (error) {
@@ -40,11 +40,11 @@ export async function updateCustomer(
   }
 }
 
-function updateSavedCustomer(data: EditValidation) {
-  authStore.getState().updateCustomer({
-    email: data.email,
-    firstName: data.firstName,
-    lastName: data.lastName,
-    dateOfBirth: data.dateOfBirth,
-  });
-}
+// function updateSavedCustomer(data: EditValidation) {
+//   authStore.getState().updateCustomer({
+//     email: data.email,
+//     firstName: data.firstName,
+//     lastName: data.lastName,
+//     dateOfBirth: data.dateOfBirth,
+//   });
+// }

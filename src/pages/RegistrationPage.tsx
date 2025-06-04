@@ -1,6 +1,6 @@
 import InputField from '../components/inputField.tsx';
 import Button from '../components/button.tsx';
-import { schemaForRegistration } from '../utils/validation.ts';
+import { CountryEnum, schemaForRegistration } from '../utils/validation.ts';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -9,7 +9,6 @@ import { registerAction } from '../routes/registrationAction.ts';
 import { useEffect, useState } from 'react';
 import { Address } from '../components/Address.tsx';
 import { ROUTES } from '../utils/paths.ts';
-import { countries } from '../utils/countryList.ts';
 import { authStore } from '../store/store.ts';
 
 export type RegistrationData = z.infer<typeof schemaForRegistration>;
@@ -35,7 +34,7 @@ function Registration() {
       shippingAddress: {
         streetName: '',
         city: '',
-        country: 'United States (US)',
+        country: CountryEnum.options[0],
         postalCode: '',
       },
       saveAsBilling: true,
@@ -142,7 +141,7 @@ function Registration() {
           <Address
             register={register}
             errors={errors}
-            countries={countries}
+            countries={CountryEnum.options}
             typeAddress="shippingAddress"
           />
           <input
@@ -166,7 +165,7 @@ function Registration() {
               <Address
                 register={register}
                 errors={errors}
-                countries={countries}
+                countries={CountryEnum.options}
                 typeAddress="billingAddress"
               />
             </div>

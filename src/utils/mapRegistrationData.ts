@@ -1,4 +1,5 @@
 import { RegistrationData } from '../pages/RegistrationPage.tsx';
+import { Country } from './validation.ts';
 
 export const countryMap = {
   'Russia(RU)': 'RU',
@@ -6,7 +7,17 @@ export const countryMap = {
   'United States (US)': 'US',
   'European (EU)': 'DE',
 };
-
+export const getFullNameCountry = (value: string): Country | undefined => {
+  const entries = Object.entries(countryMap);
+  const foundEntry = entries.find(([, val]) => {
+    // Сравниваем значение пары с value
+    return val === value;
+  });
+  if (foundEntry) {
+    const [key] = foundEntry;
+    return key as Country;
+  }
+};
 export function mapRegistrationData(formData: RegistrationData) {
   console.log(formData);
   const addresses = [

@@ -8,22 +8,23 @@ import { authStore } from '../../store/store.ts';
 // import { addNewAddress } from '../../services/sdk/addNewAddress.ts';
 import PopupWrapper from './PopupWrapper.tsx';
 import UserVerificationPopup from './UserVerificationPopup.tsx';
+import EditAddressPopup from './EditAddressPopup.tsx';
 
 function SavedAddressBlock({
   title,
   address,
   customer,
-  // onChangeAddressRole,
 }: {
   key?: string;
   title?: string;
   address: Address;
   customer: Customer;
-  // onChangeAddressRole: (address: Address, role: AddressAction) => void;
+  // onOpenPopup: () => void;
 }) {
   // console.log(address.id);
   // console.log(customer.defaultShippingAddressId);
   const [showVerification, setShowVerification] = useState(false);
+  const [showEditAddressPopup, setShowEditAddressPopup] = useState(false);
   // const [action, setRole] = useState<AddressAction>('setDefaultShippingAddress');
   const pendingAction = useRef<AddressAction>('setDefaultShippingAddress');
   const preChange = (address: Address, action: AddressAction) => {
@@ -46,7 +47,7 @@ function SavedAddressBlock({
         text="Edit"
         type="button"
         className="w-15 bg-white border border-[#9F9F9F] p-1 rounded-[7px] mr-2 text-xs"
-        /*onClick={}*/
+        onClick={() => setShowEditAddressPopup(true)}
       />
       <Button
         text="Delete"
@@ -77,6 +78,18 @@ function SavedAddressBlock({
             pendingAction.current = 'setDefaultBillingAddress';
             preChange(address, pendingAction.current);
           }}
+        />
+      )}
+      {showEditAddressPopup && (
+        <PopupWrapper
+          children={
+            <EditAddressPopup
+              data={address}
+              handleEvent={() => {
+                setShowEditAddressPopup(false);
+              }}
+            />
+          }
         />
       )}
       {showVerification && (

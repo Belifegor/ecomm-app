@@ -17,12 +17,6 @@ const SORT_OPTIONS = [
 ];
 import { Breadcrumbs } from '../components/Breadcrumbs';
 
-// const FILTERS = {
-//   brand: ['Apple', 'Samsung', 'Sony', 'Google'], // можно подгружать с сервера
-//   color: ['Black', 'White', 'Silver', 'Purple'],
-//   model: ['iPhone 14 Pro', 'Galaxy S23', 'Pixel 7', 'iPhone 15 Pro Max'],
-// };
-
 export function CatalogPage() {
   const [filters, setFilters] = useState<{ [key: string]: string[] }>({});
   const [selectedFilters, setSelectedFilters] = useState<{
@@ -104,13 +98,6 @@ export function CatalogPage() {
         <Breadcrumbs />
       </div>
       <div className="max-w-[1440px] mx-auto px-4 flex">
-        {/* Боковая панель фильтров */}
-        {/* <FilterSidebar
-          filters={filters}
-          selectedFilters={selectedFilters}
-          onFilterChange={handleFilterChange}
-        /> */}
-
         {/*Cортировка + список товаров */}
         <div className="flex-1 flex flex-col gap-4">
           {/* Блок сортировки */}
@@ -138,25 +125,6 @@ export function CatalogPage() {
               />
             </aside>
 
-            {/* Список продуктов */}
-            {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6  items-start">
-              {loading && <p>Загрузка товаров...</p>}
-              {error && <p className="text-red-500">{error}</p>}
-              {!loading && !products.length && (
-                <p>Нет товаров по выбранным фильтрам.</p>
-              )}
-              {products.map((p) => (
-                <ProductCard
-                  key={p.id}
-                  id={p.id}
-                  name={p.name}
-                  description={p.description}
-                  imageUrl={p.imageUrl}
-                  price={p.price}
-                  originalPrice={p.originalPrice}
-                />
-              ))}
-            </div> */}
             {/* Список продуктов */}
             <section className="w-3/4">
               {loading && (

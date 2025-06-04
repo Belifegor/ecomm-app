@@ -10,8 +10,8 @@ export async function registerAction(
   formData: RegistrationData,
   navigate: NavigateFunction
 ) {
-    await registerCustomer(mappedData);
-
+  const mappedData = mapRegistrationData(formData);
+  await registerCustomer(mappedData);
   const { email, password } = formData;
   const result = await getCustomerToken({ email, password });
   console.log(result);

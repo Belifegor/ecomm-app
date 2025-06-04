@@ -10,7 +10,6 @@ export const countryMap = {
 export const getFullNameCountry = (value: string): Country | undefined => {
   const entries = Object.entries(countryMap);
   const foundEntry = entries.find(([, val]) => {
-    // Сравниваем значение пары с value
     return val === value;
   });
   if (foundEntry) {

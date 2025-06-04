@@ -8,10 +8,13 @@ import Logo from '../assets/icons/Logo.svg?react';
 import BurgerIcon from '../assets/icons/Burger.svg?react';
 import ProfileIcon from '../assets/icons/profile.svg?react';
 import { ROUTES } from '../utils/paths.ts';
+import { useSearchStore } from '../store/searchStore';
+
 export function Header() {
   const customer = authStore((state) => state.customer);
   const logout = authStore((state) => state.logout);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { query, setQuery } = useSearchStore();
   const navigate = useNavigate();
   useEffect(() => {
     if (isMenuOpen) {
@@ -35,24 +38,26 @@ export function Header() {
           <input
             type="text"
             placeholder="Search..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
             className="w-full pl-10 pr-4 py-2 rounded-lg bg-gray-100 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 max-md:hidden"
           />
           <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
         </div>
 
         <nav className="hidden md:flex gap-6 text-gray-700 font-medium">
-          <a href={ROUTES.HOME} className="hover:text-[#9a2ee8]">
+          <NavLink to={ROUTES.HOME} className="hover:text-[#9a2ee8]">
             Home
-          </a>
-          <a href="#products" className="hover:text-[#9a2ee8]">
+          </NavLink>
+          <NavLink to={ROUTES.CATALOG} className="hover:text-[#9a2ee8]">
             Products
-          </a>
-          <a href="#contact" className="hover:text-[#9a2ee8]">
+          </NavLink>
+          <NavLink to="#contact" className="hover:text-[#9a2ee8]">
             Contact
-          </a>
-          <a href="#blog" className="hover:text-[#9a2ee8]">
+          </NavLink>
+          <NavLink to="#blog" className="hover:text-[#9a2ee8]">
             Blog
-          </a>
+          </NavLink>
         </nav>
 
         <div className="hidden md:flex gap-2 items-center">

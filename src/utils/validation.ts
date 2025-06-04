@@ -1,10 +1,11 @@
 import { z } from 'zod';
-const CountryEnum = z.enum([
+export const CountryEnum = z.enum([
   'United States (US)',
   'European (EU)',
   'Belarus(BY)',
   'Russia(RU)',
 ]);
+export type Country = z.infer<typeof CountryEnum>;
 const postalCodePatterns: Record<string, RegExp> = {
   'United States (US)': /^\d{5}$/,
   'European (EU)': /^[A-Z0-9\s-]{3,10}$/i,
@@ -187,3 +188,7 @@ function validatePC(country: string, postalCode: string): boolean {
   const pattern = postalCodePatterns[country];
   return pattern.test(postalCode);
 }
+export const schemaForEditUserInfo = schemaForRegistrationBase.omit({
+  password: true,
+});
+export const schemaForPasswordOnly = schemaForLogin.omit({ email: true });

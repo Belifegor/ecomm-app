@@ -10,20 +10,15 @@ export async function registerAction(
   formData: RegistrationData,
   navigate: NavigateFunction
 ) {
-  const mappedData = mapRegistrationData(formData);
-
-  await registerCustomer(mappedData);
+    await registerCustomer(mappedData);
 
   const { email, password } = formData;
   const result = await getCustomerToken({ email, password });
   console.log(result);
-  // await loginCustomer({ email, password });
   authStore.getState().login(result);
-  authStore
-    .getState()
-    .updateUserOptions({ userName: email, password: password });
+  authStore.getState().updateUserOptions({
+    userName: formData.email,
+    password: formData.password,
+  });
   navigate(ROUTES.HOME, { replace: true }); // убрал main в navigate
 }
-
-//Строка 21 authStore.getState().login(result, { userName: email, password: password })
-// заменил на работающий вариант

@@ -1,6 +1,6 @@
 import InputField from '../components/inputField.tsx';
 import Button from '../components/button.tsx';
-import { schemaForRegistration } from '../utils/validation.ts';
+import { CountryEnum, schemaForRegistration } from '../utils/validation.ts';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -9,7 +9,7 @@ import { registerAction } from '../routes/registrationAction.ts';
 import { useEffect, useState } from 'react';
 import { Address } from '../components/Address.tsx';
 import { ROUTES } from '../utils/paths.ts';
-import { countries } from '../utils/countryList.ts';
+import { authStore } from '../store/store.ts';
 
 export type RegistrationData = z.infer<typeof schemaForRegistration>;
 function Registration() {
@@ -34,26 +34,25 @@ function Registration() {
       shippingAddress: {
         streetName: '',
         city: '',
-        country: 'United States (US)',
+        country: CountryEnum.options[0],
         postalCode: '',
       },
       saveAsBilling: true,
     },
   });
   const navigate = useNavigate();
-  const registrationCustomer = (formData: RegistrationData) => {
-    registerAction(formData, navigate)
-      .then((res) => {
-        console.log(res);
-        setRegError(null);
-      })
-      .catch((error: unknown) => {
-        if (error instanceof Error) {
-          setRegError(error.message);
-        } else {
-          setRegError('An unknown error occurred');
-        }
-      });
+  const registrationCustomer = async (formData: RegistrationData) => {
+    try {
+      await registerAction(formData, navigate);
+      console.log(authStore.getState().userOptions);
+      setRegError(null);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setRegError(error.message);
+      } else {
+        setRegError('An unknown error occurred');
+      }
+    }
   };
   useEffect(() => {
     if (hideBilling) {
@@ -142,7 +141,7 @@ function Registration() {
           <Address
             register={register}
             errors={errors}
-            countries={countries}
+            countries={CountryEnum.options}
             typeAddress="shippingAddress"
           />
           <input
@@ -166,7 +165,7 @@ function Registration() {
               <Address
                 register={register}
                 errors={errors}
-                countries={countries}
+                countries={CountryEnum.options}
                 typeAddress="billingAddress"
               />
             </div>

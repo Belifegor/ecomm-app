@@ -1,4 +1,4 @@
-import { schemaForRegistrationBase } from '../../utils/validation.ts';
+import { schemaForEditUserInfo } from '../../utils/validation.ts';
 import { z } from 'zod';
 import InputField from '../inputField.tsx';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -10,33 +10,38 @@ import { useState } from 'react';
 import PopupWrapper from './PopupWrapper.tsx';
 import UserVerificationPopup from './UserVerificationPopup.tsx';
 
-export type EditValidation = z.infer<typeof schemaForRegistrationBase>;
-
+export type EditValidation = z.infer<typeof schemaForEditUserInfo>;
 function EditProfilePopup({ handleEvent }: { handleEvent: () => void }) {
   const savedCustomer = authStore.getState().customer;
+  console.log(savedCustomer);
   const {
     register,
     handleSubmit,
     getValues,
     formState: { errors, isValid },
   } = useForm<EditValidation>({
-    resolver: zodResolver(schemaForRegistrationBase),
+    resolver: zodResolver(schemaForEditUserInfo),
     mode: 'onChange',
   });
   const [showVerification, setShowVerification] = useState(false);
-
+  const [updateError, setUpdateError] = useState<string | null>(null);
   const preSubmit = () => {
     console.log(authStore.getState().userOptions);
     if (authStore.getState().userOptions === null) {
-      setShowVerification(true); /// вызываем внутри  updateUserInformation() с тем что введет польз. но только после успешной верификации
+      setShowVerification(true);
     } else {
-      updateUserInformation(); /// вызываем с тем что есть в сторе
+      updateUserInformation();
     }
   };
 
   const updateUserInformation = () => {
     const data = getValues();
-    updateCustomer(data, handleEvent).then((res) => console.log(res));
+    updateCustomer(data, handleEvent)
+      .then((res) => console.log(res))
+      .catch((err) => {
+        console.log(err);
+        setUpdateError('error');
+      });
   };
 
   return (
@@ -53,20 +58,6 @@ function EditProfilePopup({ handleEvent }: { handleEvent: () => void }) {
         {errors.email && (
           <p className="h-5 text-red-500 text-[12px]">{errors.email.message}</p>
         )}
-        <InputField
-          defaultValue={savedCustomer?.password}
-          register={register}
-          label="Password"
-          name="password"
-          type="password"
-          placeholder=""
-        />
-        {errors.password && (
-          <p className="h-5 text-red-500 text-[12px]">
-            {errors.password.message}
-          </p>
-        )}
-
         <InputField
           defaultValue={savedCustomer?.firstName}
           register={register}
@@ -120,6 +111,11 @@ function EditProfilePopup({ handleEvent }: { handleEvent: () => void }) {
             className="max-w-[150px] min-w-[80px] h-14 bg-white text-[#9F9F9F]  border border-[#EBEBEB]"
           />
         </div>
+        {updateError && (
+          <p className="h-5 text-red-500 text-[16px] mt-4 text-center">
+            {updateError}
+          </p>
+        )}
       </form>
       {showVerification && (
         <PopupWrapper>

@@ -1,16 +1,24 @@
-import InputField from '../inputField.tsx';
 import { useForm } from 'react-hook-form';
-import { CountryEnum, schemaForAddress } from '../../utils/validation.ts';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Button from '../button.tsx';
+import { CountryEnum, schemaForAddress } from '../../utils/validation.ts';
 import { useState } from 'react';
 import { authStore } from '../../store/store.ts';
+import InputField from '../inputField.tsx';
+import Button from '../button.tsx';
 import PopupWrapper from './PopupWrapper.tsx';
 import UserVerificationPopup from './UserVerificationPopup.tsx';
-import { addNewAddress } from '../../services/sdk/addNewAddress.ts';
-export type AddressValidation = z.infer<typeof schemaForAddress>;
-function AddAddressPopup({ handleEvent }: { handleEvent: () => void }) {
+import { AddressValidation } from './AddAddressPopup.tsx';
+import { Address } from '@commercetools/platform-sdk';
+import { getFullNameCountry } from '../../utils/mapRegistrationData.ts';
+import { editCustomerAddress } from '../../services/sdk/editAddress.ts';
+
+function EditAddressPopup({
+  data,
+  handleEvent,
+}: {
+  data: Address;
+  handleEvent: () => void;
+}) {
   const {
     register,
     handleSubmit,
@@ -19,20 +27,30 @@ function AddAddressPopup({ handleEvent }: { handleEvent: () => void }) {
   } = useForm<AddressValidation>({
     resolver: zodResolver(schemaForAddress),
     mode: 'onChange',
+    defaultValues: {
+      country: getFullNameCountry(data.country),
+    },
   });
   const [showVerification, setShowVerification] = useState(false);
+  //if(!data.id) return
+  const preEdit = () => {
+    //const newData = getValues();
+    // const addressId = data.id;
+    // if (!addressId) return;
+    // console.log(newData);
+    // console.log(addressId);
 
-  const preAdd = () => {
     if (authStore.getState().userOptions === null) {
       setShowVerification(true);
     } else {
-      addNewAddress(getValues, handleEvent);
+      editCustomerAddress(getValues, data, handleEvent);
     }
   };
   return (
     <div>
-      <form onSubmit={handleSubmit(preAdd)} className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit(preEdit)} className="flex flex-col gap-4">
         <InputField
+          defaultValue={data.streetName}
           register={register}
           label="Street"
           type="text"
@@ -45,6 +63,7 @@ function AddAddressPopup({ handleEvent }: { handleEvent: () => void }) {
           </p>
         )}
         <InputField
+          defaultValue={data.city}
           register={register}
           label="City"
           type="text"
@@ -58,17 +77,19 @@ function AddAddressPopup({ handleEvent }: { handleEvent: () => void }) {
           Country
         </label>
         <select
+          defaultValue={data.country}
           id="country"
           className="border border-[#9F9F9F] w-full h-14 rounded-[7px] p-4 hover:cursor-pointer"
           {...register('country', { required: true })}
         >
           {CountryEnum.options.map((country) => (
-            <option key={country} value={country}>
+            <option key={country} value={country} defaultValue={data.country}>
               {country}
             </option>
           ))}
         </select>
         <InputField
+          defaultValue={data.postalCode}
           register={register}
           label="Postal code"
           type="text"
@@ -102,7 +123,7 @@ function AddAddressPopup({ handleEvent }: { handleEvent: () => void }) {
               setShowVerification(false);
             }}
             onUpdate={() => {
-              addNewAddress(getValues, handleEvent);
+              editCustomerAddress(getValues, data, handleEvent);
             }}
           />
         </PopupWrapper>
@@ -111,4 +132,4 @@ function AddAddressPopup({ handleEvent }: { handleEvent: () => void }) {
   );
 }
 
-export default AddAddressPopup;
+export default EditAddressPopup;

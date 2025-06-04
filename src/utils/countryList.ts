@@ -1,6 +1,7 @@
-export const countries = [
-  'United States (US)',
-  'European (EU)',
-  'Belarus(BY)',
-  'Russia(RU)',
-];
+// import { Country } from './validation.ts';
+// export const countries: Country[] = [
+//   'United States (US)',
+//   'European (EU)',
+//   'Belarus(BY)',
+//   'Russia(RU)',
+// ];

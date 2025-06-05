@@ -4,11 +4,13 @@ import { Link } from 'react-router-dom';
 interface BreadcrumbsProps {
   currentCategorySlug?: string;
   categories: Category[];
+  productName?: string;
 }
 
 export function Breadcrumbs({
   currentCategorySlug,
   categories,
+  productName,
 }: BreadcrumbsProps) {
   const findCategoryBySlug = (slug: string) => {
     return categories.find((category) => category.slug['en-US'] === slug);
@@ -43,14 +45,15 @@ export function Breadcrumbs({
           </Link>
         </li>
         {trail.map((cat, index) => {
-          const isLast = index === trail.length - 1;
           const label = cat.name['en-US'];
-          const slugPath = `/catalog/${cat.slug['en-US']}`;
+          const slug = cat.slug['en-US'];
+          const slugPath = `/catalog?category=${slug}`;
+          const isLastCategory = index === trail.length - 1;
 
           return (
             <li key={cat.id}>
               <span className="text-gray-400 mr-5">{'>'}</span>
-              {isLast ? (
+              {isLastCategory && !productName ? (
                 <span className="font-semibold text-black">
                   {label.charAt(0).toUpperCase() + label.slice(1)}
                 </span>
@@ -65,6 +68,14 @@ export function Breadcrumbs({
             </li>
           );
         })}
+        {productName && (
+          <li>
+            <span className="text-gray-400 mr-5">{'>'}</span>
+            <span className="font-semibold text-black">
+              {productName.charAt(0).toUpperCase() + productName.slice(1)}
+            </span>
+          </li>
+        )}
       </ul>
     </nav>
   );

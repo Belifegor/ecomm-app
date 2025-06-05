@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getProductById } from '../services/sdk/getProductById';
-import { ProductProjection } from '@commercetools/platform-sdk';
+import { Category, ProductProjection } from '@commercetools/platform-sdk';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
+import { getCategories } from '../services/sdk/getCategories';
+import { Breadcrumbs } from '../components/Breadcrumbs';
 
 export function DetailedProductPage() {
+  const [categories, setCategories] = useState<Category[]>([]);
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState<ProductProjection | null>(null);
@@ -17,13 +20,16 @@ export function DetailedProductPage() {
       getProductById(id)
         .then((data) => {
           setProduct(data);
+          return getCategories();
         })
+        .then(setCategories)
         .catch(console.error);
     }
   }, [id]);
 
   if (!product) return <p className="p-10">Loading product...</p>;
 
+  const currentCategorySlug = product.categories?.[0]?.obj?.slug?.['en-US'];
   const master = product.masterVariant;
   const name = product.name['en-US'];
   const description = product.description?.['en-US'] || 'No description';
@@ -34,6 +40,13 @@ export function DetailedProductPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
+      {currentCategorySlug && categories.length > 0 && (
+        <Breadcrumbs
+          currentCategorySlug={currentCategorySlug}
+          categories={categories}
+          productName={product.name['en-US']}
+        />
+      )}
       <button
         onClick={() => navigate('/catalog')}
         className="mb-6 text-sm text-purple-600 hover:underline"

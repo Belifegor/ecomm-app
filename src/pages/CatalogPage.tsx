@@ -1,6 +1,6 @@
 //
 import { useEffect, useState } from 'react';
-import { ProductProjection } from '@commercetools/platform-sdk';
+import { Category, ProductProjection } from '@commercetools/platform-sdk';
 import { parseProduct } from '../utils/parseProduct';
 import { ProductCard } from '../components/CatalogCard_merged';
 import { FilterSidebar } from '../components/FilterSidebar';
@@ -8,6 +8,10 @@ import { getFilteredProducts } from '../services/sdk/GetFilteredProducts';
 import { getAvailableFilters } from '../services/sdk/getAvailableFilters';
 import { Product } from '../components/CatalogCard_merged';
 import { useSearchStore } from '../store/searchStore';
+import { Breadcrumbs } from '../components/Breadcrumbs';
+import { useSearchParams } from 'react-router-dom';
+import { CategoryMenu } from '../components/CategoryMenu';
+import { getCategories } from '../services/sdk/getCategories';
 
 const SORT_OPTIONS = [
   { value: 'price asc', label: 'Price: Low to High' },
@@ -15,7 +19,6 @@ const SORT_OPTIONS = [
   { value: 'name.en-US asc', label: 'Name: A to Z' },
   { value: 'name.en-US desc', label: 'Name: Z to A' },
 ];
-import { Breadcrumbs } from '../components/Breadcrumbs';
 
 export function CatalogPage() {
   const [filters, setFilters] = useState<{ [key: string]: string[] }>({});
@@ -26,8 +29,19 @@ export function CatalogPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<string>('price asc');
+  const [searchParams] = useSearchParams();
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
+  const categorySlug = searchParams.get('category');
 
   const searchQuery = useSearchStore((state) => state.query);
+
+  useEffect(() => {
+    getCategories()
+      .then(setCategories)
+      .catch((e) => console.error('Ошибка загрузки категорий', e))
+      .finally(() => setCategoriesLoading(false));
+  }, []);
 
   useEffect(() => {
     getAvailableFilters()
@@ -36,6 +50,24 @@ export function CatalogPage() {
   }, []);
 
   useEffect(() => {
+    {
+      /* Продолжить только когда категории получены */
+    }
+    if (categoriesLoading) return;
+
+    {
+      /* Поиск ID категории по category.slug */
+    }
+    const categoryId = categories?.find(
+      (category) => category.slug['en-US'] === categorySlug
+    )?.id;
+    console.log('Category ID', categoryId);
+
+    {
+      /* Остановка получения продуктов, если category ID является undefined */
+    }
+    if (!categorySlug || !categoryId) return;
+
     setLoading(true);
     console.log(
       '*** Перед фильтрацией, selectedFilters =',
@@ -44,7 +76,7 @@ export function CatalogPage() {
       sortOrder
     );
 
-    getFilteredProducts(selectedFilters, 30, sortOrder, searchQuery)
+    getFilteredProducts(selectedFilters, 30, sortOrder, searchQuery, categoryId)
       .then((data: ProductProjection[]) => {
         console.log(
           'Получено после фильтрации (data):',
@@ -68,7 +100,14 @@ export function CatalogPage() {
         setError('Не удалось загрузить товары. Попробуйте позже.');
       })
       .finally(() => setLoading(false));
-  }, [selectedFilters, sortOrder, searchQuery]);
+  }, [
+    categorySlug,
+    selectedFilters,
+    sortOrder,
+    searchQuery,
+    categories,
+    categoriesLoading,
+  ]);
 
   const handleFilterChange = (
     title: string,
@@ -92,10 +131,24 @@ export function CatalogPage() {
     setSortOrder(value);
   };
 
+  {
+    /* Отрисовка меню категорий, если в URL отсутсвует категория */
+  }
+  if (!categorySlug) {
+    return (
+      <div className="p-6">
+        <h1 className="text-2xl font-bold mb-4">Browse categories</h1>
+        <CategoryMenu categories={categories} />
+      </div>
+    );
+  }
   return (
     <main className="bg-white min-h-screen w-full mt-2">
       <div className="max-w-[1440px] mx-auto pl-6 pr-4">
-        <Breadcrumbs />
+        <Breadcrumbs
+          categories={categories}
+          currentCategorySlug={categorySlug}
+        />
       </div>
       <div className="max-w-[1440px] mx-auto px-4 flex">
         {/*Cортировка + список товаров */}

@@ -1,34 +1,65 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Category } from '@commercetools/platform-sdk';
+import { Link } from 'react-router-dom';
 
-export function Breadcrumbs() {
-  const location = useLocation();
-  const paths = location.pathname.split('/').filter(Boolean);
+interface BreadcrumbsProps {
+  currentCategorySlug?: string;
+  categories: Category[];
+}
 
-  const crumbs = [
-    { label: 'Home', to: '/' },
-    ...paths.map((segment, index) => {
-      const path = '/' + paths.slice(0, index + 1).join('/');
-      const label = segment.charAt(0).toUpperCase() + segment.slice(1);
-      return { label, to: path };
-    }),
-  ];
+export function Breadcrumbs({
+  currentCategorySlug,
+  categories,
+}: BreadcrumbsProps) {
+  const findCategoryBySlug = (slug: string) => {
+    return categories.find((category) => category.slug['en-US'] === slug);
+  };
+
+  const buildBreadcrumbTrail = (category: Category | undefined): Category[] => {
+    if (!category) return [];
+    const parent = categories.find((cat) => cat.id === category.parent?.id);
+    return [...buildBreadcrumbTrail(parent), category];
+  };
+
+  const trail =
+    currentCategorySlug && categories.length > 0
+      ? buildBreadcrumbTrail(findCategoryBySlug(currentCategorySlug))
+      : [];
+
   return (
     <nav className="text-xl text-gray-500 py-4 w-full overflow-x-auto whitespace-nowrap">
       <ul className="flex items-center space-x-5">
-        {crumbs.map((crumb, index) => {
-          const isLast = index === crumbs.length - 1;
+        <li>
+          <Link to="/" className="text-gray-500 hover:underline transition">
+            Home
+          </Link>
+        </li>
+        <li>
+          <span className="text-gray-400 mr-5">{'>'}</span>
+          <Link
+            to="/catalog"
+            className="text-gray-500 hover:underline transition"
+          >
+            Catalog
+          </Link>
+        </li>
+        {trail.map((cat, index) => {
+          const isLast = index === trail.length - 1;
+          const label = cat.name['en-US'];
+          const slugPath = `/catalog/${cat.slug['en-US']}`;
 
           return (
-            <li key={crumb.to}>
-              {index > 0 && <span className="text-gray-400 mr-5">{'>'}</span>}
+            <li key={cat.id}>
+              <span className="text-gray-400 mr-5">{'>'}</span>
               {isLast ? (
-                <span className="font-semibold text-black">{crumb.label}</span>
+                <span className="font-semibold text-black">
+                  {label.charAt(0).toUpperCase() + label.slice(1)}
+                </span>
               ) : (
                 <Link
-                  to={crumb.to}
+                  to={slugPath}
                   className="text-gray-500 hover:underline transition"
                 >
-                  {crumb.label}
+                  {label.charAt(0).toUpperCase() + label.slice(1)}
                 </Link>
               )}
             </li>

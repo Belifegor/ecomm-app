@@ -13,7 +13,8 @@ export async function getFilteredProducts(
   filters: Filters,
   limit = 10,
   sort?: string,
-  searchQuery?: string
+  searchQuery?: string,
+  categoryId?: string
 ) {
   const filter: string[] = [];
 
@@ -45,6 +46,11 @@ export async function getFilteredProducts(
     filter.push(
       `masterVariant.price.centAmount:range(${min * 100} to ${max * 100})`
     );
+  }
+
+  // Категория
+  if (categoryId) {
+    filter.push(`categories.id: subtree("${categoryId}")`);
   }
 
   console.log('Commercetools filter predicates:', filter);

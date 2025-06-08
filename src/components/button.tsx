@@ -1,20 +1,29 @@
-import { JSX } from 'react';
+import React from 'react';
 
 type ButtonProps = {
   type: 'submit' | 'reset' | 'button';
+  disabled?: boolean;
   text: string;
-  disabled: boolean;
+  className?: string;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 };
-
-function Button(props: ButtonProps): JSX.Element {
+function Button({
+  type,
+  disabled = false,
+  text,
+  className,
+  onClick,
+}: ButtonProps) {
   return (
     <button
-      type={props.type}
-      disabled={props.disabled}
-      className={`h-14 w-1/1 rounded-[7px] hover:cursor-pointer ${props.disabled ? 'bg-gray-400 cursor-not-allowed' : 'bg-black hover:bg-gray-800, '} text-white mt-6`}
+      type={type}
+      disabled={disabled}
+      onClick={onClick}
+      className={`w-1/1 rounded-[7px] mt-2 hover:cursor-pointer disabled:cursor-not-allowed ${disabled ? 'bg-gray-400 cursor-not-allowed' : 'bg-black hover:bg-gray-800, '} ${className}`}
     >
-      {props.text}
+      {text}
     </button>
   );
 }
+
 export default Button;

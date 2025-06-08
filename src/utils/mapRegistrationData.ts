@@ -1,12 +1,22 @@
 import { RegistrationData } from '../pages/RegistrationPage.tsx';
+import { Country } from './validation.ts';
 
-const countryMap = {
+export const countryMap = {
   'Russia(RU)': 'RU',
   'Belarus(BY)': 'BY',
   'United States (US)': 'US',
   'European (EU)': 'DE',
 };
-
+export const getFullNameCountry = (value: string): Country | undefined => {
+  const entries = Object.entries(countryMap);
+  const foundEntry = entries.find(([, val]) => {
+    return val === value;
+  });
+  if (foundEntry) {
+    const [key] = foundEntry;
+    return key as Country;
+  }
+};
 export function mapRegistrationData(formData: RegistrationData) {
   console.log(formData);
   const addresses = [
@@ -34,6 +44,6 @@ export function mapRegistrationData(formData: RegistrationData) {
     dateOfBirth: formData.dateOfBirth,
     addresses,
     defaultShippingAddress: 0,
-    defaultBillingAddress: formData.saveAsBilling ? 1 : 0,
+    defaultBillingAddress: formData.saveAsBilling ? 0 : 1,
   };
 }

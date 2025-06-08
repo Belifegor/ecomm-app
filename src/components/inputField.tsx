@@ -9,6 +9,7 @@ type InputFieldProps<T extends FieldValues> = {
   name: Path<T>;
   placeholder: string;
   register: UseFormRegister<T>;
+  defaultValue?: string;
 };
 
 export function InputField<T extends FieldValues>({
@@ -17,6 +18,7 @@ export function InputField<T extends FieldValues>({
   name,
   placeholder,
   register,
+  defaultValue,
 }: InputFieldProps<T>): JSX.Element {
   const [isShownPassword, setShowPassword] = useState(false);
   const isPassword: boolean = type === 'password';
@@ -33,6 +35,7 @@ export function InputField<T extends FieldValues>({
           className="border border-[#9F9F9F] w-full h-14 rounded-[7px] p-4 hover:cursor-pointer"
           {...register(name)}
           placeholder={placeholder}
+          defaultValue={defaultValue}
         />
         {isPassword && (
           <button

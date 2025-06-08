@@ -1,10 +1,11 @@
 import { z } from 'zod';
-const CountryEnum = z.enum([
+export const CountryEnum = z.enum([
   'United States (US)',
   'European (EU)',
   'Belarus(BY)',
   'Russia(RU)',
 ]);
+export type Country = z.infer<typeof CountryEnum>;
 const postalCodePatterns: Record<string, RegExp> = {
   'United States (US)': /^\d{5}$/,
   'European (EU)': /^[A-Z0-9\s-]{3,10}$/i,
@@ -71,72 +72,85 @@ export const schemaForLogin = z.object({
       message: 'Password must contain at least one special symbol',
     }),
 });
-export const schemaForAddress = z.object({
-  streetName: z
-    .string()
-    .min(1, { message: 'Field must contain at least one letter' }),
-  city: z
+export const schemaForAddress = z
+  .object({
+    streetName: z
+      .string()
+      .min(1, { message: 'Field must contain at least one letter' }),
+    city: z
+      .string()
+      .min(1, { message: 'Field must contain at least one letter' })
+      .refine((val) => !/[^A-Za-z]/.test(val), {
+        message: 'Field must not contain digits and special symbols',
+      }),
+    country: CountryEnum,
+    postalCode: z
+      .string()
+      .min(1, { message: 'Field must contain at least one letter' }),
+  })
+  .superRefine((data, ctx) => {
+    if (!validatePC(data.country, data.postalCode)) {
+      console.log(validatePC(data.country, data.postalCode));
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Wrong postal code format for billing address',
+        path: ['postalCode'],
+      });
+    }
+  });
+export const schemaForRegistrationBase = schemaForLogin.extend({
+  firstName: z
     .string()
     .min(1, { message: 'Field must contain at least one letter' })
     .refine((val) => !/[^A-Za-z]/.test(val), {
       message: 'Field must not contain digits and special symbols',
     }),
-  country: CountryEnum,
-  postalCode: z
+  lastName: z
     .string()
-    .min(1, { message: 'Field must contain at least one letter' }),
+    .min(1, { message: 'Field must contain at least one letter' })
+    .refine((val) => !/[^A-Za-z]/.test(val), {
+      message: 'Field must not contain digits and special symbols',
+    }),
+  dateOfBirth: z
+    .string()
+    .min(1, { message: 'Add your birth date' })
+    .refine(
+      (val) => {
+        const birthDate = new Date(val);
+        const now = new Date();
+        return birthDate <= now;
+      },
+      {
+        message: 'Wrong date',
+      }
+    )
+    .refine(
+      (val) => {
+        const birthDate = new Date(val);
+        const now = new Date();
+
+        const thirteenYearsAgo = new Date(
+          now.getFullYear() - 13,
+          now.getMonth(),
+          now.getDate()
+        );
+
+        return birthDate <= thirteenYearsAgo;
+      },
+      {
+        message: 'You must be over 13 years old',
+      }
+    ),
 });
-export const schemaForRegistration = schemaForLogin
+
+export const schemaForRegistration = schemaForRegistrationBase
   .extend({
-    firstName: z
-      .string()
-      .min(1, { message: 'Field must contain at least one letter' })
-      .refine((val) => !/[^A-Za-z]/.test(val), {
-        message: 'Field must not contain digits and special symbols',
-      }),
-    lastName: z
-      .string()
-      .min(1, { message: 'Field must contain at least one letter' })
-      .refine((val) => !/[^A-Za-z]/.test(val), {
-        message: 'Field must not contain digits and special symbols',
-      }),
-    dateOfBirth: z
-      .string()
-      .min(1, { message: 'Add your birth date' })
-      .refine(
-        (val) => {
-          const birthDate = new Date(val);
-          const now = new Date();
-          return birthDate <= now;
-        },
-        {
-          message: 'Wrong date',
-        }
-      )
-      .refine(
-        (val) => {
-          const birthDate = new Date(val);
-          const now = new Date();
-
-          const thirteenYearsAgo = new Date(
-            now.getFullYear() - 13,
-            now.getMonth(),
-            now.getDate()
-          );
-
-          return birthDate <= thirteenYearsAgo;
-        },
-        {
-          message: 'You must be over 13 years old',
-        }
-      ),
     shippingAddress: schemaForAddress,
     saveAsBilling: z.boolean(),
-    billingAddress: schemaForAddress,
+    billingAddress: z.union([schemaForAddress, z.undefined()]).optional(),
   })
 
   .superRefine((data, ctx) => {
-    console.log(data.saveAsBilling);
     if (
       !validatePC(data.shippingAddress.country, data.shippingAddress.postalCode)
     ) {
@@ -146,29 +160,35 @@ export const schemaForRegistration = schemaForLogin
         path: ['shippingAddress', 'postalCode'],
       });
     }
-
-    if (!data.saveAsBilling && data.billingAddress) {
-      if (
-        !validatePC(data.billingAddress.country, data.billingAddress.postalCode)
-      ) {
+    if (!data.saveAsBilling) {
+      if (!data.billingAddress) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: 'Wrong postal code format for billing address',
-          path: ['billingAddress', 'postalCode'],
+          message: 'Billing address is required if not saved as shipping',
+          path: ['billingAddress'],
         });
+      } else {
+        if (
+          !validatePC(
+            data.billingAddress.country,
+            data.billingAddress.postalCode
+          )
+        ) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'Wrong postal code format for billing address',
+            path: ['billingAddress', 'postalCode'],
+          });
+        }
       }
     }
-
-    // if (!postalCodePatterns[shippingData.country].test(shippingData.postalCode)) {
-    //   ctx.addIssue({
-    //     code: z.ZodIssueCode.custom,
-    //     message: 'Wrong postal code format',
-    //     path: ['postalCode'],
-    //   });
-    // }
   });
 
 function validatePC(country: string, postalCode: string): boolean {
   const pattern = postalCodePatterns[country];
   return pattern.test(postalCode);
 }
+export const schemaForEditUserInfo = schemaForRegistrationBase.omit({
+  password: true,
+});
+export const schemaForPasswordOnly = schemaForLogin.omit({ email: true });

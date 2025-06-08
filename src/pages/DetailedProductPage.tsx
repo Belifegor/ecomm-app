@@ -1,3 +1,5 @@
+import Modal from '../components/Modal';
+import SwiperModal from '../components/SwiperModal';
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getProductById } from '../services/sdk/getProductById';
@@ -11,6 +13,8 @@ import { Breadcrumbs } from '../components/Breadcrumbs';
 
 export function DetailedProductPage() {
   const [categories, setCategories] = useState<Category[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentImage, setCurrentImage] = useState('');
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState<ProductProjection | null>(null);
@@ -34,6 +38,7 @@ export function DetailedProductPage() {
   const name = product.name['en-US'];
   const description = product.description?.['en-US'] || 'No description';
   const images = master.images || [];
+  const imageUrls = images.map((img) => img.url);
   const price = master.prices?.[0];
   const current = price?.discounted?.value || price?.value;
   const original = price?.discounted ? price?.value : null;
@@ -66,6 +71,10 @@ export function DetailedProductPage() {
                 <img
                   src={img.url}
                   alt={`image-${idx}`}
+                  onClick={() => {
+                    setCurrentImage(img.url); // добавил модальное окно
+                    setIsModalOpen(true);
+                  }}
                   className="w-full object-contain max-h-[400px] mx-auto"
                 />
               </SwiperSlide>
@@ -93,6 +102,11 @@ export function DetailedProductPage() {
           </button>
         </div>
       </div>
+      {isModalOpen && (
+        <Modal onClose={() => setIsModalOpen(false)}>
+          <SwiperModal images={imageUrls} currentImage={currentImage} />
+        </Modal>
+      )}
     </div>
   );
 }

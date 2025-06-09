@@ -26,7 +26,7 @@ export function Header() {
       document.body.style.overflow = '';
     };
   }, [isMenuOpen]);
-
+  const countOfProduct = 1;
   return (
     <header className="bg-white shadow fixed top-0 left-0 w-full z-10">
       <div className="max-w-[1440px] mx-auto px-8 py-4 flex justify-between items-center xl:px-40">
@@ -50,13 +50,10 @@ export function Header() {
             Home
           </NavLink>
           <NavLink to={ROUTES.CATALOG} className="hover:text-[#9a2ee8]">
-            Products
+            Catalog
           </NavLink>
-          <NavLink to="#contact" className="hover:text-[#9a2ee8]">
-            Contact
-          </NavLink>
-          <NavLink to="#blog" className="hover:text-[#9a2ee8]">
-            Blog
+          <NavLink to={ROUTES.ABOUT} className="hover:text-[#9a2ee8]">
+            About Us
           </NavLink>
         </nav>
 
@@ -64,10 +61,18 @@ export function Header() {
           <button className="relative w-6 h-6 ml-2">
             <HeartIcon />
           </button>
-
-          <button className="relative w-6 h-6 mr-2">
+          <Link
+            to={ROUTES.CART}
+            onClick={() => setIsMenuOpen(false)}
+            className="relative w-6 h-6"
+          >
             <CartIcon />
-          </button>
+            {countOfProduct > 0 && (
+              <span className="absolute -top-1 -right-2 bg-red-500 text-white rounded-full px-1 text-xs">
+                {countOfProduct}
+              </span>
+            )}
+          </Link>
         </div>
         <div className="hidden md:flex gap-4">
           {customer ? (
@@ -139,25 +144,18 @@ export function Header() {
             Home
           </NavLink>
           <NavLink
-            to="/about"
+            to={ROUTES.CATALOG}
             onClick={() => setIsMenuOpen(false)}
             className="hover:text-[#9a2ee8]"
           >
-            About
+            Catalog
           </NavLink>
           <NavLink
-            to="/contact"
+            to={ROUTES.ABOUT}
             onClick={() => setIsMenuOpen(false)}
             className="hover:text-[#9a2ee8]"
           >
-            Contact
-          </NavLink>
-          <NavLink
-            to="/blog"
-            onClick={() => setIsMenuOpen(false)}
-            className="hover:text-[#9a2ee8]"
-          >
-            Blog
+            About Us
           </NavLink>
           {customer ? (
             <>
@@ -200,9 +198,18 @@ export function Header() {
             <button className="relative w-6 h-6">
               <HeartIcon />
             </button>
-            <button className="relative w-6 h-6">
+            <Link
+              to={ROUTES.CART}
+              onClick={() => setIsMenuOpen(false)}
+              className="relative w-6 h-6"
+            >
               <CartIcon />
-            </button>
+              {countOfProduct > 0 && (
+                <span className="absolute -top-1 -right-2 bg-red-500 text-white rounded-full px-1 text-xs">
+                  {countOfProduct}
+                </span>
+              )}
+            </Link>
           </div>
         </nav>
       </div>

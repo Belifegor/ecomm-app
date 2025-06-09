@@ -2,6 +2,7 @@
 // import { createAuthForAnonymousSessionFlow, TokenStore  } from '@commercetools/sdk-client-v2'
 
 import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
+import { getCreateAnonymousId } from '../../utils/getCreateAnonymousId';
 import {
   type AuthMiddlewareOptions,
   ClientBuilder,
@@ -24,6 +25,7 @@ export const authMiddlewareOptions: AuthMiddlewareOptions = {
   credentials: {
     clientId: CLIENT_ID,
     clientSecret: CLIENT_SECRET,
+    anonymousId: getCreateAnonymousId(),
   },
   scopes,
   httpClient: fetch,

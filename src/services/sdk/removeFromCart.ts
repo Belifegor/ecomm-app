@@ -15,7 +15,7 @@ export const removeFromCart = async (
           {
             action: 'removeLineItem',
             lineItemId,
-            quantity: 1, // может быть изменено на нужное кол-во товара
+            // quantity: 1, // может быть изменено на нужное кол-во товара
           },
         ],
       },

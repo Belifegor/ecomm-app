@@ -1,4 +1,5 @@
 import { LoginData } from '../../pages/LoginPage.tsx';
+import { getCreateAnonymousId } from '../../utils/getCreateAnonymousId';
 import {
   ClientBuilder,
   PasswordAuthMiddlewareOptions,
@@ -12,6 +13,8 @@ import {
   httpMiddlewareOptions,
   PROJECT_KEY,
 } from './BuildClient.ts';
+import type { MyCustomerSigninExtended } from '../../types/MyCustomerSigninExtended.ts';
+import { useCartStore } from '../../store/cartStore';
 
 export function createApiRoot(formData: LoginData) {
   const passwordMiddlewareOptions: PasswordAuthMiddlewareOptions = {
@@ -40,11 +43,27 @@ export function createApiRoot(formData: LoginData) {
   });
 }
 export async function getCustomerToken(formData: LoginData) {
+  const anonymousId = getCreateAnonymousId();
+
+  const loginBody: MyCustomerSigninExtended = {
+    email: formData.email,
+    password: formData.password,
+    anonymousId,
+  };
+
   const result = await createApiRoot(formData)
     .me()
     .login()
-    .post({ body: formData })
+    .post({ body: loginBody })
     .execute();
   console.log(result);
+
+  if (result.body.cart) {
+    useCartStore
+      .getState()
+      .setCartId(result.body.cart.id, result.body.cart.version);
+  }
+
+  localStorage.removeItem('ct_anonymous_id');
   return result.body.customer;
 }

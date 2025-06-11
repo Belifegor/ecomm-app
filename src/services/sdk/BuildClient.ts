@@ -16,6 +16,21 @@ export const AUTH_HOST = import.meta.env.VITE_CT_AUTH_HOST;
 export const API_HOST = import.meta.env.VITE_CT_API_HOST;
 export const API_SCOPES = import.meta.env.VITE_API_SCOPES;
 
+const TOKEN_KEY = 'ct_token';
+
+const tokenCache = {
+  get: () => {
+    const raw = localStorage.getItem(TOKEN_KEY);
+    return raw ? JSON.parse(raw) : null;
+  },
+  set: (token: Record<string, unknown>) => {
+    localStorage.setItem(TOKEN_KEY, JSON.stringify(token));
+  },
+  remove: (): void => {
+    localStorage.removeItem(TOKEN_KEY);
+  },
+};
+
 const projectKey = PROJECT_KEY;
 const scopes = API_SCOPES;
 
@@ -29,6 +44,7 @@ export const authMiddlewareOptions: AuthMiddlewareOptions = {
   },
   scopes,
   httpClient: fetch,
+  tokenCache,
 };
 
 export const httpMiddlewareOptions: HttpMiddlewareOptions = {

@@ -4,10 +4,12 @@ interface CartState {
   cartId: string | null;
   version: number;
   setCartId: (id: string, version: number) => void;
+  resetCart: () => void;
 }
 
 export const useCartStore = create<CartState>((set) => ({
   cartId: null,
   version: 0,
   setCartId: (id, version) => set({ cartId: id, version }),
+  resetCart: () => set({ cartId: null, version: 0 }),
 }));

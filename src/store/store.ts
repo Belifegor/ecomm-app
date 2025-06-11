@@ -34,6 +34,9 @@ export const authStore = create<AuthStore>((set, get) => ({
   logout: () => {
     localStorage.removeItem('customer'); //очищаю
     localStorage.removeItem('userOptions');
+    localStorage.removeItem('ct_token');
+    localStorage.removeItem('ct_anonymous_id');
+
     set({ customer: null, userOptions: null });
     getAnToken();
   },

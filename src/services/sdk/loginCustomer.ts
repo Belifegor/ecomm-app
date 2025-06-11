@@ -12,6 +12,7 @@ import {
   CLIENT_SECRET,
   httpMiddlewareOptions,
   PROJECT_KEY,
+  apiRoot,
 } from './BuildClient.ts';
 import type { MyCustomerSigninExtended } from '../../types/MyCustomerSigninExtended.ts';
 import { useCartStore } from '../../store/cartStore';
@@ -44,6 +45,13 @@ export function createApiRoot(formData: LoginData) {
 }
 export async function getCustomerToken(formData: LoginData) {
   const anonymousId = getCreateAnonymousId();
+  const anonCart = await apiRoot
+    .me()
+    .activeCart()
+    .get()
+    .execute()
+    .then((res) => res.body)
+    .catch(() => null);
 
   const loginBody: MyCustomerSigninExtended = {
     email: formData.email,
@@ -51,19 +59,44 @@ export async function getCustomerToken(formData: LoginData) {
     anonymousId,
   };
 
-  const result = await createApiRoot(formData)
+  const customerApiRoot = createApiRoot(formData);
+
+  const result = await customerApiRoot
     .me()
     .login()
     .post({ body: loginBody })
     .execute();
-  console.log(result);
 
-  if (result.body.cart) {
+  const customer = result.body.customer;
+
+  if (anonCart?.id) {
+    try {
+      const replicateResult = await customerApiRoot
+        .carts()
+        .replicate()
+        .post({
+          body: {
+            reference: {
+              typeId: 'cart',
+              id: anonCart.id,
+            },
+          },
+        })
+        .execute();
+
+      const newCart = replicateResult.body;
+      useCartStore.getState().setCartId(newCart.id, newCart.version);
+      console.log('[replicate] migrated anonymous cart to customer');
+    } catch (e) {
+      console.warn('[replicate] failed to migrate anonymous cart:', e);
+    }
+  } else if (result.body.cart) {
     useCartStore
       .getState()
       .setCartId(result.body.cart.id, result.body.cart.version);
   }
 
   localStorage.removeItem('ct_anonymous_id');
-  return result.body.customer;
+
+  return customer;
 }

@@ -1,9 +1,9 @@
 export function getCreateAnonymousId(): string {
-  const localKey = 'ct_anonymous_id';
-  let id = localStorage.getItem(localKey);
+  const key = 'ct_anonymous_id';
+  let id = localStorage.getItem(key);
   if (!id) {
     id = crypto.randomUUID();
-    localStorage.setItem(localKey, id);
+    localStorage.setItem(key, id);
   }
   return id;
 }

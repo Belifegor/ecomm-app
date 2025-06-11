@@ -2,7 +2,7 @@
 // import { createAuthForAnonymousSessionFlow, TokenStore  } from '@commercetools/sdk-client-v2'
 
 import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
-import { getCreateAnonymousId } from '../../utils/getCreateAnonymousId.ts';
+import { getCreateAnonymousId } from '../../utils/getCreateAnonymousId';
 import {
   type AuthMiddlewareOptions,
   ClientBuilder,
@@ -68,13 +68,3 @@ export const anonymousClient = new ClientBuilder()
 export const apiRoot = createApiBuilderFromCtpClient(
   anonymousClient
 ).withProjectKey({ projectKey: PROJECT_KEY });
-
-export function getAnonymousAccessToken(): string | null {
-  const token = tokenCache.get();
-  return token?.access_token ?? null;
-}
-
-export function clearAnonymousSession() {
-  tokenCache.remove();
-  localStorage.removeItem('ct_anonymous_id');
-}

@@ -67,6 +67,8 @@ export async function getCustomerToken(formData: LoginData) {
     .post({ body: loginBody })
     .execute();
 
+  localStorage.removeItem('ct_anonymous_id');
+
   const customer = result.body.customer;
 
   if (anonCart?.id) {
@@ -95,8 +97,6 @@ export async function getCustomerToken(formData: LoginData) {
       .getState()
       .setCartId(result.body.cart.id, result.body.cart.version);
   }
-
-  localStorage.removeItem('ct_anonymous_id');
 
   return customer;
 }

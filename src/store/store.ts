@@ -41,6 +41,7 @@ export const authStore = create<AuthStore>((set, get) => ({
     useCartStore.getState().resetCart();
 
     set({ customer: null, userOptions: null });
+
     getAnToken();
   },
   isAuthenticated: () => get().customer !== null,

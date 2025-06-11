@@ -1,6 +1,7 @@
 import { Customer } from '@commercetools/platform-sdk';
 import { create } from 'zustand';
 import { getAnToken } from '../services/sdk/getAnonymousToken.ts';
+import { useCartStore } from './cartStore.ts';
 
 type AuthStore = {
   customer: Customer | null;
@@ -36,6 +37,8 @@ export const authStore = create<AuthStore>((set, get) => ({
     localStorage.removeItem('userOptions');
     localStorage.removeItem('ct_token');
     localStorage.removeItem('ct_anonymous_id');
+
+    useCartStore.getState().resetCart();
 
     set({ customer: null, userOptions: null });
     getAnToken();

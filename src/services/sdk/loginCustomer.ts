@@ -13,6 +13,7 @@ import {
   httpMiddlewareOptions,
   PROJECT_KEY,
   apiRoot,
+  setApiRoot,
 } from './BuildClient.ts';
 import type { MyCustomerSigninExtended } from '../../types/MyCustomerSigninExtended.ts';
 import { useCartStore } from '../../store/cartStore';
@@ -61,6 +62,8 @@ export async function getCustomerToken(formData: LoginData) {
 
   const customerApiRoot = createApiRoot(formData);
 
+  setApiRoot(customerApiRoot);
+
   const result = await customerApiRoot
     .me()
     .login()
@@ -71,7 +74,7 @@ export async function getCustomerToken(formData: LoginData) {
 
   const customer = result.body.customer;
 
-  if (anonCart?.id) {
+  if (anonCart?.lineItems?.length) {
     try {
       const replicateResult = await customerApiRoot
         .carts()

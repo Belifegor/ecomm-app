@@ -37,7 +37,7 @@ export async function getAnToken(): Promise<void> {
       clientSecret: CLIENT_SECRET,
       anonymousId,
     },
-    scopes: [API_SCOPES],
+    scopes: API_SCOPES,
     httpClient: fetch,
     tokenCache,
   };

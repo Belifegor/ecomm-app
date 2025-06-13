@@ -1,5 +1,5 @@
 import { LoginData } from '../../pages/LoginPage.tsx';
-import { getCreateAnonymousId } from '../../utils/getCreateAnonymousId';
+// import { getCreateAnonymousId } from '../../utils/getCreateAnonymousId';
 import {
   ClientBuilder,
   PasswordAuthMiddlewareOptions,
@@ -45,7 +45,7 @@ export function createApiRoot(formData: LoginData) {
   });
 }
 export async function getCustomerToken(formData: LoginData) {
-  const anonymousId = getCreateAnonymousId();
+  // const anonymousId = getCreateAnonymousId();
   const anonCart = await apiRoot
     .me()
     .activeCart()
@@ -57,7 +57,7 @@ export async function getCustomerToken(formData: LoginData) {
   const loginBody: MyCustomerSigninExtended = {
     email: formData.email,
     password: formData.password,
-    anonymousId,
+    // anonymousId,
   };
 
   const customerApiRoot = createApiRoot(formData);
@@ -96,9 +96,49 @@ export async function getCustomerToken(formData: LoginData) {
       console.warn('[replicate] failed to migrate anonymous cart:', e);
     }
   } else if (result.body.cart) {
-    useCartStore
-      .getState()
-      .setCartId(result.body.cart.id, result.body.cart.version);
+    const cart = result.body.cart;
+    if (cart.totalPrice?.currencyCode !== 'USD') {
+      console.warn('[login] cart in wrong currency, deleting...');
+      await customerApiRoot
+        .carts()
+        .withId({ ID: cart.id })
+        .delete({ queryArgs: { version: cart.version } })
+        .execute();
+
+      const created = await customerApiRoot
+        .me()
+        .carts()
+        .post({
+          body: {
+            currency: 'USD',
+            country: 'US',
+          },
+        })
+        .execute();
+
+      useCartStore.getState().setCartId(created.body.id, created.body.version);
+
+      console.log('[login] replaced cart with new USD one');
+    } else {
+      useCartStore.getState().setCartId(cart.id, cart.version);
+      console.log('[login] reused customer cart (USD)');
+    }
+
+    // === 3. Если вообще нет корзины — создадим с USD ===
+  } else {
+    const created = await customerApiRoot
+      .me()
+      .carts()
+      .post({
+        body: {
+          currency: 'USD',
+          country: 'US',
+        },
+      })
+      .execute();
+
+    useCartStore.getState().setCartId(created.body.id, created.body.version);
+    console.log('[login] created new customer cart (USD)');
   }
 
   return customer;

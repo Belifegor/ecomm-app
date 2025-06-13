@@ -14,7 +14,6 @@ export type Product = {
   price: string;
   originalPrice?: string;
   liked?: boolean;
-  inCart: boolean;
 };
 
 export function ProductCard({
@@ -26,11 +25,9 @@ export function ProductCard({
   price,
   originalPrice,
   liked = false,
-  inCart = false,
 }: Product) {
   const [isLiked, setIsLiked] = useState(liked);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isInCart, setIsInCart] = useState(inCart);
 
   return (
     <div
@@ -85,24 +82,11 @@ export function ProductCard({
         </div>
       </Link>
       {/* Кнопка покупки */}
-      {/* <button
+      <button
         className="mt-4 bg-black text-white w-full max-w-[200px] min-w-[100px]
        mb-6 mx-auto px-8 py-3 rounded-lg hover:bg-[#9a2ee8] hover:text-white transition"
       >
         <span className="whitespace-nowrap">Buy now</span>
-      </button> */}
-
-      {/* Добавить в корзину */}
-
-      <button
-        className={`mt-4 w-full max-w-[200px] min-w-[100px] mb-6 mx-auto px-8 py-3 rounded-lg transition font-medium ${
-          isInCart
-            ? 'bg-white text-black hover:bg-black hover:text-white'
-            : 'bg-black text-white hover:bg-[#9a2ee8]'
-        }`}
-        onClick={() => setIsInCart(!isInCart)}
-      >
-        {isInCart ? 'In cart' : 'Add to cart'}
       </button>
 
       {/* Модалка со слайдером */}

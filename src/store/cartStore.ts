@@ -7,9 +7,24 @@ interface CartState {
   resetCart: () => void;
 }
 
-export const useCartStore = create<CartState>((set) => ({
-  cartId: null,
-  version: 0,
-  setCartId: (id, version) => set({ cartId: id, version }),
-  resetCart: () => set({ cartId: null, version: 0 }),
-}));
+export const useCartStore = create<CartState>((set) => {
+  const savedCartId = localStorage.getItem('ct_cart_id');
+  const savedVersion = localStorage.getItem('ct_cart_version');
+
+  return {
+    cartId: savedCartId || null,
+    version: savedVersion ? parseInt(savedVersion, 10) : 0,
+
+    setCartId: (id, version) => {
+      localStorage.setItem('ct_cart_id', id);
+      localStorage.setItem('ct_cart_version', version.toString());
+      set({ cartId: id, version });
+    },
+
+    resetCart: () => {
+      localStorage.removeItem('ct_cart_id');
+      localStorage.removeItem('ct_cart_version');
+      set({ cartId: null, version: 0 });
+    },
+  };
+});

@@ -65,6 +65,10 @@ export const anonymousClient = new ClientBuilder()
   .withHttpMiddleware(httpMiddlewareOptions)
   .build();
 
-export const apiRoot = createApiBuilderFromCtpClient(
+export let apiRoot = createApiBuilderFromCtpClient(
   anonymousClient
 ).withProjectKey({ projectKey: PROJECT_KEY });
+
+export function setApiRoot(newRoot: typeof apiRoot) {
+  apiRoot = newRoot;
+}

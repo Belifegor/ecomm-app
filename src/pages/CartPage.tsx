@@ -5,6 +5,7 @@ import { useCartStore } from '../store/cartStore';
 import { LineItem } from '@commercetools/platform-sdk';
 import { removeItemFromCart } from '../services/sdk/removeItemFromCart';
 import { updateCartItemQuantity } from '../services/sdk/changeQuantity';
+import { clearCart } from '../services/sdk/clearCart';
 
 export function CartPage() {
   const cartId = useCartStore((state) => state.cartId);
@@ -111,6 +112,22 @@ export function CartPage() {
                 </button>
               </li>
             ))}
+            {items.length > 0 && (
+              <div className="mb-4 flex justify-center">
+                <button
+                  onClick={() => {
+                    if (
+                      window.confirm('Are you sure you want to clear the cart?')
+                    ) {
+                      clearCart().then(() => setItems([]));
+                    }
+                  }}
+                  className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-red-600 transition-colors"
+                >
+                  Clear Cart 🗑️
+                </button>
+              </div>
+            )}
           </ul>
         </div>
         {/* Правая колонка */}

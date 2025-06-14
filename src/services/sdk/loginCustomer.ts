@@ -17,6 +17,7 @@ import {
 } from './BuildClient.ts';
 import type { MyCustomerSigninExtended } from '../../types/MyCustomerSigninExtended.ts';
 import { useCartStore } from '../../store/cartStore';
+import { checkAndSetQuantity } from '../../utils/checkAndSetQuantity.ts';
 
 export function createApiRoot(formData: LoginData) {
   const passwordMiddlewareOptions: PasswordAuthMiddlewareOptions = {
@@ -92,6 +93,7 @@ export async function getCustomerToken(formData: LoginData) {
       const newCart = replicateResult.body;
       useCartStore.getState().setCartId(newCart.id, newCart.version);
       console.log('[replicate] migrated anonymous cart to customer');
+      checkAndSetQuantity(replicateResult.body);
     } catch (e) {
       console.warn('[replicate] failed to migrate anonymous cart:', e);
     }

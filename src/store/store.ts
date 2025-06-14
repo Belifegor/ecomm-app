@@ -40,7 +40,7 @@ export const authStore = create<AuthStore>((set, get) => ({
     localStorage.removeItem('ct_anonymous_id');
 
     useCartStore.getState().resetCart();
-
+    useCartStore.getState().setQuantity(0);
     set({ customer: null, userOptions: null });
     await initCart();
     getAnToken();
@@ -48,12 +48,10 @@ export const authStore = create<AuthStore>((set, get) => ({
   isAuthenticated: () => get().customer !== null,
   updateCustomer: (newCustomer: Partial<Customer>) => {
     const currentCustomer = get().customer;
-    // const currentUserOptions = get().userOptions;
     if (currentCustomer /* && currentUserOptions*/) {
       const updatedCustomer: Customer = {
         ...currentCustomer,
         ...newCustomer,
-        // version: currentCustomer.version + 1,
       };
       console.log(updatedCustomer);
       localStorage.setItem('customer', JSON.stringify(updatedCustomer));

@@ -11,10 +11,11 @@ export type Filters = {
 //получение товаров по выбранным фильтрам
 export async function getFilteredProducts(
   filters: Filters,
-  limit = 10,
+  limit = 9,
   sort?: string,
   searchQuery?: string,
-  categoryId?: string
+  categoryId?: string,
+  offset?: number
 ) {
   const filter: string[] = [];
 
@@ -62,6 +63,7 @@ export async function getFilteredProducts(
       .get({
         queryArgs: {
           limit,
+          offset,
           filter: filter.length > 0 ? filter : undefined,
           sort: sort ? [sort] : undefined,
           [`text.en-US`]: searchQuery ? searchQuery : undefined,
@@ -70,7 +72,10 @@ export async function getFilteredProducts(
       })
       .execute();
 
-    return response.body.results;
+    return {
+      products: response.body.results,
+      total: response.body.total,
+    };
   } catch (error) {
     console.error('Error filtering products:', error);
     throw new Error('Не удалось загрузить товары. Попробуйте позже');

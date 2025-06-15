@@ -1,6 +1,6 @@
 //
 import { useEffect, useState } from 'react';
-import { Category, ProductProjection } from '@commercetools/platform-sdk';
+import { Category } from '@commercetools/platform-sdk';
 import { parseProduct } from '../utils/parseProduct';
 import { ProductCard } from '../components/CatalogCard_merged';
 import { FilterSidebar } from '../components/FilterSidebar';
@@ -12,6 +12,7 @@ import { Breadcrumbs } from '../components/Breadcrumbs';
 import { useSearchParams } from 'react-router-dom';
 import { CategoryMenu } from '../components/CategoryMenu';
 import { getCategories } from '../services/sdk/getCategories';
+import { Pagination } from '../components/Pagination';
 
 const SORT_OPTIONS = [
   { value: 'price asc', label: 'Price: Low to High' },
@@ -19,6 +20,8 @@ const SORT_OPTIONS = [
   { value: 'name.en-US asc', label: 'Name: A to Z' },
   { value: 'name.en-US desc', label: 'Name: Z to A' },
 ];
+
+const LIMIT = 9;
 
 export function CatalogPage() {
   const [filters, setFilters] = useState<{ [key: string]: string[] }>({});
@@ -33,6 +36,8 @@ export function CatalogPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
   const categorySlug = searchParams.get('category');
+  const [offset, setOffset] = useState(0);
+  const [total, setTotal] = useState(0);
 
   const searchQuery = useSearchStore((state) => state.query);
 
@@ -48,6 +53,13 @@ export function CatalogPage() {
       .then(setFilters)
       .catch((e) => console.error('Ошибка загрузки доступных фильтров:', e));
   }, []);
+
+  {
+    /* Set offset to 0 in case if a filter was changed */
+  }
+  useEffect(() => {
+    setOffset(0);
+  }, [selectedFilters, sortOrder, categorySlug, searchQuery]);
 
   useEffect(() => {
     {
@@ -76,11 +88,18 @@ export function CatalogPage() {
       sortOrder
     );
 
-    getFilteredProducts(selectedFilters, 30, sortOrder, searchQuery, categoryId)
-      .then((data: ProductProjection[]) => {
+    getFilteredProducts(
+      selectedFilters,
+      LIMIT,
+      sortOrder,
+      searchQuery,
+      categoryId,
+      offset
+    )
+      .then(({ products, total }) => {
         console.log(
           'Получено после фильтрации (data):',
-          data.map((p) => ({
+          products.map((p) => ({
             id: p.id,
             brand: p.masterVariant.attributes?.find((a) => a.name === 'brand')
               ?.value,
@@ -89,8 +108,12 @@ export function CatalogPage() {
             name: p.name['en-US'],
           }))
         );
-        const parsedProducts = data.map(parseProduct);
+        const parsedProducts = products.map(parseProduct);
         console.log('Parsed products for ProductCard:', parsedProducts);
+
+        if (total) {
+          setTotal(total);
+        }
 
         setProducts(parsedProducts);
         setError(null);
@@ -107,6 +130,7 @@ export function CatalogPage() {
     searchQuery,
     categories,
     categoriesLoading,
+    offset,
   ]);
 
   const handleFilterChange = (
@@ -205,6 +229,12 @@ export function CatalogPage() {
                   ))}
                 </div>
               )}
+              <Pagination
+                limit={LIMIT}
+                offset={offset}
+                total={total}
+                setOffset={setOffset}
+              />
             </section>
           </div>
         </div>

@@ -5,6 +5,7 @@ import SwiperModal from './SwiperModal';
 import HeartOutline from '../assets/icons/heart-outline.svg?react';
 import HeartFilled from '../assets/icons/heart-filled.svg?react';
 import { addProductToCart } from '../services/sdk/addToCart';
+import { LoadingPopup } from './LoadingPopup';
 
 export type Product = {
   id: string;
@@ -29,6 +30,7 @@ export function ProductCard({
 }: Product) {
   const [isLiked, setIsLiked] = useState(liked);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   return (
     <div
@@ -83,16 +85,17 @@ export function ProductCard({
         </div>
       </Link>
       {/* Кнопка покупки */}
-      {/* <button
-        className="mt-4 bg-black text-white w-full max-w-[200px] min-w-[100px]
-       mb-6 mx-auto px-8 py-3 rounded-lg hover:bg-[#9a2ee8] hover:text-white transition"
-      >
-        <span className="whitespace-nowrap">Buy now</span>
-      </button> */}
       <button
         className="mt-4 bg-black text-white w-full max-w-[200px] min-w-[100px]
           mb-6 mx-auto px-8 py-3 rounded-lg hover:bg-[#9a2ee8] hover:text-white transition"
-        onClick={() => addProductToCart(id, 1)}
+        onClick={async () => {
+          setLoading(true);
+          try {
+            await addProductToCart(id, 1);
+          } finally {
+            setLoading(false);
+          }
+        }}
       >
         <span className="whitespace-nowrap">Add to Cart</span>
       </button>
@@ -103,6 +106,7 @@ export function ProductCard({
           <SwiperModal images={images} currentImage={imageUrl} />
         </Modal>
       )}
+      {loading && <LoadingPopup message="Adding to cart..." />}
     </div>
   );
 }

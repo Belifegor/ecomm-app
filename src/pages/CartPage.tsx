@@ -88,6 +88,12 @@ export function CartPage() {
 
   const handleRemove = async (itemId: string) => {
     if (!cartId) return;
+
+    const confirmRemove = window.confirm(
+      'Are you sure you want to remove this item from the cart?'
+    );
+    if (!confirmRemove) return;
+
     await removeItemFromCart(itemId);
     const res = await getCartById(cartId);
     setItems(res.body.lineItems);

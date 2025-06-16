@@ -181,7 +181,7 @@ export function CatalogPage() {
     );
   }
   return (
-    <main className="bg-white min-h-screen w-full mt-2">
+    <main className="bg-white min-h-full w-full mt-2">
       <div className="max-w-[1440px] mx-auto pl-6 pr-4">
         <Breadcrumbs
           categories={categories}
@@ -217,17 +217,18 @@ export function CatalogPage() {
             </aside>
 
             {/* Список продуктов */}
-            <section className="w-3/4">
-              {loading && (
-                <div className="flex justify-center items-center min-h-[300px]">
-                  <p className="text-gray-500 text-lg">Загрузка товаров...</p>
+            <section className="w-3/4 flex flex-col min-h-full">
+              {loading ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6  items-start mt-2">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <ProductCard key={`skeleton-${i}`} loading />
+                  ))}
                 </div>
-              )}
-              {error && <p className="text-red-500">{error}</p>}
-              {!loading && !products.length && (
+              ) : error ? (
+                <p className="text-red-500">{error}</p>
+              ) : !products.length ? (
                 <p>Нет товаров по выбранным фильтрам.</p>
-              )}
-              {!loading && !error && products.length > 0 && (
+              ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6  items-start mt-2">
                   {products.map((p) => (
                     <ProductCard
@@ -249,6 +250,7 @@ export function CatalogPage() {
                 offset={offset}
                 total={total}
                 setOffset={setOffset}
+                loading={loading}
               />
             </section>
           </div>

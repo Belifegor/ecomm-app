@@ -9,15 +9,16 @@ import Button from './button.tsx';
 import { Spinner } from './Spinner.tsx';
 
 export type Product = {
-  id: string;
-  name: string;
+  id?: string;
+  name?: string;
   description?: string;
   imageUrl?: string;
   images?: string[];
-  price: string;
+  price?: string;
   originalPrice?: string;
   liked?: boolean;
   inCart?: boolean;
+  loading?: boolean;
 };
 
 export function ProductCard({
@@ -30,6 +31,7 @@ export function ProductCard({
   originalPrice,
   liked = false,
   inCart = false,
+  loading = false,
 }: Product) {
   const [isLiked, setIsLiked] = useState(liked);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,6 +41,7 @@ export function ProductCard({
   const handleAddToCart = async () => {
     setIsLoading(true);
     try {
+      if (!id) return;
       await addProductToCart(id, 1);
       setIsInCart(true);
     } catch (err) {
@@ -47,6 +50,20 @@ export function ProductCard({
       setIsLoading(false);
     }
   };
+
+  // Отображение пустых карточек, если товары загружаются
+  if (loading) {
+    return (
+      <div className="h-[420px] bg-[#F6F6F6] rounded-xl px-4 py-6 shadow animate-pulse flex flex-col gap-3">
+        <div className="h-6 w-3/4 bg-gray-300 rounded"></div>
+        <div className="h-6 w-1/2 bg-gray-300 rounded"></div>
+        <div className="h-40 bg-gray-200 rounded"></div>
+        <div className="h-5 w-1/2 bg-gray-300 rounded"></div>
+        <div className="h-10 w-full bg-gray-300 rounded mt-auto"></div>
+      </div>
+    );
+  }
+
   return (
     <div
       key={id}
@@ -100,6 +117,7 @@ export function ProductCard({
         </div>
       </Link>
       {isLoading ? (
+        // Ожидаем добавление товара в корзину из каталога
         <button
           type="button"
           disabled
@@ -109,6 +127,7 @@ export function ProductCard({
           <span>Adding...</span>
         </button>
       ) : (
+        // Отображение кнопки добавления товара в корзину
         <Button
           type="button"
           disabled={isInCart}

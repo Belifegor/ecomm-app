@@ -2,17 +2,13 @@ import { apiRoot } from './BuildClient';
 import { useCartStore } from '../../store/cartStore';
 import { checkAndSetQuantity } from '../../utils/checkAndSetQuantity.ts';
 
-export const addProductToCart = async (
-  productId: string,
-  variantId: number,
-  quantity = 1
+export const updateCartItemQuantity = async (
+  itemId: string,
+  newQuantity: number
 ) => {
   const { cartId, version } = useCartStore.getState();
 
-  if (!cartId) {
-    console.warn('[addToCart] Нет ID корзины');
-    return;
-  }
+  if (!cartId) throw new Error('[updateQuantity] No cart ID defined');
 
   try {
     const res = await apiRoot
@@ -23,10 +19,9 @@ export const addProductToCart = async (
           version,
           actions: [
             {
-              action: 'addLineItem',
-              productId,
-              variantId,
-              quantity,
+              action: 'changeLineItemQuantity',
+              lineItemId: itemId,
+              quantity: newQuantity,
             },
           ],
         },
@@ -35,8 +30,8 @@ export const addProductToCart = async (
 
     useCartStore.getState().setCartId(res.body.id, res.body.version);
     checkAndSetQuantity(res.body);
-    console.log('[addToCart] Товар успешно добавлен');
+    console.log('[updateQuantity] Quantity updated');
   } catch (err) {
-    console.error('[addToCart] Ошибка при добавлении товара', err);
+    console.error('[updateQuantity] Error:', err);
   }
 };

@@ -2,15 +2,11 @@ import { apiRoot } from './BuildClient';
 import { useCartStore } from '../../store/cartStore';
 import { checkAndSetQuantity } from '../../utils/checkAndSetQuantity.ts';
 
-export const addProductToCart = async (
-  productId: string,
-  variantId: number,
-  quantity = 1
-) => {
+export const removeItemFromCart = async (itemId: string) => {
   const { cartId, version } = useCartStore.getState();
 
   if (!cartId) {
-    console.warn('[addToCart] Нет ID корзины');
+    throw new Error('[removeItem]Cart ID is not defined');
     return;
   }
 
@@ -23,10 +19,8 @@ export const addProductToCart = async (
           version,
           actions: [
             {
-              action: 'addLineItem',
-              productId,
-              variantId,
-              quantity,
+              action: 'removeLineItem',
+              lineItemId: itemId,
             },
           ],
         },
@@ -35,8 +29,9 @@ export const addProductToCart = async (
 
     useCartStore.getState().setCartId(res.body.id, res.body.version);
     checkAndSetQuantity(res.body);
-    console.log('[addToCart] Товар успешно добавлен');
+    console.log(res.body);
+    console.log('[removeItem] Item removed from cart:', res.body.id);
   } catch (err) {
-    console.error('[addToCart] Ошибка при добавлении товара', err);
+    console.error('[removeItem] Error removing item from cart:', err);
   }
 };

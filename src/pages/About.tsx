@@ -29,7 +29,7 @@ function About() {
       <div className="w-full">
         <div className="flex flex-col items-center sm:flex-row-reverse w-full justify-between mt-10">
           <div
-            className="w-1/2 h-80 bg-center bg-cover sm:w-1/3"
+            className="w-1/2 h-80 bg-center bg-cover bg-position-[center_top_-45px] sm:w-1/3"
             style={{
               backgroundImage: "url('../images/forAboutUs/belifegor.jpg')",
             }}

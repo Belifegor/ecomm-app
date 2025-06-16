@@ -1,6 +1,7 @@
 import { apiRoot } from './BuildClient';
 import { useCartStore } from '../../store/cartStore';
 import { CartUpdateAction } from '@commercetools/platform-sdk';
+import { checkAndSetQuantity } from '../../utils/checkAndSetQuantity.ts';
 
 export const clearCart = async () => {
   const { cartId } = useCartStore.getState();
@@ -27,4 +28,5 @@ export const clearCart = async () => {
     .execute();
 
   useCartStore.getState().setCartId(res.body.id, res.body.version);
+  checkAndSetQuantity(res.body);
 };

@@ -184,7 +184,7 @@ export function CartPage() {
         <Button
           type="button"
           text="Clear cart"
-          className="w-28 h-9.5 bg-white border border-[#9F9F9F] p-1 rounded-[1px] text-xs mt-5 hover:text-red-600"
+          className="w-28 h-9.5 bg-white border border-[#9F9F9F] p-2 text-xs mt-5 hover:text-red-600"
           onClick={() => {
             if (window.confirm('Clear the cart?')) {
               clearCart().then(() => {
@@ -213,12 +213,12 @@ export function CartPage() {
             placeholder="SAVE10"
             className="w-full border px-3 py-2 rounded mb-2"
           />
-          <button
+          <Button
+            type="button"
+            text="Apply"
+            className="text-white py-2"
             onClick={applyPromoCode}
-            className="w-full bg-black text-white py-2 rounded hover:opacity-90"
-          >
-            Apply
-          </button>
+          />
           {promoStatus === 'success' && (
             <p className="text-green-600 text-sm mt-1">Promo code applied!</p>
           )}
@@ -262,9 +262,7 @@ export function CartPage() {
             <span>${(total / 100).toFixed(2)}</span>
           </div>
         </div>
-        <button className="w-full bg-black text-white py-2 rounded hover:opacity-90">
-          Checkout
-        </button>
+        <Button type="button" text="Checkout" className="text-white py-2" />
       </div>
     </div>
   );

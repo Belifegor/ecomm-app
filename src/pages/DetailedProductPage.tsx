@@ -12,6 +12,8 @@ import { getCategories } from '../services/sdk/getCategories';
 import { Breadcrumbs } from '../components/Breadcrumbs';
 import Button from '../components/button.tsx';
 import { addOrRemoveClickFunction } from '../utils/productCard/addOrRemoveClickFunction.ts';
+import { getCartById } from '../services/sdk/getCartById.ts';
+import { useCartStore } from '../store/cartStore.ts';
 
 export function DetailedProductPage() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -32,7 +34,17 @@ export function DetailedProductPage() {
         .catch(console.error);
     }
   }, [id]);
-
+  const currentCart = useCartStore.getState().cartId;
+  useEffect(() => {
+    let inCartList = [];
+    if (currentCart) {
+      getCartById(currentCart).then((res) => {
+        inCartList = res.body.lineItems;
+        const found = inCartList.some((item) => item.productId === id);
+        setIsInCart(found);
+      });
+    }
+  }, [currentCart, id]);
   if (!product) return <p className="p-10">Loading product...</p>;
 
   const currentCategorySlug = product.categories?.[0]?.obj?.slug?.['en-US'];

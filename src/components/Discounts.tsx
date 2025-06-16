@@ -1,4 +1,4 @@
-import { ProductCard } from './CatalogCard_merged';
+import { ProductCard } from './CatalogCard.tsx';
 
 const discountedProducts = [
   {

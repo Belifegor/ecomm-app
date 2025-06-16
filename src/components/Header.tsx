@@ -9,12 +9,8 @@ import BurgerIcon from '../assets/icons/Burger.svg?react';
 import ProfileIcon from '../assets/icons/profile.svg?react';
 import { ROUTES } from '../utils/paths.ts';
 import { useSearchStore } from '../store/searchStore';
-<<<<<<< belifegor/basket-about_us
 import { useLocation } from 'react-router-dom';
-=======
 import { useCartStore } from '../store/cartStore.ts';
->>>>>>> release/basket-about_us
-
 export function Header() {
   const location = useLocation();
   const isCatalogPage = location.pathname === '/catalog';

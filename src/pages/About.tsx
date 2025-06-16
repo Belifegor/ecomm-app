@@ -1,17 +1,17 @@
 import Rs from '../../public/images/forAboutUs/rs.svg?react';
 function About() {
   return (
-    <div className="max-w-[1440px] w-full flex flex-col items-center justify-center py-10 px-8 xl:px-40">
+    <div className="max-w-[1440px] w-full flex flex-col items-center justify-center py-10 xl:px-40 sm:px-8">
       <div className="w-full">
         <h1 className="text-2xl font-bold mb-10">About Us</h1>
         <div
-          className="flex h-80 flex-row-reverse bg-center bg-cover"
+          className="flex flex-row-reverse items-center bg-center bg-cover"
           style={{
             backgroundImage:
-              "url('../public/images/forAboutUs/aboutProjectBackground.png')",
+              "url('../images/forAboutUs/aboutProjectBackground.png')",
           }}
         >
-          <div className="w-1/2 h-full bg-white flex flex-col">
+          <div className="w-1/2 bg-white flex flex-col">
             <h2 className="text-xl text-black text-center py-8">
               About Project
             </h2>
@@ -27,12 +27,11 @@ function About() {
         </div>
       </div>
       <div className="w-full">
-        <div className="w-full h-80 flex flex-row-reverse justify-between mt-10">
+        <div className="flex flex-col items-center sm:flex-row-reverse w-full justify-between mt-10">
           <div
-            className="w-1/3 h-full bg-position-[center_top_-40px] bg-cover"
+            className="w-1/2 h-80 bg-center bg-cover sm:w-1/3"
             style={{
-              backgroundImage:
-                "url('../public/images/forAboutUs/belifegor.jpg')",
+              backgroundImage: "url('../images/forAboutUs/belifegor.jpg')",
             }}
           ></div>
           <div className="w-2/3 py-5">
@@ -59,11 +58,11 @@ function About() {
             </p>
           </div>
         </div>
-        <div className="w-full h-80 flex justify-between mt-10">
+        <div className="flex flex-col items-center sm:flex-row w-full justify-between mt-10">
           <div
-            className="w-1/3 h-full bg-center bg-cover"
+            className="w-1/2 h-80 bg-center bg-cover sm:w-1/3"
             style={{
-              backgroundImage: "url('../public/images/forAboutUs/alex.jpeg')",
+              backgroundImage: "url('../images/forAboutUs/alex.jpeg')",
             }}
           ></div>
           <div className="w-2/3 py-5">
@@ -91,11 +90,11 @@ function About() {
             </p>
           </div>
         </div>
-        <div className="w-full h-80 flex justify-between flex-row-reverse mt-10">
+        <div className="flex flex-col items-center sm:flex-row-reverse w-full justify-between mt-10">
           <div
-            className="w-1/3 h-full bg-center bg-cover bg-position-[center_top_-45px]"
+            className="w-1/2 h-80 bg-center bg-cover bg-position-[center_top_-45px] sm:w-1/3"
             style={{
-              backgroundImage: "url('../public/images/forAboutUs/kate.jpg')",
+              backgroundImage: "url('../images/forAboutUs/kate.jpg')",
             }}
           ></div>
           <div className="w-2/3 py-5">

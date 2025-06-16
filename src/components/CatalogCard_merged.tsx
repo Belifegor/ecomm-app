@@ -5,8 +5,12 @@ import SwiperModal from './SwiperModal';
 import HeartOutline from '../assets/icons/heart-outline.svg?react';
 import HeartFilled from '../assets/icons/heart-filled.svg?react';
 import { addProductToCart } from '../services/sdk/addToCart';
+<<<<<<< belifegor/basket-about_us
+import { LoadingPopup } from './LoadingPopup';
+=======
 import Button from './button.tsx';
 import { Spinner } from './Spinner.tsx';
+>>>>>>> release/basket-about_us
 
 export type Product = {
   id?: string;
@@ -35,6 +39,9 @@ export function ProductCard({
 }: Product) {
   const [isLiked, setIsLiked] = useState(liked);
   const [isModalOpen, setIsModalOpen] = useState(false);
+<<<<<<< belifegor/basket-about_us
+  const [loading, setLoading] = useState(false);
+=======
   const [isInCart, setIsInCart] = useState(inCart);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -63,6 +70,7 @@ export function ProductCard({
       </div>
     );
   }
+>>>>>>> release/basket-about_us
 
   return (
     <div
@@ -116,6 +124,24 @@ export function ProductCard({
           </div>
         </div>
       </Link>
+<<<<<<< belifegor/basket-about_us
+      {/* Кнопка покупки */}
+      <button
+        className="mt-4 bg-black text-white w-full max-w-[200px] min-w-[100px]
+          mb-6 mx-auto px-8 py-3 rounded-lg hover:bg-[#9a2ee8] hover:text-white transition"
+        onClick={async () => {
+          setLoading(true);
+          try {
+            await addProductToCart(id, 1);
+          } finally {
+            setLoading(false);
+          }
+        }}
+      >
+        <span className="whitespace-nowrap">Add to Cart</span>
+      </button>
+
+=======
       {isLoading ? (
         // Ожидаем добавление товара в корзину из каталога
         <button
@@ -140,12 +166,14 @@ export function ProductCard({
           onClick={handleAddToCart}
         />
       )}
+>>>>>>> release/basket-about_us
       {/* Модалка со слайдером */}
       {isModalOpen && (
         <Modal onClose={() => setIsModalOpen(false)}>
           <SwiperModal images={images} currentImage={imageUrl} />
         </Modal>
       )}
+      {loading && <LoadingPopup message="Adding to cart..." />}
     </div>
   );
 }

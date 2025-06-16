@@ -9,9 +9,15 @@ import BurgerIcon from '../assets/icons/Burger.svg?react';
 import ProfileIcon from '../assets/icons/profile.svg?react';
 import { ROUTES } from '../utils/paths.ts';
 import { useSearchStore } from '../store/searchStore';
+<<<<<<< belifegor/basket-about_us
+import { useLocation } from 'react-router-dom';
+=======
 import { useCartStore } from '../store/cartStore.ts';
+>>>>>>> release/basket-about_us
 
 export function Header() {
+  const location = useLocation();
+  const isCatalogPage = location.pathname === '/catalog';
   const customer = authStore((state) => state.customer);
   const logout = authStore((state) => state.logout);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -35,15 +41,19 @@ export function Header() {
           <Logo />
         </Link>
 
-        <div className="relative hidden lg:block w-[240px] xl:w-[280px] 2xl:w-[240px]">
-          <input
-            type="text"
-            placeholder="Search..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 rounded-lg bg-gray-100 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 max-md:hidden"
-          />
-          <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+        <div className="relative w-full max-w-[240px] sm:max-w-[280px]">
+          {isCatalogPage && (
+            <>
+              <input
+                type="text"
+                placeholder="Search..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 rounded-lg bg-gray-100 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            </>
+          )}
         </div>
 
         <nav className="hidden md:flex gap-6 text-gray-700 font-medium">

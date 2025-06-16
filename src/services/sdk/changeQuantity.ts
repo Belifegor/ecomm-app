@@ -1,5 +1,6 @@
 import { apiRoot } from './BuildClient';
 import { useCartStore } from '../../store/cartStore';
+import { checkAndSetQuantity } from '../../utils/checkAndSetQuantity.ts';
 
 export const updateCartItemQuantity = async (
   itemId: string,
@@ -28,6 +29,7 @@ export const updateCartItemQuantity = async (
       .execute();
 
     useCartStore.getState().setCartId(res.body.id, res.body.version);
+    checkAndSetQuantity(res.body);
     console.log('[updateQuantity] Quantity updated');
   } catch (err) {
     console.error('[updateQuantity] Error:', err);

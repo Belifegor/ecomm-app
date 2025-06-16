@@ -2,11 +2,11 @@
 import { useEffect, useState } from 'react';
 import { Category, LineItem } from '@commercetools/platform-sdk';
 import { parseProduct } from '../utils/parseProduct';
-import { ProductCard } from '../components/CatalogCard.tsx';
+import { ProductCard } from '../components/CatalogCardTmp.tsx';
 import { FilterSidebar } from '../components/FilterSidebar';
 import { getFilteredProducts } from '../services/sdk/GetFilteredProducts';
 import { getAvailableFilters } from '../services/sdk/getAvailableFilters';
-import { Product } from '../components/CatalogCard.tsx';
+import { Product } from '../components/CatalogCardTmp.tsx';
 import { useSearchStore } from '../store/searchStore';
 import { Breadcrumbs } from '../components/Breadcrumbs';
 import { useSearchParams } from 'react-router-dom';

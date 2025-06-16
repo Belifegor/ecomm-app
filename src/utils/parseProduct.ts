@@ -1,5 +1,5 @@
 import { ProductProjection } from '@commercetools/platform-sdk';
-import { Product } from '../components/CatalogCard.tsx';
+import { Product } from '../components/CatalogCardTmp.tsx';
 
 function formatPrice(centAmount?: number): string {
   if (centAmount) {

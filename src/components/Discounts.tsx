@@ -1,4 +1,4 @@
-import { ProductCard } from './CatalogCardTmp.tsx';
+import { ProductCard } from './CatalogCard.tsx';
 
 const discountedProducts = [
   {

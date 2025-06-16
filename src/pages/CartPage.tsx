@@ -8,6 +8,7 @@ import { updateCartItemQuantity } from '../services/sdk/changeQuantity';
 import { clearCart } from '../services/sdk/clearCart';
 import { addDiscountCode } from '../services/sdk/addDiscountCode';
 import Button from '../components/button.tsx';
+import { getEffectivePrice } from '../utils/getEffectivePrice.ts';
 
 export function CartPage() {
   const cartId = useCartStore((state) => state.cartId);
@@ -18,7 +19,7 @@ export function CartPage() {
   const shipping = 2900;
 
   const originalSubtotal = items.reduce(
-    (sum, item) => sum + item.price.value.centAmount * item.quantity,
+    (sum, item) => sum + getEffectivePrice(item) * item.quantity,
     0
   );
 
@@ -37,7 +38,7 @@ export function CartPage() {
         setItems(res.body.lineItems);
         setAppliedLineTotal(
           res.body.lineItems.reduce(
-            (sum, item) => sum + item.price.value.centAmount * item.quantity,
+            (sum, item) => sum + getEffectivePrice(item) * item.quantity,
             0
           )
         );
@@ -53,7 +54,7 @@ export function CartPage() {
       setItems(updatedCart.lineItems);
 
       const subtotal = updatedCart.lineItems.reduce(
-        (sum, item) => sum + item.price.value.centAmount * item.quantity,
+        (sum, item) => sum + getEffectivePrice(item) * item.quantity,
         0
       );
 
@@ -75,7 +76,7 @@ export function CartPage() {
     setItems(res.body.lineItems);
 
     const subtotal = res.body.lineItems.reduce(
-      (sum, item) => sum + item.price.value.centAmount * item.quantity,
+      (sum, item) => sum + getEffectivePrice(item) * item.quantity,
       0
     );
 
@@ -100,7 +101,7 @@ export function CartPage() {
     setItems(res.body.lineItems);
 
     const subtotal = res.body.lineItems.reduce(
-      (sum, item) => sum + item.price.value.centAmount * item.quantity,
+      (sum, item) => sum + getEffectivePrice(item) * item.quantity,
       0
     );
 
@@ -166,7 +167,7 @@ export function CartPage() {
                     </button>
                   </div>
                   <p className="text-lg font-semibold">
-                    ${(item.price.value.centAmount / 100).toFixed(2)}
+                    ${(getEffectivePrice(item) / 100).toFixed(2)}
                   </p>
                 </div>
               </div>

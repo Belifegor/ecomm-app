@@ -7,6 +7,7 @@ import { removeItemFromCart } from '../services/sdk/removeItemFromCart';
 import { updateCartItemQuantity } from '../services/sdk/changeQuantity';
 import { clearCart } from '../services/sdk/clearCart';
 import { addDiscountCode } from '../services/sdk/addDiscountCode';
+import Button from '../components/button.tsx';
 
 export function CartPage() {
   const cartId = useCartStore((state) => state.cartId);
@@ -148,7 +149,7 @@ export function CartPage() {
               <div className="flex-1">
                 <p className="font-medium">{item.name['en-US']}</p>
                 <div className="mt-2 flex items-center gap-4">
-                  <div className="flex items-center border rounded">
+                  <div className="flex items-center border border-[#9F9F9F] rounded">
                     <button
                       onClick={() => updateQuantity(item.id, item.quantity - 1)}
                       className="px-3 py-1 text-lg disabled:opacity-50"
@@ -171,31 +172,27 @@ export function CartPage() {
               </div>
               <button
                 onClick={() => handleRemove(item.id)}
-                className="text-gray-500 hover:text-red-600 hover:bg-gray-500 text-3xl
-                  font-bold rounded-full shadow-md w-10 h-10
+                className="text-gray-500 hover:text-red-600 text-2xl
+                  font-extralight rounded-full shadow-md w-10 h-10
                   flex items-center justify-center transition-colors duration-200"
               >
                 ×
               </button>
             </li>
           ))}
-
-          {/* Очистить корзину */}
-          <div className="mb-4 flex justify-center">
-            <button
-              onClick={() => {
-                if (window.confirm('Clear the cart?')) {
-                  clearCart().then(() => {
-                    setItems([]);
-                  });
-                }
-              }}
-              className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-red-600 transition-colors"
-            >
-              Clear Cart 🗑️
-            </button>
-          </div>
         </ul>
+        <Button
+          type="button"
+          text="Clear cart"
+          className="w-28 h-9.5 bg-white border border-[#9F9F9F] p-1 rounded-[1px] text-xs mt-5 hover:text-red-600"
+          onClick={() => {
+            if (window.confirm('Clear the cart?')) {
+              clearCart().then(() => {
+                setItems([]);
+              });
+            }
+          }}
+        />
       </div>
 
       {/* Правый блок: Order Summary */}

@@ -34,7 +34,6 @@ export function createApiRoot(formData: LoginData) {
     scopes: API_SCOPES,
     httpClient: fetch,
   };
-  console.log('xxxxx');
   const passwordFlowClient = new ClientBuilder()
     .withProjectKey(PROJECT_KEY)
     .withPasswordFlow(passwordMiddlewareOptions)
@@ -93,6 +92,7 @@ export async function getCustomerToken(formData: LoginData) {
       const newCart = replicateResult.body;
       useCartStore.getState().setCartId(newCart.id, newCart.version);
       console.log('[replicate] migrated anonymous cart to customer');
+      console.log(replicateResult.body);
       checkAndSetQuantity(replicateResult.body);
     } catch (e) {
       console.warn('[replicate] failed to migrate anonymous cart:', e);
@@ -119,7 +119,7 @@ export async function getCustomerToken(formData: LoginData) {
         .execute();
 
       useCartStore.getState().setCartId(created.body.id, created.body.version);
-
+      checkAndSetQuantity(created.body);
       console.log('[login] replaced cart with new USD one');
     } else {
       useCartStore.getState().setCartId(cart.id, cart.version);

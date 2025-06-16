@@ -5,6 +5,7 @@ import SwiperModal from './SwiperModal';
 import HeartOutline from '../assets/icons/heart-outline.svg?react';
 import HeartFilled from '../assets/icons/heart-filled.svg?react';
 import { addProductToCart } from '../services/sdk/addToCart';
+import Button from './button.tsx';
 
 export type Product = {
   id: string;
@@ -15,6 +16,7 @@ export type Product = {
   price: string;
   originalPrice?: string;
   liked?: boolean;
+  inCart?: boolean;
 };
 
 export function ProductCard({
@@ -26,14 +28,15 @@ export function ProductCard({
   price,
   originalPrice,
   liked = false,
+  inCart = false,
 }: Product) {
   const [isLiked, setIsLiked] = useState(liked);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [isInCart, setIsInCart] = useState(inCart);
   return (
     <div
       key={id}
-      className="relative bg-[#F6F6F6] rounded-xl px-4 flex flex-col  
+      className="relative bg-[#F6F6F6] rounded-xl px-4 flex flex-col
       text-center shadow hover:shadow-lg transition m-0.5"
     >
       {/* Иконка лайка */}
@@ -82,21 +85,22 @@ export function ProductCard({
           </div>
         </div>
       </Link>
-      {/* Кнопка покупки */}
-      {/* <button
-        className="mt-4 bg-black text-white w-full max-w-[200px] min-w-[100px]
-       mb-6 mx-auto px-8 py-3 rounded-lg hover:bg-[#9a2ee8] hover:text-white transition"
-      >
-        <span className="whitespace-nowrap">Buy now</span>
-      </button> */}
-      <button
-        className="mt-4 bg-black text-white w-full max-w-[200px] min-w-[100px]
-          mb-6 mx-auto px-8 py-3 rounded-lg hover:bg-[#9a2ee8] hover:text-white transition"
-        onClick={() => addProductToCart(id, 1)}
-      >
-        <span className="whitespace-nowrap">Add to Cart</span>
-      </button>
-
+      <Button
+        type="button"
+        disabled={isInCart}
+        text={isInCart ? 'In cart' : 'Add to cart'}
+        className={`mt-4 w-full max-w-[200px] min-w-[100px] mb-6 mx-auto px-8 py-3 rounded-lg transition font-medium ${
+          isInCart
+            ? 'bg-white text-black'
+            : 'bg-black text-white hover:bg-[#9a2ee8]'
+        }`}
+        onClick={() => {
+          setIsInCart(!isInCart);
+          addProductToCart(id, 1).catch((err) => {
+            console.log(err);
+          });
+        }}
+      />
       {/* Модалка со слайдером */}
       {isModalOpen && (
         <Modal onClose={() => setIsModalOpen(false)}>

@@ -1,6 +1,6 @@
 //
 import { useEffect, useState } from 'react';
-import { Category } from '@commercetools/platform-sdk';
+import { Category, LineItem } from '@commercetools/platform-sdk';
 import { parseProduct } from '../utils/parseProduct';
 import { ProductCard } from '../components/CatalogCard_merged';
 import { FilterSidebar } from '../components/FilterSidebar';
@@ -13,6 +13,8 @@ import { useSearchParams } from 'react-router-dom';
 import { CategoryMenu } from '../components/CategoryMenu';
 import { getCategories } from '../services/sdk/getCategories';
 import { Pagination } from '../components/Pagination';
+import { useCartStore } from '../store/cartStore';
+import { getCartById } from '../services/sdk/getCartById';
 
 const SORT_OPTIONS = [
   { value: 'price asc', label: 'Price: Low to High' },
@@ -38,8 +40,20 @@ export function CatalogPage() {
   const categorySlug = searchParams.get('category');
   const [offset, setOffset] = useState(0);
   const [total, setTotal] = useState(0);
+  const [lineItems, setLineItems] = useState<LineItem[]>([]);
+  const { cartId } = useCartStore();
 
   const searchQuery = useSearchStore((state) => state.query);
+
+  useEffect(() => {
+    if (!cartId) return;
+
+    getCartById(cartId)
+      .then((cart) => {
+        setLineItems(cart.body.lineItems);
+      })
+      .catch(console.error);
+  }, [cartId]);
 
   useEffect(() => {
     getCategories()
@@ -225,6 +239,7 @@ export function CatalogPage() {
                       images={p.images}
                       price={p.price}
                       originalPrice={p.originalPrice}
+                      inCart={lineItems.some((item) => item.productId === p.id)}
                     />
                   ))}
                 </div>

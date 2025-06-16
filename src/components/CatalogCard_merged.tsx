@@ -6,6 +6,7 @@ import HeartOutline from '../assets/icons/heart-outline.svg?react';
 import HeartFilled from '../assets/icons/heart-filled.svg?react';
 import { addProductToCart } from '../services/sdk/addToCart';
 import Button from './button.tsx';
+import { Spinner } from './Spinner.tsx';
 
 export type Product = {
   id: string;
@@ -33,10 +34,23 @@ export function ProductCard({
   const [isLiked, setIsLiked] = useState(liked);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isInCart, setIsInCart] = useState(inCart);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleAddToCart = async () => {
+    setIsLoading(true);
+    try {
+      await addProductToCart(id, 1);
+      setIsInCart(true);
+    } catch (err) {
+      console.error('Cannot add product to cart', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <div
       key={id}
-      className="relative bg-[#F6F6F6] rounded-xl px-4 flex flex-col
+      className="h-full relative bg-[#F6F6F6] rounded-xl px-4 flex flex-col
       text-center shadow hover:shadow-lg transition m-0.5"
     >
       {/* Иконка лайка */}
@@ -64,12 +78,12 @@ export function ProductCard({
 
       {/* Название и описание */}
       <Link to={`/products/${id}`} className="no-underline">
-        <div className="flex flex-col items-center w-full min-h-[120px]">
-          <h3 className="text-lg font-medium text-gray-800 mb-2 leading-snug line-clamp-2">
+        <div className="flex flex-col items-center w-full min-h-[120px] flex-grow">
+          <h3 className="text-lg font-medium text-gray-800 mb-2 leading-snug line-clamp-2 min-h-[3rem]">
             {name}
           </h3>
           {description && (
-            <p className="text-sm text-gray-600 mb-2 line-clamp-2">
+            <p className="text-sm text-gray-600 mb-2 line-clamp-2 min-h-[2.5rem]">
               {description}
             </p>
           )}
@@ -85,22 +99,28 @@ export function ProductCard({
           </div>
         </div>
       </Link>
-      <Button
-        type="button"
-        disabled={isInCart}
-        text={isInCart ? 'In cart' : 'Add to cart'}
-        className={`mt-4 w-full max-w-[200px] min-w-[100px] mb-6 mx-auto px-8 py-3 rounded-lg transition font-medium ${
-          isInCart
-            ? 'bg-white text-black'
-            : 'bg-black text-white hover:bg-[#9a2ee8]'
-        }`}
-        onClick={() => {
-          setIsInCart(!isInCart);
-          addProductToCart(id, 1).catch((err) => {
-            console.log(err);
-          });
-        }}
-      />
+      {isLoading ? (
+        <button
+          type="button"
+          disabled
+          className="mt-4 w-full max-w-[200px] min-w-[100px] mb-6 mx-auto px-8 py-3 rounded-lg transition font-medium bg-white text-black flex justify-center items-center gap-2"
+        >
+          <Spinner />
+          <span>Adding...</span>
+        </button>
+      ) : (
+        <Button
+          type="button"
+          disabled={isInCart}
+          text={isInCart ? 'In cart' : 'Add to cart'}
+          className={`mt-4 w-full max-w-[200px] min-w-[100px] mb-6 mx-auto px-8 py-3 rounded-lg transition font-medium ${
+            isInCart
+              ? 'bg-white text-black'
+              : 'bg-black text-white hover:bg-[#9a2ee8]'
+          }`}
+          onClick={handleAddToCart}
+        />
+      )}
       {/* Модалка со слайдером */}
       {isModalOpen && (
         <Modal onClose={() => setIsModalOpen(false)}>

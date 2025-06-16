@@ -11,10 +11,7 @@ import { Navigation } from 'swiper/modules';
 import { getCategories } from '../services/sdk/getCategories';
 import { Breadcrumbs } from '../components/Breadcrumbs';
 import Button from '../components/button.tsx';
-import { addProductToCart } from '../services/sdk/addToCart.ts';
-import { removeItemFromCart } from '../services/sdk/removeItemFromCart.ts';
-import { useCartStore } from '../store/cartStore.ts';
-import { apiRoot } from '../services/sdk/apiRoot.ts';
+import { addOrRemoveClickFunction } from '../utils/productCard/addOrRemoveClickFunction.ts';
 
 export function DetailedProductPage() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -112,7 +109,7 @@ export function DetailedProductPage() {
             }`}
             onClick={() => {
               if (id) {
-                handleClick(id, isInCart, setIsInCart);
+                addOrRemoveClickFunction(id, isInCart, setIsInCart);
               }
             }}
           />
@@ -125,41 +122,4 @@ export function DetailedProductPage() {
       )}
     </div>
   );
-}
-async function handleClick(
-  id: string,
-  isInCart: boolean,
-  setState: (value: boolean) => void
-) {
-  if (!isInCart) {
-    setState(!isInCart);
-    addProductToCart(id, 1).catch((err) => {
-      console.log(err);
-    });
-  } else {
-    const lineId = await getItemLineId(id);
-    if (!lineId) return;
-    setState(!isInCart);
-    removeItemFromCart(lineId);
-  }
-}
-async function getItemLineId(id: string) {
-  const cartId = useCartStore.getState().cartId;
-  if (!cartId) return;
-  try {
-    const response = await apiRoot
-      .carts()
-      .withId({ ID: cartId })
-      .get()
-      .execute();
-
-    const lineItem = response.body.lineItems.find(
-      (item) => item.productId === id
-    );
-    if (!lineItem) return;
-    return lineItem.id;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
 }

@@ -1,6 +1,6 @@
 //
 import { useEffect, useState } from 'react';
-import { Category } from '@commercetools/platform-sdk';
+import { Category, LineItem } from '@commercetools/platform-sdk';
 import { parseProduct } from '../utils/parseProduct';
 import { ProductCard } from '../components/CatalogCard_merged';
 import { FilterSidebar } from '../components/FilterSidebar';
@@ -13,6 +13,8 @@ import { useSearchParams } from 'react-router-dom';
 import { CategoryMenu } from '../components/CategoryMenu';
 import { getCategories } from '../services/sdk/getCategories';
 import { Pagination } from '../components/Pagination';
+import { useCartStore } from '../store/cartStore';
+import { getCartById } from '../services/sdk/getCartById';
 
 const SORT_OPTIONS = [
   { value: 'price asc', label: 'Price: Low to High' },
@@ -38,8 +40,20 @@ export function CatalogPage() {
   const categorySlug = searchParams.get('category');
   const [offset, setOffset] = useState(0);
   const [total, setTotal] = useState(0);
+  const [lineItems, setLineItems] = useState<LineItem[]>([]);
+  const { cartId } = useCartStore();
 
   const searchQuery = useSearchStore((state) => state.query);
+
+  useEffect(() => {
+    if (!cartId) return;
+
+    getCartById(cartId)
+      .then((cart) => {
+        setLineItems(cart.body.lineItems);
+      })
+      .catch(console.error);
+  }, [cartId]);
 
   useEffect(() => {
     getCategories()
@@ -167,7 +181,7 @@ export function CatalogPage() {
     );
   }
   return (
-    <main className="bg-white min-h-screen w-full mt-2">
+    <main className="bg-white min-h-full w-full mt-2">
       <div className="max-w-[1440px] mx-auto pl-6 pr-4">
         <Breadcrumbs
           categories={categories}
@@ -203,17 +217,18 @@ export function CatalogPage() {
             </aside>
 
             {/* Список продуктов */}
-            <section className="w-3/4">
-              {loading && (
-                <div className="flex justify-center items-center min-h-[300px]">
-                  <p className="text-gray-500 text-lg">Загрузка товаров...</p>
+            <section className="w-3/4 flex flex-col min-h-full">
+              {loading ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6  items-start mt-2">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <ProductCard key={`skeleton-${i}`} loading />
+                  ))}
                 </div>
-              )}
-              {error && <p className="text-red-500">{error}</p>}
-              {!loading && !products.length && (
+              ) : error ? (
+                <p className="text-red-500">{error}</p>
+              ) : !products.length ? (
                 <p>Нет товаров по выбранным фильтрам.</p>
-              )}
-              {!loading && !error && products.length > 0 && (
+              ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6  items-start mt-2">
                   {products.map((p) => (
                     <ProductCard
@@ -225,6 +240,7 @@ export function CatalogPage() {
                       images={p.images}
                       price={p.price}
                       originalPrice={p.originalPrice}
+                      inCart={lineItems.some((item) => item.productId === p.id)}
                     />
                   ))}
                 </div>
@@ -234,6 +250,7 @@ export function CatalogPage() {
                 offset={offset}
                 total={total}
                 setOffset={setOffset}
+                loading={loading}
               />
             </section>
           </div>

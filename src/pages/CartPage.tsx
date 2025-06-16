@@ -7,6 +7,8 @@ import { removeItemFromCart } from '../services/sdk/removeItemFromCart';
 import { updateCartItemQuantity } from '../services/sdk/changeQuantity';
 import { clearCart } from '../services/sdk/clearCart';
 import { addDiscountCode } from '../services/sdk/addDiscountCode';
+import Button from '../components/button.tsx';
+import { getEffectivePrice } from '../utils/getEffectivePrice.ts';
 
 export function CartPage() {
   const cartId = useCartStore((state) => state.cartId);
@@ -17,7 +19,7 @@ export function CartPage() {
   const shipping = 2900;
 
   const originalSubtotal = items.reduce(
-    (sum, item) => sum + item.price.value.centAmount * item.quantity,
+    (sum, item) => sum + getEffectivePrice(item) * item.quantity,
     0
   );
 
@@ -36,7 +38,7 @@ export function CartPage() {
         setItems(res.body.lineItems);
         setAppliedLineTotal(
           res.body.lineItems.reduce(
-            (sum, item) => sum + item.price.value.centAmount * item.quantity,
+            (sum, item) => sum + getEffectivePrice(item) * item.quantity,
             0
           )
         );
@@ -52,7 +54,7 @@ export function CartPage() {
       setItems(updatedCart.lineItems);
 
       const subtotal = updatedCart.lineItems.reduce(
-        (sum, item) => sum + item.price.value.centAmount * item.quantity,
+        (sum, item) => sum + getEffectivePrice(item) * item.quantity,
         0
       );
 
@@ -74,7 +76,7 @@ export function CartPage() {
     setItems(res.body.lineItems);
 
     const subtotal = res.body.lineItems.reduce(
-      (sum, item) => sum + item.price.value.centAmount * item.quantity,
+      (sum, item) => sum + getEffectivePrice(item) * item.quantity,
       0
     );
 
@@ -99,7 +101,7 @@ export function CartPage() {
     setItems(res.body.lineItems);
 
     const subtotal = res.body.lineItems.reduce(
-      (sum, item) => sum + item.price.value.centAmount * item.quantity,
+      (sum, item) => sum + getEffectivePrice(item) * item.quantity,
       0
     );
 
@@ -148,7 +150,7 @@ export function CartPage() {
               <div className="flex-1">
                 <p className="font-medium">{item.name['en-US']}</p>
                 <div className="mt-2 flex items-center gap-4">
-                  <div className="flex items-center border rounded">
+                  <div className="flex items-center border border-[#9F9F9F] rounded">
                     <button
                       onClick={() => updateQuantity(item.id, item.quantity - 1)}
                       className="px-3 py-1 text-lg disabled:opacity-50"
@@ -165,37 +167,33 @@ export function CartPage() {
                     </button>
                   </div>
                   <p className="text-lg font-semibold">
-                    ${(item.price.value.centAmount / 100).toFixed(2)}
+                    ${(getEffectivePrice(item) / 100).toFixed(2)}
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => handleRemove(item.id)}
-                className="text-gray-500 hover:text-red-600 hover:bg-gray-500 text-3xl
-                  font-bold rounded-full shadow-md w-10 h-10
+                className="text-gray-500 hover:text-red-600 text-2xl
+                  font-extralight rounded-full shadow-md w-10 h-10
                   flex items-center justify-center transition-colors duration-200"
               >
                 ×
               </button>
             </li>
           ))}
-
-          {/* Очистить корзину */}
-          <div className="mb-4 flex justify-center">
-            <button
-              onClick={() => {
-                if (window.confirm('Clear the cart?')) {
-                  clearCart().then(() => {
-                    setItems([]);
-                  });
-                }
-              }}
-              className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-red-600 transition-colors"
-            >
-              Clear Cart 🗑️
-            </button>
-          </div>
         </ul>
+        <Button
+          type="button"
+          text="Clear cart"
+          className="w-28 h-9.5 bg-white border border-[#9F9F9F] p-2 text-xs mt-5 hover:text-red-600"
+          onClick={() => {
+            if (window.confirm('Clear the cart?')) {
+              clearCart().then(() => {
+                setItems([]);
+              });
+            }
+          }}
+        />
       </div>
 
       {/* Правый блок: Order Summary */}
@@ -216,12 +214,12 @@ export function CartPage() {
             placeholder="SAVE10"
             className="w-full border px-3 py-2 rounded mb-2"
           />
-          <button
+          <Button
+            type="button"
+            text="Apply"
+            className="text-white py-2"
             onClick={applyPromoCode}
-            className="w-full bg-black text-white py-2 rounded hover:opacity-90"
-          >
-            Apply
-          </button>
+          />
           {promoStatus === 'success' && (
             <p className="text-green-600 text-sm mt-1">Promo code applied!</p>
           )}
@@ -265,9 +263,7 @@ export function CartPage() {
             <span>${(total / 100).toFixed(2)}</span>
           </div>
         </div>
-        <button className="w-full bg-black text-white py-2 rounded hover:opacity-90">
-          Checkout
-        </button>
+        <Button type="button" text="Checkout" className="text-white py-2" />
       </div>
     </div>
   );

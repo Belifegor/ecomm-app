@@ -3,6 +3,7 @@ interface PaginationProps {
   limit: number;
   total: number;
   setOffset: (newOffset: number) => void;
+  loading?: boolean;
 }
 
 const THREE_DOTS = '...';
@@ -12,6 +13,7 @@ export function Pagination({
   limit,
   total,
   setOffset,
+  loading,
 }: PaginationProps) {
   const currentPage = Math.floor(offset / limit) + 1;
   const totalPages = Math.ceil(total / limit);
@@ -19,7 +21,7 @@ export function Pagination({
   const getPages = (): (string | number)[] => {
     const pages: (string | number)[] = [];
 
-    // Numbers display depending on how many pages there are
+    // Показ номеров, в зависимости от количества страниц
     if (totalPages < 5) {
       for (let i = 1; i <= totalPages; i++) pages.push(i);
     } else {
@@ -45,25 +47,25 @@ export function Pagination({
   };
 
   return (
-    <div className="flex items-end gap-2  justify-center py-4">
+    <div className="flex items-end gap-2 justify-center py-4 mt-auto">
       <button
         className="px-3 py-1 text-xl disabled:opacity-30"
         onClick={() => setOffset(offset - limit)}
-        disabled={currentPage === 1}
+        disabled={currentPage === 1 || loading}
       >
         {'<'}
       </button>
 
       {getPages().map((page, index) => (
         <button
-          key={index}
+          key={`page-${index}`}
           className={`px-4 py-2 rounded-md ${
             page === currentPage
               ? 'bg-black text-white'
               : 'bg-gray-100 text-black hover:bg-gray-200'
           }`}
           onClick={() => handlePageClick(page)}
-          disabled={page === THREE_DOTS}
+          disabled={page === THREE_DOTS || loading}
         >
           {page}
         </button>
@@ -72,7 +74,7 @@ export function Pagination({
       <button
         className="px-3 py-1 text-xl disabled:opacity-30"
         onClick={() => setOffset(offset + limit)}
-        disabled={currentPage === totalPages}
+        disabled={currentPage === totalPages || loading}
       >
         {'>'}
       </button>

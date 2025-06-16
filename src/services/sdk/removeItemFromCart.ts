@@ -1,5 +1,6 @@
 import { apiRoot } from './BuildClient';
 import { useCartStore } from '../../store/cartStore';
+import { checkAndSetQuantity } from '../../utils/checkAndSetQuantity.ts';
 
 export const removeItemFromCart = async (itemId: string) => {
   const { cartId, version } = useCartStore.getState();
@@ -27,6 +28,8 @@ export const removeItemFromCart = async (itemId: string) => {
       .execute();
 
     useCartStore.getState().setCartId(res.body.id, res.body.version);
+    checkAndSetQuantity(res.body);
+    console.log(res.body);
     console.log('[removeItem] Item removed from cart:', res.body.id);
   } catch (err) {
     console.error('[removeItem] Error removing item from cart:', err);

@@ -1,5 +1,6 @@
 import { apiRoot } from './BuildClient';
 import { useCartStore } from '../../store/cartStore';
+import { checkAndSetQuantity } from '../../utils/checkAndSetQuantity.ts';
 
 export const addProductToCart = async (
   productId: string,
@@ -33,6 +34,7 @@ export const addProductToCart = async (
       .execute();
 
     useCartStore.getState().setCartId(res.body.id, res.body.version);
+    checkAndSetQuantity(res.body);
     console.log('[addToCart] Товар успешно добавлен');
   } catch (err) {
     console.error('[addToCart] Ошибка при добавлении товара', err);

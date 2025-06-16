@@ -9,7 +9,11 @@ import BurgerIcon from '../assets/icons/Burger.svg?react';
 import ProfileIcon from '../assets/icons/profile.svg?react';
 import { ROUTES } from '../utils/paths.ts';
 import { useSearchStore } from '../store/searchStore';
+<<<<<<< belifegor/basket-about_us
 import { useLocation } from 'react-router-dom';
+=======
+import { useCartStore } from '../store/cartStore.ts';
+>>>>>>> release/basket-about_us
 
 export function Header() {
   const location = useLocation();
@@ -29,7 +33,7 @@ export function Header() {
       document.body.style.overflow = '';
     };
   }, [isMenuOpen]);
-  const countOfProduct = 1;
+  const countOfProduct = useCartStore((state) => state.quantity);
   return (
     <header className="bg-white shadow fixed top-0 left-0 w-full z-10">
       <div className="max-w-[1440px] mx-auto px-8 py-4 flex justify-between items-center xl:px-40">

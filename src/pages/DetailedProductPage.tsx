@@ -10,6 +10,8 @@ import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 import { getCategories } from '../services/sdk/getCategories';
 import { Breadcrumbs } from '../components/Breadcrumbs';
+import Button from '../components/button.tsx';
+import { addOrRemoveClickFunction } from '../utils/productCard/addOrRemoveClickFunction.ts';
 
 export function DetailedProductPage() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -18,7 +20,7 @@ export function DetailedProductPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState<ProductProjection | null>(null);
-
+  const [isInCart, setIsInCart] = useState(false);
   useEffect(() => {
     if (id) {
       getProductById(id)
@@ -54,7 +56,7 @@ export function DetailedProductPage() {
       )}
       <button
         onClick={() => navigate('/catalog')}
-        className="mb-6 text-sm text-purple-600 hover:underline"
+        className="mb-6 text-purple-600 hover:underline"
       >
         ← Back to catalog
       </button>
@@ -97,9 +99,20 @@ export function DetailedProductPage() {
 
           <p className="text-gray-700 leading-relaxed text-sm">{description}</p>
 
-          <button className="mt-6 bg-black text-white px-6 py-3 w-fit rounded-lg hover:bg-purple-700 transition">
-            Add to Cart
-          </button>
+          <Button
+            type="button"
+            text={isInCart ? 'Remove from cart' : 'Add to cart'}
+            className={`mt-4 w-full max-w-[200px] min-w-[100px] mb-6 px-8 py-3 rounded-lg transition font-medium ${
+              isInCart
+                ? 'bg-white text-black border border-[#9F9F9F]'
+                : 'bg-black text-white hover:bg-[#9a2ee8]'
+            }`}
+            onClick={() => {
+              if (id) {
+                addOrRemoveClickFunction(id, isInCart, setIsInCart);
+              }
+            }}
+          />
         </div>
       </div>
       {isModalOpen && (

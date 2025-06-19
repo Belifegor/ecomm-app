@@ -7,6 +7,7 @@ import { Product } from '../components/CatalogCard';
 import { useEffect, useState } from 'react';
 import { getProducts } from '../services/sdk/getProducts';
 import { parseProduct } from '../utils/parseProduct';
+import { PromoBannerList } from '../components/PromoBanner';
 import '../styles/index.css';
 
 export function MainPage() {
@@ -23,6 +24,7 @@ export function MainPage() {
   }, []);
   return (
     <main className="min-h-screen w-full bg-gray-50">
+      <PromoBannerList />
       <HeroSection />
       <CategorySlider />
       <Banners />

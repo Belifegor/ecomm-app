@@ -58,7 +58,15 @@ export function CartPage() {
         0
       );
 
-      const discount = Math.round(subtotal * 0.1);
+      let discount = 0;
+      const code = promoCode.trim().toUpperCase();
+
+      if (code === 'SAVE10') {
+        discount = Math.round(subtotal * 0.1);
+      } else if (code === 'SAVE20') {
+        discount = Math.round(subtotal * 0.2);
+      }
+
       const discountedTotal = subtotal - discount;
 
       setAppliedLineTotal(discountedTotal);

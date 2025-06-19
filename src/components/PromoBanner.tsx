@@ -4,8 +4,8 @@ type Promo = {
 };
 
 const promoCodes: Promo[] = [
-  { code: 'SAVE10', description: '10% off all items' },
-  //   { code: 'SAVE20', description: '' },
+  { code: 'SAVE10', description: '10% off for all items' },
+  { code: 'SAVE20', description: '20% off for all times' },
 ];
 
 export function PromoBannerList() {

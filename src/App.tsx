@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { /*RouterProvider*/ Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { Header } from './components/Header.tsx';
 import { Footer } from './components/Footer.tsx';
 import { initCart } from './services/sdk/initCart';

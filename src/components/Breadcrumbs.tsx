@@ -28,7 +28,7 @@ export function Breadcrumbs({
       : [];
 
   return (
-    <nav className="text-xl text-gray-500 py-4 w-full overflow-x-auto whitespace-nowrap">
+    <nav className="text-xl text-gray-500 py-4 w-full overflow-x-auto whitespace-nowrap mb-10">
       <ul className="flex items-center space-x-5">
         <li>
           <Link to="/" className="text-gray-500 hover:underline transition">

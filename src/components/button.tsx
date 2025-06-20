@@ -19,7 +19,7 @@ function Button({
       type={type}
       disabled={disabled}
       onClick={onClick}
-      className={`w-1/1 rounded-[7px] mt-2 hover:cursor-pointer disabled:cursor-not-allowed ${disabled ? 'bg-gray-400 cursor-not-allowed' : 'bg-black hover:bg-gray-800, '} ${className}`}
+      className={`w-1/1 rounded-[7px] mt-2 hover:cursor-pointer hover:opacity-90 disabled:cursor-not-allowed ${disabled ? 'bg-gray-400 cursor-not-allowed hover:opacity-100' : 'bg-black hover:bg-gray-800, '} ${className}`}
     >
       {text}
     </button>

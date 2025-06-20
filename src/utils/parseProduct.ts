@@ -1,12 +1,10 @@
 import { ProductProjection } from '@commercetools/platform-sdk';
-import { Product } from '../components/CatalogCard_merged';
+import { Product } from '../components/CatalogCard.tsx';
 
-function formatPrice(centAmount?: number): string {
-  if (centAmount) {
-    return `${(centAmount / 100).toFixed(2)}`;
-  } else {
-    return `undefined`;
-  }
+function formatPrice(centAmount?: number): string | undefined {
+  return typeof centAmount === 'number'
+    ? (centAmount / 100).toFixed(2)
+    : undefined;
 }
 
 export function parseProduct(product: ProductProjection): Product {

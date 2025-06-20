@@ -10,6 +10,8 @@ import { MainPage } from '../pages/MainPage.tsx';
 import { ROUTES } from '../utils/paths.ts';
 import { CatalogPage } from '../pages/CatalogPage.tsx';
 import { DetailedProductPage } from '../pages/DetailedProductPage.tsx';
+import About from '../pages/About.tsx';
+import CartPage from '../pages/CartPage.tsx';
 
 const router = createBrowserRouter([
   {
@@ -49,6 +51,14 @@ const router = createBrowserRouter([
         path: ROUTES.PROFILE,
         element: <ProfilePage />,
         loader: protectedLoader,
+      },
+      {
+        path: ROUTES.ABOUT,
+        element: <About />,
+      },
+      {
+        path: ROUTES.CART,
+        element: <CartPage />,
       },
       {
         path: ROUTES.NOT_FOUND,

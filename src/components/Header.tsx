@@ -9,8 +9,11 @@ import BurgerIcon from '../assets/icons/Burger.svg?react';
 import ProfileIcon from '../assets/icons/profile.svg?react';
 import { ROUTES } from '../utils/paths.ts';
 import { useSearchStore } from '../store/searchStore';
-
+import { useLocation } from 'react-router-dom';
+import { useCartStore } from '../store/cartStore.ts';
 export function Header() {
+  const location = useLocation();
+  const isCatalogPage = location.pathname === '/catalog';
   const customer = authStore((state) => state.customer);
   const logout = authStore((state) => state.logout);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -26,7 +29,7 @@ export function Header() {
       document.body.style.overflow = '';
     };
   }, [isMenuOpen]);
-
+  const countOfProduct = useCartStore((state) => state.quantity);
   return (
     <header className="bg-white shadow fixed top-0 left-0 w-full z-10">
       <div className="max-w-[1440px] mx-auto px-8 py-4 flex justify-between items-center xl:px-40">
@@ -34,15 +37,19 @@ export function Header() {
           <Logo />
         </Link>
 
-        <div className="relative hidden lg:block w-[240px] xl:w-[280px] 2xl:w-[240px]">
-          <input
-            type="text"
-            placeholder="Search..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 rounded-lg bg-gray-100 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 max-md:hidden"
-          />
-          <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+        <div className="relative w-full max-w-[240px] sm:max-w-[280px]">
+          {isCatalogPage && (
+            <>
+              <input
+                type="text"
+                placeholder="Search..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 rounded-lg bg-gray-100 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            </>
+          )}
         </div>
 
         <nav className="hidden md:flex gap-6 text-gray-700 font-medium">
@@ -50,13 +57,10 @@ export function Header() {
             Home
           </NavLink>
           <NavLink to={ROUTES.CATALOG} className="hover:text-[#9a2ee8]">
-            Products
+            Catalog
           </NavLink>
-          <NavLink to="#contact" className="hover:text-[#9a2ee8]">
-            Contact
-          </NavLink>
-          <NavLink to="#blog" className="hover:text-[#9a2ee8]">
-            Blog
+          <NavLink to={ROUTES.ABOUT} className="hover:text-[#9a2ee8]">
+            About Us
           </NavLink>
         </nav>
 
@@ -64,10 +68,18 @@ export function Header() {
           <button className="relative w-6 h-6 ml-2">
             <HeartIcon />
           </button>
-
-          <button className="relative w-6 h-6 mr-2">
+          <Link
+            to={ROUTES.CART}
+            onClick={() => setIsMenuOpen(false)}
+            className="relative w-6 h-6"
+          >
             <CartIcon />
-          </button>
+            {countOfProduct > 0 && (
+              <span className="absolute -top-1 -right-2 bg-red-500 text-white rounded-full px-1 text-xs">
+                {countOfProduct}
+              </span>
+            )}
+          </Link>
         </div>
         <div className="hidden md:flex gap-4">
           {customer ? (
@@ -139,25 +151,18 @@ export function Header() {
             Home
           </NavLink>
           <NavLink
-            to="/about"
+            to={ROUTES.CATALOG}
             onClick={() => setIsMenuOpen(false)}
             className="hover:text-[#9a2ee8]"
           >
-            About
+            Catalog
           </NavLink>
           <NavLink
-            to="/contact"
+            to={ROUTES.ABOUT}
             onClick={() => setIsMenuOpen(false)}
             className="hover:text-[#9a2ee8]"
           >
-            Contact
-          </NavLink>
-          <NavLink
-            to="/blog"
-            onClick={() => setIsMenuOpen(false)}
-            className="hover:text-[#9a2ee8]"
-          >
-            Blog
+            About Us
           </NavLink>
           {customer ? (
             <>
@@ -200,9 +205,18 @@ export function Header() {
             <button className="relative w-6 h-6">
               <HeartIcon />
             </button>
-            <button className="relative w-6 h-6">
+            <Link
+              to={ROUTES.CART}
+              onClick={() => setIsMenuOpen(false)}
+              className="relative w-6 h-6"
+            >
               <CartIcon />
-            </button>
+              {countOfProduct > 0 && (
+                <span className="absolute -top-1 -right-2 bg-red-500 text-white rounded-full px-1 text-xs">
+                  {countOfProduct}
+                </span>
+              )}
+            </Link>
           </div>
         </nav>
       </div>
